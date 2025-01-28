@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  h2,
+  h3 {
+    font-family: 'Playfair Display';
+  }
+
+  h1 {
+    @apply text-4xl;
+  }
+  h2 {
+    @apply text-3xl;
+  }
+  h3 {
+    @apply text-2xl;
+  }
+
+  p,
+  li {
+    font-family: 'Roboto';
+  }
+}
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  .clip-path-incline {
+    clip-path: polygon(100px 0, 100% 0, 100% 100%, 0% 100%);
+  }
+
+  .slant-bg-secondary::before {
+    content: '';
+    background-color: #014f8d;
+    z-index: 1;
+    position: absolute;
+    height: 100%;
+    width: 15vw;
+    float: left;
+    clip-path: polygon(0 0, 100% 0, 50% 100%, 0% 100%);
+
+     @media (max-width: 768px) { 
+      clip-path: polygon(0 0, 100% 0, 50% 50%, 0% 100%);
+    } 
+  }
+}
+
+.custom-button-small {
+  @apply text-white text-center flex items-center justify-center hover:bg-white transition-all border border-black ;
+  width: 164px;
+  height: 45px;
+}
+
+.header-background {
+  @apply bg-[#23314B] flex items-center; /* Combina bg-customBlue con tu color actual */
+  height: 100px;
+  padding: 16px; /* O usa @apply py-4 */
+}
+
+.custom-subtitle-home{
+  font-size: 20px;
+}
+
+.custom-button-home{
+  background-color: #23314B;
+  /* width: 297px; */
+  height: 59px;
+}
+.img-container-home{
+  margin-bottom: 20px;
+}
+
+.img-experts{
+  left: 50px;
+}
+.img-experts1{
+  left: 100px;
+}
+.img-experts2{
+  left: 150px;
+}
+
+.span-white-1{
+  width: 250px;
+  margin-bottom: 80px;
+}
+
+.span-white-2{
+  width: 1100px;
+  margin-bottom: -90px;
+}
+
+.img-section2{
+  /* width: 808px;
+  height: 559px; */
+  left: 155px;
+  top: -120px;
+
+}
+
+.title-containerimg-section2{
+  font-size: 50px;
+}
+.p-containerimg-section2{
+  
+  font-weight: 400;
+  color: #0E121A;
+}
+
+.circle-estadistics-home {
+  height: 160px;
+  width: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: all 0.5s ease-in-out;
+}
+
+.group:hover .circle-estadistics-home {
+  background-color: rgba(101, 101, 104, 0.137);
+  transform: scale(1.1);
+}
+
+.container-cards-home{
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.cards-home{
+  width: 380px;
+  height: 490px;
+}
+
+.contain-practice{
+  margin-top: 120px;
+}
+
+.areasdepractica-banner{
+  background-color: #D9D9D980;
+}
+.contacto-banner{
+  background-color: #D9D9D980;
+  height: 550px;
+}
+
+.title-areasdepractica-banner{
+  /* font-size: 50px; */
+  color: #23314B
+}
+
+.p-banner-areasdepractica{
+  /* font-size: 22px; */
+  line-height: 30px;
+}
+.p-cards-areasdepractica{
+  font-size: 18px;
+}
+.title-cards-areasdepractica{
+  font-size: 30px;
+}
+
+/* .img-banner-elestudio{
+  width:1025px;
+  height: 550px;
+} */
+.section-white-elestudio{
+  width: 100%;
+}
+
+.name-member{
+  font-size: 40px;
+}
+
+.job-member{
+  font-size: 30px;
+  margin-top: 10px;
+}
+.section-white-elestudio{
+  width: 100%;
+}
+.section-white-elestudio-p {
+  font-size: 22px;
+  line-height: 30px;
+}
