@@ -48,6 +48,10 @@ html {
   }
 }
 
+.title-banner-home{
+  color: #1C244B;
+}
+
 .custom-button-small {
   @apply text-white text-center flex items-center justify-center hover:bg-white transition-all border border-black ;
   width: 164px;
@@ -55,7 +59,7 @@ html {
 }
 
 .header-background {
-  @apply bg-[#23314B] flex items-center; /* Combina bg-customBlue con tu color actual */
+  @apply bg-white flex items-center; 
   height: 100px;
   padding: 16px; /* O usa @apply py-4 */
 }

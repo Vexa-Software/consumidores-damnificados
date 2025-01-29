@@ -12,8 +12,10 @@ export default {
         customSecondaryGray: '#3F4A5D',
         base: '#F7F7F7',
         baseDark: '#303131',
-         customBlue: '#23314B',
+         customBlue: '#324A6D',
+      
          customGrey: '#3F4A5D',
+         customSkyBlue: '#2FB4ED',
       },
       fontFamily: {
         serif: ['serif'],

@@ -12,16 +12,16 @@ const Header: React.FC = () => {
           {/* Logo Desktop */}
           <Link to="/" className="hidden lg:block w-[431px] h-[52px]">
             <img
-              src="/assets/img/APM-abogados-logo.svg"
-              alt="APM Abogados Logo"
+              src="/assets/img/consumidores-damnificados/consulogo.png"
+              alt="Logo consumidores-damnificados"
               className="w-full h-full object-contain"
             />
           </Link>
           {/* Logo Mobile */}
           <Link to="/" className="lg:hidden w-[219px] h-[71px]">
             <img
-              src="/assets/img/APM-abogados-logo-mobile.svg"
-              alt="APM Abogados Logo Mobile"
+              src="/assets/img/consumidores-damnificados/consulogo.png"
+              alt="Logo Consumidores-damnificados"
               className="w-full h-full object-contain"
             />
           </Link>
@@ -30,36 +30,32 @@ const Header: React.FC = () => {
 
         {/* Navigation */}
         <nav
-          className={`absolute top-[70px] left-0 w-full bg-[#23314B] text-white flex flex-col items-center space-y-4 transition-all duration-300 ${
-            isMenuOpen ? 'h-auto opacity-100 py-8' : 'h-0 opacity-0 overflow-hidden'
-          } lg:static lg:h-auto lg:opacity-100 lg:overflow-visible lg:flex lg:flex-row lg:py-0 lg:space-x-14 lg:justify-center lg:items-center lg:space-y-0`}
+          className={`absolute top-[70px] left-0 w-full bg-white text-black flex flex-col items-center space-y-4 transition-all duration-300 ${isMenuOpen ? 'h-auto opacity-100 py-8' : 'h-0 opacity-0 overflow-hidden'
+            } lg:static lg:h-auto lg:opacity-100 lg:overflow-visible lg:flex lg:flex-row lg:py-0 lg:space-x-8 lg:justify-end lg:items-center lg:space-y-0`}
         >
           <Link to="/" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
-            Inicio
+            Home
           </Link>
           <Link to="/areas-de-practica" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
-            Áreas de práctica
+            Quienes Somos
           </Link>
           <Link to="/el-estudio" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
-            El estudio
+            Nuestros Logros
+          </Link>
+          <Link to="/denuncia" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
+            Denunciá
           </Link>
           <Link to="/nuestro-equipo" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
-            Nuestro equipo
+            {/* Linker bien */}
+            Noticias
           </Link>
-          <Link to="/contacto" className="custom-button-small text-white hover:bg-white hover:text-primary transition-all duration-500 ease-in-out border border-white lg:hidden">
+          <Link to="/contacto" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Contacto
           </Link>
         </nav>
 
-        {/* Botón contacto */}
-        <div className="hidden lg:block">
-          <Link
-            to="/contacto"
-            className="custom-button-small text-white hover:bg-white hover:text-primary transition-all duration-500 ease-in-out border border-white"
-          >
-            Contacto
-          </Link>
-        </div>
+
+
 
         {/* Icono menú hamburguesa para mobile */}
         <div className="lg:hidden">

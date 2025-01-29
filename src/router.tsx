@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Home from './pages/Home';
+import Denuncia from './pages/Denuncia';
 import AreasDePractica from './pages/AreasDePractica';
 import ElEstudio from './pages/ElEstudio';
 import Contacto from './pages/Contacto';
@@ -12,6 +13,7 @@ export const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: '/', element: <Home /> },
+      { path: '/denuncia', element: <Denuncia /> },
       { path: '/areas-de-practica', element: <AreasDePractica /> },
       { path: '/el-estudio', element: <ElEstudio /> },
       { path: '/nuestro-equipo', element: <NuestroEquipo /> },
