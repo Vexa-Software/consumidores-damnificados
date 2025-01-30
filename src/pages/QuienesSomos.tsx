@@ -12,7 +12,7 @@ const QuienesSomos: React.FC = () => {
             <div className="w-[85%] sm:w-[84%] lg:sm:w-[91%] 2xl:sm:w-[77%] grid grid-cols-1 lg:grid-cols-3 gap-12 text-[#324A6D] text-sm leading-relaxed">
                 {/* Columna 1 - Nuestro Origen */}
                 <div>
-                    <h2 className="text-xl 2xl:text-2xl font-bold text-[#324A6D] mb-4">
+                    <h2 className="text-xl 2xl:text-2xl font-semibold text-[#324A6D] mb-4">
                         Nuestro <span className="font-extrabold">Origen</span>
                     </h2>
                     <p>
@@ -49,7 +49,7 @@ const QuienesSomos: React.FC = () => {
 
                 {/* Columna 2 - Cómo Trabajamos */}
                 <div className="">
-                    <h2 className="text-xl 2xl:text-2xl font-bold text-[#324A6D] mb-4">
+                    <h2 className="text-xl 2xl:text-2xl font-semibold text-[#324A6D] mb-4">
                         Cómo <span className="font-extrabold">Trabajamos</span>
                     </h2>
                     <p>
