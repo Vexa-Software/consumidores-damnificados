@@ -13,39 +13,41 @@ const Home: React.FC = () => {
 
 
 
-        <div className="relative w-full h-[63vh] flex justify-center items-center bg-gradient-to-r"
+        <div className="relative w-full h-[auto] flex flex-col justify-center  bg-gradient-to-r sm:py-16 lg:px-20 2xl:px-56"
           style={{
             backgroundImage: " url('/assets/img/consumidores-damnificados/Background.png')",
             backgroundSize: 'cover',
             minHeight: "59vh"
           }}>
+          <div className='flex flex-col sm:flex-col lg:flex-row  2xl:flex-row    items-center justify-between px-12 sm:px-5 2xl:px-8 '>
 
-          {/* Imagen a la izquierda */}
-          <div className="h-auto w-[38%] flex justify-center items-center py-4">
-            <img
-              src="/assets/img/consumidores-damnificados/bannerpic.png"
-              alt="Dirección de Defensa del Consumidor"
-              className="w-full h-full object-cover"
-            />
-          </div>
+            {/* Imagen a la izquierda */}
+            <div className="h-auto sm:h-[50%] lg:h-auto 2xl:h-auto w-[100%] sm:w-[80%] lg:w-[45%] 2xl:w-[40%] mb-6 sm:mb-10 lg:mb-0  ">
+              <img
+                src="/assets/img/consumidores-damnificados/bannerpic.png"
+                alt="Dirección de Defensa del Consumidor"
+                className="w-full h-full object-cover  items-center"
+              />
+            </div>
 
-          {/* Contenido a la derecha */}
-          <div className="w-1/2 h-full flex flex-col justify-center items-center px-36">
-            <h1 className="text-bg-customBlue text-center text-6xl font-bold">¡Conocé Tus Derechos!</h1>
-            <p className="text-bg-customBlue mt-4 text-center text-lg">
-              Ofrecemos diferentes soluciones para que puedas llevar a cabo tus denuncias.
-              Llevamos más de 10 años trabajando sobre los Derechos Financieros.
-            </p>
-            <div className="flex justify-center w-full"> {/* Añado este contenedor */}
-              <button className="w-[186px] h-[48px] mt-6 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition">
-                Denunciá
-              </button>
+            {/* Contenido a la derecha */}
+            <div className="w-[1/2] sm:w-[80%] lg:w-[45%] 2xl:w-[45%] h-full flex flex-col justify-center items-center ">
+              <h1 className="text-bg-customBlue text-center text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold">¡Conocé Tus Derechos!</h1>
+              <p className="text-bg-customBlue mt-4 text-center text-sm lg:text-xl 2xl:text-2xl">
+                Ofrecemos diferentes soluciones para que puedas llevar a cabo tus denuncias.
+                Llevamos más de 10 años trabajando sobre los Derechos Financieros.
+              </p>
+              <div className="flex justify-center w-full"> {/* Añado este contenedor */}
+                <button className="w-[186px] h-[48px] mt-6 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition">
+                  Denunciá
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        
+
         <div className="w-full flex justify-center bg-gray-100 py-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-[65%] h-[25vh]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-[65%]   lg:w-[78%] 2xl:w-[60%] h-[auto] sm:h-[auto] lg:h-[auto]">
             {[
               {
                 title: "Defensa Al Consumidor",

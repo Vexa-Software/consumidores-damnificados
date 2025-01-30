@@ -1,43 +1,62 @@
 import React from "react";
+import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-customBlue text-white w-full py-6">
-      <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center">
+    <footer className="bg-[#2A2A2B] text-white w-full py-6">
+      <div className="container mx-auto flex flex-col sm:flex-row lg:flex-row justify-between items-center px-16 sm:px-20 lg:px-16">
         {/* Columna Izquierda: Logo */}
-        <div className="mb-6 flex flex-row items-center justify-center lg:mb-0">
+        <div className="flex items-center justify-center lg:justify-start mb-6 lg:mb-0">
           <img
-            src="/assets/img/APM-abogados-logo.svg"
-            alt="APM Abogados"
-            className="w-[80%] md:w-full h-full object-contain"
+            src="/assets/img/consumidores-damnificados/footer-logo.png"
+            alt="Consumidores Damnificados"
+            className="w-[180px] object-contain"
           />
         </div>
 
-        {/* Columna Derecha: Información de Contacto */}
-        <div className="text-center md:text-right leading-relaxed flex flex-col md:flex-row md:items-center md:justify-end gap-4">
-          <div className="flex flex-col md:flex-row md:items-center gap-10 text-base justify-end w-full">
-            <div className="flex items-center">
-              📍 <p className="ml-2">Gral. Juan D. Perón 315, 2° piso, CABA</p>
-            </div>
-            <div className="flex items-center">
-              ☎ <p className="ml-2">Tel: 11-5766-2143</p>
-            </div>
-            <div className="flex items-center">
-              ✉{" "}
-              <a
-                href="mailto:info@apmabogados.com.ar"
-                className="ml-2 underline hover:text-gray-300"
-              >
-                info@apmabogados.com.ar
-              </a>
-            </div>
-          </div>
+        {/* Columna Centro: Enlaces Relacionados */}
+        <div className="text-center text-sm text-gray-400 flex flex-col lg:flex-row lg:items-center lg:gap-4">
+          <span className="text-white font-medium">Enlaces Relacionados:</span>
+          {[
+            { name: "ssn.gov.ar", url: "https://ssn.gov.ar" },
+            { name: "enre.gov.ar", url: "https://enre.gov.ar" },
+            { name: "enargas.gov.ar", url: "https://enargas.gov.ar" },
+            { name: "cns.gov.ar", url: "https://cns.gov.ar" },
+            { name: "cnrt.gov.ar", url: "https://cnrt.gov.ar" },
+          ].map((link, index) => (
+            <a
+              key={index}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white transition"
+            >
+              {link.name}
+            </a>
+          ))}
         </div>
 
-
+        {/* Columna Derecha: Iconos de Redes Sociales con Fondo Blanco */}
+        <div className="flex items-center gap-4 mt-6 lg:mt-0">
+          <a
+            href="https://www.facebook.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white p-2 rounded-full text-[#2A2A2B] hover:bg-gray-300 transition text-xl w-10 h-10 flex items-center justify-center"
+          >
+            <FaFacebookF />
+          </a>
+          <a
+            href="https://www.linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white p-2 rounded-full text-[#2A2A2B] hover:bg-gray-300 transition text-xl w-10 h-10 flex items-center justify-center"
+          >
+            <FaLinkedinIn />
+          </a>
+        </div>
       </div>
     </footer>
-
   );
 };
 
