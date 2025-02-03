@@ -39,13 +39,13 @@ const Header: React.FC = () => {
           <Link to="/quienes-somos" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Quienes Somos
           </Link>
-          <Link to="/el-estudio" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
+          <Link to="/logros" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Nuestros Logros
           </Link>
           <Link to="/denuncia" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Denunciá
           </Link>
-          <Link to="/nuestro-equipo" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
+          <Link to="/noticias" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             {/* Linker bien */}
             Noticias
           </Link>

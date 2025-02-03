@@ -1,12 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import Denuncia from "./pages/Denuncia";
-import ElEstudio from "./pages/ElEstudio";
+import Logros from "./pages/Logros";
 import Contacto from "./pages/Contacto";
-import NuestroEquipo from "./pages/NuestroEquipo";
+import Noticias from "./pages/Noticias";
 import Layout from "./pages/Layout";
 import QuienesSomos from "./pages/QuienesSomos";
 import Login from "./pages/Login"; // Importamos la nueva página de Login
+import LogrosAdmin from "./pages/LogrosAdmin";
+import NoticiasAdmin from "./pages/NoticiasAdmin";
 
 export const router = createBrowserRouter([
   {
@@ -15,11 +17,13 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/quienes-somos", element: <QuienesSomos /> },
+      { path: "/logros", element: <Logros /> },
       { path: "/denuncia", element: <Denuncia /> },
-      { path: "/el-estudio", element: <ElEstudio /> },
-      { path: "/nuestro-equipo", element: <NuestroEquipo /> },
+      { path: "/noticias", element: <Noticias /> },
       { path: "/contacto", element: <Contacto /> },
     ],
   },
   { path: "/login", element: <Login /> }, // Ruta de Login fuera del Layout
+  { path: "/logros-admin", element: <LogrosAdmin /> },
+  { path: "/noticias-admin", element: <NoticiasAdmin/> },
 ]);

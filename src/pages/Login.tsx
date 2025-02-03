@@ -12,15 +12,15 @@ const Login: React.FC = () => {
     return (
         <div className="flex flex-col items-center justify-start min-h-screen bg-white">
             {/* Header minimalista con logo y título centrado */}
-            <div className="relative w-full bg-[#f7f7f7] border border-[#0EA5E9] py-6 px-12 2xl:py-4 2xl:px-40 flex flex-row justify-between items-center">
+            <div className="relative w-full bg-[#f7f7f7] border border-[#0EA5E9] py-6 px-12 sm:px-24 2xl:py-4 2xl:px-[13%] flex flex-row justify-between items-center">
                 {/* Logo alineado a la izquierda */}
                 <img
                     src="/assets/img/consumidores-damnificados/consulogo.png"
                     alt="Consumidores Damnificados"
-                    className="w-[60%] h-auto 2xl:w-[25%] 2xl:h-auto"
+                    className="w-[60%] h-auto lg:w-[30%] 2xl:w-[30%] 2xl:h-auto"
                 />
                  {/* Texto "ADMIN PANEL" centrado */}
-                 <h1 className="text-center 2xl:my-4 text-black text-sm 2xl:text-2xl font-semibold">
+                 <h1 className="text-center 2xl:my-4 text-black text-xs sm:text-lg lg:text-lg 2xl:text-2xl font-semibold">
                     ADMIN PANEL
                 </h1>
             </div>
