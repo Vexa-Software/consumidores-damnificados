@@ -25,44 +25,41 @@ const LogrosAdmin: React.FC = () => {
     
     const nuevosLogros = [...logros, { ...nuevoLogro, id: Date.now() }];
     setLogros(nuevosLogros);
-    localStorage.setItem("logros", JSON.stringify(nuevosLogros)); // Guardar en localStorage
+    localStorage.setItem("logros", JSON.stringify(nuevosLogros));
 
     setNuevoLogro({ id: 0, titulo: "", descripcion: "", fecha: "" });
-};
+  };
 
-// Modificar eliminación para actualizar localStorage
-const handleEliminarLogro = (id: number) => {
+  const handleEliminarLogro = (id: number) => {
     const logrosActualizados = logros.filter((logro) => logro.id !== id);
     setLogros(logrosActualizados);
     localStorage.setItem("logros", JSON.stringify(logrosActualizados));
-};
+  };
 
-
-const handleEditarLogro = (logro: Logro) => {
+  const handleEditarLogro = (logro: Logro) => {
     setEditando(true);
     setLogroEditadoId(logro.id);
     setNuevoLogro(logro);
-};
+  };
 
-const handleGuardarEdicion = () => {
+  const handleGuardarEdicion = () => {
     const logrosActualizados = logros.map((logro) =>
-        logro.id === logroEditadoId ? nuevoLogro : logro
+      logro.id === logroEditadoId ? nuevoLogro : logro
     );
 
     setLogros(logrosActualizados);
-    localStorage.setItem("logros", JSON.stringify(logrosActualizados)); // Guardar en localStorage
+    localStorage.setItem("logros", JSON.stringify(logrosActualizados));
 
     setNuevoLogro({ id: 0, titulo: "", descripcion: "", fecha: "" });
     setEditando(false);
     setLogroEditadoId(null);
-};
-
+  };
 
   return (
-    <div className="flex">
+    <div className="flex flex-col sm:flex-row">
       <AdminSidebar />
-      <div className="p-8 max-w-3xl mx-auto w-3/4">
-        <h1 className="text-3xl font-bold mb-6 text-center">Administrar Logros</h1>
+      <div className="p-4 sm:p-8 w-full sm:w-3/4">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Administrar Logros</h1>
         <AdminForm
           nuevoItem={nuevoLogro}
           setNuevoItem={setNuevoLogro}
@@ -70,7 +67,7 @@ const handleGuardarEdicion = () => {
           handleAgregarItem={handleAgregarLogro}
           handleGuardarEdicion={handleGuardarEdicion}
         />
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full border-collapse border border-gray-300 text-xs ">
           <thead>
             <tr className="bg-gray-200">
               <th className="border p-2">Título</th>
@@ -85,15 +82,15 @@ const handleGuardarEdicion = () => {
                 <td className="border p-2">{logro.titulo}</td>
                 <td className="border p-2">{logro.descripcion}</td>
                 <td className="border p-2">{logro.fecha}</td>
-                <td className="border p-2 flex justify-center gap-2">
+                <td className="border p-2 flex flex-wrap justify-center gap-2">
                   <button
-                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-xs sm:text-base"
                     onClick={() => handleEditarLogro(logro)}
                   >
                     Editar
                   </button>
                   <button
-                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-xs sm:text-base"
                     onClick={() => handleEliminarLogro(logro.id)}
                   >
                     Eliminar
@@ -109,3 +106,4 @@ const handleGuardarEdicion = () => {
 };
 
 export default LogrosAdmin;
+
