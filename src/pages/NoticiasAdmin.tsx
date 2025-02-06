@@ -93,7 +93,7 @@ const NoticiasAdmin: React.FC = () => {
         <div className="flex flex-col sm:flex-row">
             <AdminSidebar />
             <div className="p-4 sm:p-8 w-full sm:w-3/4">
-                <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Administrar Noticias</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Noticias</h1>
                 <AdminForm
                     nuevoItem={nuevaNoticia}
                     setNuevoItem={setNuevaNoticia}
@@ -103,15 +103,15 @@ const NoticiasAdmin: React.FC = () => {
                 />
 
                 {/* Input para subir imagen */}
-                <input type="file" accept="image/png, image/jpeg, image/jpg" onChange={handleImageUpload} className="mb-2 text-xs sm:text-base" />
+                <input type="file" accept="image/png, image/jpeg, image/jpg" onChange={handleImageUpload} className="mb-2 text-xs " />
                 {nuevaNoticia.imagen && (
                     <img src={nuevaNoticia.imagen} alt="Vista previa" className="w-full  h-auto mb-2 rounded-lg " />
                 )}
 
                <div className="overflow-x-auto w-full">
-  <table className="w-full table-fixed border-collapse border border-gray-300 text-xs sm:text-base">
+  <table className="w-full table-fixed border-collapse border border-gray-300 text-xs ">
     <thead>
-      <tr className="bg-red-200">
+      <tr className="bg-gray-200">
         <th className="border py-2 w-1/6">Título</th>
         <th className="border py-2 w-2/6">Descripción</th>
         <th className="border py-2 w-1/6">Fecha</th>
@@ -129,14 +129,14 @@ const NoticiasAdmin: React.FC = () => {
           <td className="border p-1">{noticia.fecha}</td>
           <td className="border p-1 ">
             {noticia.imagen && (
-              <img src={noticia.imagen} alt="Noticia" className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover" />
+              <img src={noticia.imagen} alt="Noticia" className=" w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover " />
             )}
           </td>
           <td className="border p-2 flex flex-wrap justify-center gap-2">
-            <button className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-xs sm:text-base" onClick={() => handleEditarNoticia(noticia)}>
+            <button className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-xs " onClick={() => handleEditarNoticia(noticia)}>
               Editar
             </button>
-            <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-xs sm:text-base" onClick={() => handleEliminarNoticia(noticia.id)}>
+            <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-xs " onClick={() => handleEliminarNoticia(noticia.id)}>
               Eliminar
             </button>
           </td>

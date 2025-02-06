@@ -39,8 +39,8 @@ const Header: React.FC = () => {
           <Link to="/quienes-somos" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Quienes Somos
           </Link>
-          <Link to="/logros" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
-            Nuestros Logros
+          <Link to="/avisos-judiciales" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
+            Avisos Judiciales
           </Link>
           <Link to="/denuncia" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Denunciá

@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const AdminSidebar: React.FC = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false); // Estado del sidebar en mobile
+
+  // Función para cerrar sesión (puedes modificarla según tu lógica de autenticación)
+  const handleLogout = () => {
+    localStorage.removeItem("userToken"); // Elimina el token de autenticación (si usas uno)
+    window.location.href = "/login"; // Redirige al login o página de inicio
+  };
 
   return (
     <>
@@ -18,39 +24,49 @@ const AdminSidebar: React.FC = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-64 h-screen bg-gray-800 text-white p-6 transform ${
+        className={`fixed top-0 left-0 w-64 h-screen bg-gray-800 text-white p-6 flex flex-col justify-between transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform sm:translate-x-0 sm:w-1/4 sm:relative z-50`}
       >
-        <h2 className="text-xl font-bold mb-4">Panel de Administración</h2>
-        <ul>
-          <li
-            className={`mb-2 ${location.pathname === "/logros-admin" ? "bg-gray-600" : ""}`}
+        <div>
+          {/* Botón "X" para cerrar Sidebar en Mobile */}
+          <button
+            className="absolute top-4 right-4 text-white sm:hidden"
+            onClick={() => setIsOpen(false)}
           >
-            <Link to="/logros-admin" className="block p-2" onClick={() => setIsOpen(false)}>
-              Administrar Logros
-            </Link>
-          </li>
-          <li
-            className={`mb-2 ${location.pathname === "/noticias-admin" ? "bg-gray-600" : ""}`}
-          >
-            <Link to="/noticias-admin" className="block p-2" onClick={() => setIsOpen(false)}>
-              Administrar Noticias
-            </Link>
-          </li>
-        </ul>
+            <FaTimes className="text-2xl" />
+          </button>
+
+          <h2 className="text-xl font-bold mb-4">Panel de Administración</h2>
+          <ul>
+            <li className={`mb-2 ${location.pathname === "/avisos-judiciales-admin" ? "bg-gray-600" : ""}`}>
+              <Link to="/avisos-judiciales-admin" className="block p-2" onClick={() => setIsOpen(false)}>
+                Avisos Judiciales
+              </Link>
+            </li>
+            <li className={`mb-2 ${location.pathname === "/noticias-admin" ? "bg-gray-600" : ""}`}>
+              <Link to="/noticias-admin" className="block p-2" onClick={() => setIsOpen(false)}>
+                Noticias
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Botón de Cerrar Sesión en la parte inferior */}
+        <button
+          onClick={handleLogout}
+          className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition"
+        >
+          Cerrar Sesión
+        </button>
       </div>
 
       {/* Fondo oscuro para cerrar Sidebar en mobile */}
       {isOpen && (
-        <div
-          className="fixed inset-0 bg-black opacity-50 sm:hidden"
-          onClick={() => setIsOpen(false)}
-        ></div>
+        <div className="fixed inset-0 bg-black opacity-50 sm:hidden" onClick={() => setIsOpen(false)}></div>
       )}
     </>
   );
 };
 
 export default AdminSidebar;
-

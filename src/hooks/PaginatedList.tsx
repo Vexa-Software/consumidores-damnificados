@@ -10,8 +10,8 @@ interface Item {
 }
 
 interface PaginatedListProps {
-  storageKey: string; // Clave en localStorage ("logros" o "noticias")
-  title: string; // Título principal ("Nuestros Logros" o "Últimas Noticias")
+  storageKey: string; // Clave en localStorage ("avisosJudiciales" o "noticias")
+  title: string; // Título principal ("Avisos Judiciales" o "Últimas Noticias")
 }
 
 const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
@@ -117,8 +117,8 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
             </div>
         )}
 
-          {/* Si es "logros", muestra el icono de check, si es "noticias", no muestra nada */}
-          {storageKey === "logros" && (
+          {/* Si es "avisosJudiciales", muestra el icono de check, si es "noticias", no muestra nada */}
+          {storageKey === "avisos-judiciales" && (
             <div className="flex justify-center sm:justify-start">
               <FaCheckCircle className="text-sky-500 text-3xl sm:text-4xl lg:text-5xl flex-shrink-0 mb-2" />
             </div>
