@@ -6,6 +6,7 @@ interface AdminFormProps {
   editando: boolean;
   handleGuardarEdicion: () => void;
   handleAgregarItem: () => void;
+  
 }
 
 const AdminForm: React.FC<AdminFormProps> = ({

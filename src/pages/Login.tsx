@@ -1,12 +1,33 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const isValidEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+      };
+
+       //Función para validar contraseña
+  const isValidPassword = (password: string) => {
+    return password.length >= 6 && /\d/.test(password); // Al menos 6 caracteres y un número
+  };
+
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Email:", email, "Password:", password);
+        if (!isValidEmail(email)) {
+            toast.error("Por favor, ingresa un email válido.");
+            return;
+          }
+          if (!isValidPassword(password)) {
+            toast.error("La contraseña debe tener al menos 6 caracteres y un número.");
+            return;
+          }
+      
+        
+          toast.success("Inicio de sesión exitoso");
     };
 
     return (
@@ -20,8 +41,8 @@ const Login: React.FC = () => {
                     className="w-[60%] h-auto lg:w-[30%] 2xl:w-[30%] 2xl:h-auto"
                 />
                  {/* Texto "ADMIN PANEL" centrado */}
-                 <h1 className="text-center 2xl:my-4 text-black text-xs sm:text-lg lg:text-lg 2xl:text-2xl font-semibold">
-                    ADMIN PANEL
+                 <h1 className="text-center 2xl:my-4 text-black text-[60%] sm:text-lg lg:text-lg 2xl:text-2xl font-medium sm:font-semibold">
+                    Panel de Administracion
                 </h1>
             </div>
 
@@ -37,7 +58,7 @@ const Login: React.FC = () => {
                         <input
                             type="email"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                            placeholder="tuemail@gmail.com"
+                            placeholder="Correo electronico"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -55,12 +76,7 @@ const Login: React.FC = () => {
                         />
                     </div>
 
-                    {/* Opción de recuperar contraseña */}
-                    <div className="text-right mb-4">
-                        <a href="/recuperar-contraseña" className="text-sm text-blue-500 hover:underline">
-                            ¿Has olvidado tu contraseña?
-                        </a>
-                    </div>
+                    
 
                     <button
                         type="submit"
@@ -69,14 +85,6 @@ const Login: React.FC = () => {
                         Ingresar
                     </button>
 
-                    {/* Separador */}
-                    <div className="text-center my-4 text-gray-500 text-sm">O</div>
-
-                    {/* Botón de autenticación con Google */}
-                    <button className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-100 transition">
-                        <img src="/assets/favicon/logo-google.png" alt="Google" className="w-5 h-5" />
-                        Iniciar sesión con Google
-                    </button>
                 </form>
             </div>
         </div>

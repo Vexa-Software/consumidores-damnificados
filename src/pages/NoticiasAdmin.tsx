@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminForm from "../components/AdminForm";
+import { toast } from "react-toastify";
 
 interface Noticia {
     id: number;
     titulo: string;
     descripcion: string;
     fecha: string;
-    imagen?: string; // Nueva propiedad para almacenar la imagen
+    imagen?: string;
 }
 
 const NoticiasAdmin: React.FC = () => {
@@ -22,6 +23,21 @@ const NoticiasAdmin: React.FC = () => {
     const [editando, setEditando] = useState<boolean>(false);
     const [noticiaEditadaId, setNoticiaEditadaId] = useState<number | null>(null);
 
+    // Modales para eliminar y editar
+    const [modalEliminarOpen, setModalEliminarOpen] = useState<boolean>(false);
+    const [noticiaAEliminar, setNoticiaAEliminar] = useState<number | null>(null);
+
+    const [modalEditarOpen, setModalEditarOpen] = useState<boolean>(false);
+    const [noticiaAEditar, setNoticiaAEditar] = useState<Noticia | null>(null);
+
+    // Estados de errores
+    const [errores, setErrores] = useState({
+        titulo: "",
+        descripcion: "",
+        fecha: "",
+        imagen: "",
+    });
+
     useEffect(() => {
         const noticiasGuardadas = localStorage.getItem("noticias");
         if (noticiasGuardadas) {
@@ -29,32 +45,34 @@ const NoticiasAdmin: React.FC = () => {
         }
     }, []);
 
-    // Manejo de subida de imagen
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-            const maxSize = 5 * 1024 * 1024; // 5MB
+    //  Función para validar campos
+    const validarCampos = (): boolean => {
+        let esValido = true;
+        const nuevosErrores = { titulo: "", descripcion: "", fecha: "", imagen: "" };
 
-            if (!allowedTypes.includes(file.type)) {
-                alert("Solo se permiten imágenes en formato JPG, JPEG o PNG.");
-                return;
-            }
-            if (file.size > maxSize) {
-                alert("El tamaño máximo permitido es de 5MB.");
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setNuevaNoticia({ ...nuevaNoticia, imagen: reader.result as string });
-            };
-            reader.readAsDataURL(file);
+        if (nuevaNoticia.titulo.length < 3 || nuevaNoticia.titulo.length > 1000) {
+            nuevosErrores.titulo = "El título debe tener entre 3 y 1000 caracteres.";
+            esValido = false;
         }
+        if (nuevaNoticia.descripcion.length < 3 || nuevaNoticia.descripcion.length > 7000) {
+            nuevosErrores.descripcion = "La descripción debe tener entre 3 y 7000 caracteres.";
+            esValido = false;
+        }
+        if (!nuevaNoticia.fecha) {
+            nuevosErrores.fecha = "Debe ingresar una fecha.";
+            esValido = false;
+        }
+
+        setErrores(nuevosErrores);
+        return esValido;
     };
 
+    //  Función para agregar noticia
     const handleAgregarNoticia = () => {
-        if (!nuevaNoticia.titulo || !nuevaNoticia.descripcion || !nuevaNoticia.fecha) return;
+        if (!validarCampos()) {
+            toast.error("Corrige los errores antes de guardar.");
+            return;
+        }
 
         const nuevasNoticias = [...noticias, { ...nuevaNoticia, id: Date.now() }];
         nuevasNoticias.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
@@ -62,21 +80,32 @@ const NoticiasAdmin: React.FC = () => {
         localStorage.setItem("noticias", JSON.stringify(nuevasNoticias));
 
         setNuevaNoticia({ id: 0, titulo: "", descripcion: "", fecha: "", imagen: "" });
+        toast.success("Noticia agregada con éxito");
     };
 
-    const handleEliminarNoticia = (id: number) => {
-        const noticiasActualizadas = noticias.filter((noticia) => noticia.id !== id);
-        setNoticias(noticiasActualizadas);
-        localStorage.setItem("noticias", JSON.stringify(noticiasActualizadas));
-    };
-
+    //  Mostrar modal de confirmación antes de editar
     const handleEditarNoticia = (noticia: Noticia) => {
-        setEditando(true);
-        setNoticiaEditadaId(noticia.id);
-        setNuevaNoticia(noticia);
+        setModalEditarOpen(true);
+        setNoticiaAEditar(noticia);
     };
 
+    //  Confirmar edición de noticia
+    const confirmarEdicion = () => {
+        if (!noticiaAEditar) return;
+
+        setEditando(true);
+        setNoticiaEditadaId(noticiaAEditar.id);
+        setNuevaNoticia(noticiaAEditar);
+        setModalEditarOpen(false);
+    };
+
+    //  Guardar la edición de la noticia
     const handleGuardarEdicion = () => {
+        if (!validarCampos()) {
+            toast.error("Corrige los errores antes de guardar.");
+            return;
+        }
+
         const noticiasActualizadas = noticias.map((noticia) =>
             noticia.id === noticiaEditadaId ? nuevaNoticia : noticia
         );
@@ -87,13 +116,32 @@ const NoticiasAdmin: React.FC = () => {
         setNuevaNoticia({ id: 0, titulo: "", descripcion: "", fecha: "", imagen: "" });
         setEditando(false);
         setNoticiaEditadaId(null);
+        toast.success("Noticia editada con éxito");
+    };
+
+    //  Mostrar modal de confirmación antes de eliminar
+    const handleEliminarNoticia = (id: number) => {
+        setModalEliminarOpen(true);
+        setNoticiaAEliminar(id);
+    };
+
+    //  Confirmar eliminación de noticia
+    const confirmarEliminar = () => {
+        if (noticiaAEliminar !== null) {
+            const noticiasActualizadas = noticias.filter((noticia) => noticia.id !== noticiaAEliminar);
+            setNoticias(noticiasActualizadas);
+            localStorage.setItem("noticias", JSON.stringify(noticiasActualizadas));
+            toast.success("Noticia eliminada con éxito");
+        }
+        setModalEliminarOpen(false);
+        setNoticiaAEliminar(null);
     };
 
     return (
-        <div className="flex flex-col sm:flex-row">
+        <div className="flex">
             <AdminSidebar />
-            <div className="p-4 sm:p-8 w-full sm:w-3/4">
-                <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Noticias</h1>
+            <div className="p-8 max-w-3xl mx-auto w-3/4">
+                <h1 className="text-3xl font-bold mb-6 text-center">Administrar Noticias</h1>
                 <AdminForm
                     nuevoItem={nuevaNoticia}
                     setNuevoItem={setNuevaNoticia}
@@ -102,54 +150,58 @@ const NoticiasAdmin: React.FC = () => {
                     handleGuardarEdicion={handleGuardarEdicion}
                 />
 
-                {/* Input para subir imagen */}
-                <input type="file" accept="image/png, image/jpeg, image/jpg" onChange={handleImageUpload} className="mb-2 text-xs " />
-                {nuevaNoticia.imagen && (
-                    <img src={nuevaNoticia.imagen} alt="Vista previa" className="w-full  h-auto mb-2 rounded-lg " />
-                )}
-
-               <div className="overflow-x-auto w-full">
-  <table className="w-full table-fixed border-collapse border border-gray-300 text-xs ">
-    <thead>
-      <tr className="bg-gray-200">
-        <th className="border py-2 w-1/6">Título</th>
-        <th className="border py-2 w-2/6">Descripción</th>
-        <th className="border py-2 w-1/6">Fecha</th>
-        <th className="border py-2 w-1/6">Imagen</th>
-        <th className="border py-2 w-1/6">Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      {noticias.map((noticia) => (
-        <tr key={noticia.id} className="border">
-          <td className="border p-1 truncate max-w-[100px]">{noticia.titulo}</td>
-          <td className="border p-1 max-w-[250px] sm:max-w-[400px] truncate">
-            <p className="overflow-hidden line-clamp-3">{noticia.descripcion}</p>
-          </td>
-          <td className="border p-1">{noticia.fecha}</td>
-          <td className="border p-1 ">
-            {noticia.imagen && (
-              <img src={noticia.imagen} alt="Noticia" className=" w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover " />
-            )}
-          </td>
-          <td className="border p-2 flex flex-wrap justify-center gap-2">
-            <button className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-xs " onClick={() => handleEditarNoticia(noticia)}>
-              Editar
-            </button>
-            <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 text-xs " onClick={() => handleEliminarNoticia(noticia.id)}>
-              Eliminar
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+                <table className="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr className="bg-gray-200">
+                            <th className="border p-2">Título</th>
+                            <th className="border p-2">Contenido</th>
+                            <th className="border p-2">Fecha</th>
+                            <th className="border p-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {noticias.map((noticia) => (
+                            <tr key={noticia.id} className="border">
+                                <td className="border p-2">{noticia.titulo}</td>
+                                <td className="border p-2">{noticia.descripcion}</td>
+                                <td className="border p-2">{noticia.fecha}</td>
+                                <td className="border p-2 flex justify-center gap-2">
+                                    <button className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600" onClick={() => handleEditarNoticia(noticia)}>Editar</button>
+                                    <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600" onClick={() => handleEliminarNoticia(noticia.id)}>Eliminar</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
+
+            {/* Modal de Confirmación para eliminar */}
+            {modalEliminarOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded-lg">
+                        <p className="text-lg font-bold mb-4">¿Estás seguro de eliminar esta noticia?</p>
+                        <div className="flex flex-row justify-evenly">
+                            <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalEliminarOpen(false)}>Cancelar</button>
+                            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmarEliminar}>Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal de Confirmación para editar */}
+            {modalEditarOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white p-6 rounded-lg ">
+                        <p className="text-lg font-bold mb-4">¿Quieres editar esta noticia?</p>
+                        <div className="flex flex-row justify-evenly">
+                            <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalEditarOpen(false)}>Cancelar</button>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={confirmarEdicion}>Confirmar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
 
 export default NoticiasAdmin;
-

@@ -15,6 +15,8 @@ import 'dayjs/locale/es';
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const rootElement = document.getElementById('root')!;
 const root = createRoot(rootElement);
@@ -29,6 +31,7 @@ root.render(
             <SnackbarProvider>
               {/* AQUI RouterProvider envuelve todo */}
               <RouterProvider router={router} />
+              <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
             </SnackbarProvider>
           </QueryClientProvider>
         </LocalizationProvider>
