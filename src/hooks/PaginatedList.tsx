@@ -23,14 +23,14 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
     const savedItems = localStorage.getItem(storageKey);
     if (savedItems) {
       const parsedItems: Item[] = JSON.parse(savedItems);
-        
+
       // Ordenar por fecha más reciente primero
-      parsedItems.sort((a: Item, b: Item) => 
-          new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+      parsedItems.sort((a: Item, b: Item) =>
+        new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
       );
 
       setItems(parsedItems);
-      
+
     }
   }, [storageKey]);
 
@@ -110,15 +110,15 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
           key={item.id}
           className="bg-[#F7F7F7] w-full p-6 my-4 rounded-lg shadow-md flex flex-col sm:flex-row sm:items-center sm:space-x-4"
         >
-  {/* Mostrar imagen si es una noticia y si tiene imagen */}
-  {storageKey === "noticias" && item.imagen && (
+          {/* Mostrar imagen si es una noticia y si tiene imagen */}
+          {storageKey === "noticias" && item.imagen && (
             <div className="flex justify-center sm:justify-start w-full sm:w-auto">
-                <img src={item.imagen} alt="Noticia" className="w-full h-[200px] sm:w-[200px] sm:h-[300px] 2xl:w-[300px] 2xl:h-[300px] object-cover rounded-lg mb-4 sm:mb-0" />
+              <img src={item.imagen} alt="Noticia" className="w-full h-[200px] sm:w-[200px] sm:h-[300px] 2xl:w-[300px] 2xl:h-[300px] object-cover rounded-lg mb-4 sm:mb-0" />
             </div>
-        )}
+          )}
 
           {/* Si es "avisosJudiciales", muestra el icono de check, si es "noticias", no muestra nada */}
-          {storageKey === "avisos-judiciales" && (
+          {storageKey === "avisosJudiciales" && (
             <div className="flex justify-center sm:justify-start">
               <FaCheckCircle className="text-sky-500 text-3xl sm:text-4xl lg:text-5xl flex-shrink-0 mb-2" />
             </div>
