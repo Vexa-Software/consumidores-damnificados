@@ -1,33 +1,43 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import { auth } from "../firebase/config";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const isValidEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
       };
 
-       //Función para validar contraseña
-  const isValidPassword = (password: string) => {
-    return password.length >= 6 && /\d/.test(password); // Al menos 6 caracteres y un número
-  };
-
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!isValidEmail(email)) {
             toast.error("Por favor, ingresa un email válido.");
             return;
-          }
-          if (!isValidPassword(password)) {
-            toast.error("La contraseña debe tener al menos 6 caracteres y un número.");
-            return;
-          }
-      
-        
-          toast.success("Inicio de sesión exitoso");
+        }
+
+        try {
+            setLoading(true);
+            await signInWithEmailAndPassword(auth, email, password);
+            toast.success("Inicio de sesión exitoso");
+            navigate("/avisos-judiciales-admin");
+        } catch (error: any) {
+            let errorMessage = "Error al iniciar sesión";
+            if (error.code === 'auth/user-not-found') {
+                errorMessage = "Usuario no encontrado";
+            } else if (error.code === 'auth/wrong-password') {
+                errorMessage = "Contraseña incorrecta";
+            }
+            toast.error(errorMessage);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -80,9 +90,10 @@ const Login: React.FC = () => {
 
                     <button
                         type="submit"
-                        className="w-full bg-[#0EA5E9] text-white py-2 rounded-lg hover:bg-[#2498ce] transition"
+                        className="w-full bg-[#0EA5E9] text-white py-2 rounded-lg hover:bg-[#2498ce] transition disabled:opacity-50"
+                        disabled={loading}
                     >
-                        Ingresar
+                        {loading ? "Cargando..." : "Ingresar"}
                     </button>
 
                 </form>

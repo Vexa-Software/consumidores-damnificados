@@ -9,7 +9,7 @@ interface AdminFormProps {
   handleAgregarItem: () => void;
   errores: { titulo: string; descripcion: string; fecha: string; imagen: string };
   setErrores: (errores: any) => void;
-  validarCampos:boolean;
+  validarCampos: () => boolean;
 }
 
 const AdminForm: React.FC<AdminFormProps> = ({
@@ -22,8 +22,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
   errores,
   setErrores,
   validarCampos,
-
-
 }) => {
 
   // ✅ Ref para resetear el input de archivo
@@ -61,10 +59,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
       handleGuardarEdicion(); // Llamamos la función directamente
       resetFormulario(); // Solo se ejecuta después de editar
     } else {
-      if(!validarCampos){
+
+      if(!validarCampos()){
+        return;
+      }
       handleAgregarItem(); // Llamamos la función directamente
       resetFormulario();
-    }
     }
   };
 
@@ -75,46 +75,91 @@ const AdminForm: React.FC<AdminFormProps> = ({
     }
   };
 
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNuevoItem({ ...nuevoItem, titulo: e.target.value });
+    setErrores((prev: any) => ({ ...prev, titulo: "" }));
+  };
+
+  const handleChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNuevoItem({ ...nuevoItem, descripcion: e.target.value });
+    setErrores((prev: any) => ({ ...prev, descripcion: "" }));
+  };
+
+  const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNuevoItem({ ...nuevoItem, fecha: e.target.value });
+    setErrores((prev: any) => ({ ...prev, fecha: "" }));
+  };
+
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleImageUpload(e);
+    setErrores((prev: any) => ({ ...prev, imagen: "" }));
+  };
 
   return (
     <div className="mb-6 p-4 border rounded-lg shadow-md bg-white w-full max-w-md mx-auto">
-      <input
-        type="text"
-        placeholder="Título"
-        className="w-full mb-2 p-2 border rounded text-sm"
-        value={nuevoItem.titulo}
-        onChange={(e) => setNuevoItem({ ...nuevoItem, titulo: e.target.value })}
-      />
-      {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
 
-      <textarea
-        placeholder="Descripción"
-        className="w-full mb-2 p-2 border rounded text-sm"
-        value={nuevoItem.descripcion}
-        onChange={(e) => setNuevoItem({ ...nuevoItem, descripcion: e.target.value })}
-      />
-      {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
+      <div className="mb-4">
+        <label htmlFor="titulo" className="block text-sm font-medium text-gray-700 mb-1">
+          Título
+        </label>
+        <input
+          id="titulo"
+          type="text"
+          placeholder="Título"
+          className="w-full mb-2 p-2 border rounded text-sm"
+          value={nuevoItem.titulo}
+          onChange={handleChangeTitle}
+        />
+        {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
+      </div>
 
-      <input
-        type="date"
-        className="w-full mb-2 p-2 border rounded text-sm"
-        value={nuevoItem.fecha}
-        onChange={(e) => setNuevoItem({ ...nuevoItem, fecha: e.target.value })}
-      />
-      {errores.fecha && <p className="text-red-500 text-sm">{errores.fecha}</p>}
+
+      <div className="mb-4">
+        <label htmlFor="descripcion" className="block text-sm font-medium text-gray-700 mb-1">
+          Descripción
+        </label>
+        <textarea
+          id="descripcion"
+          placeholder="Descripción"
+          className="w-full mb-2 p-2 border rounded text-sm"
+          value={nuevoItem.descripcion}
+          onChange={handleChangeDescription}
+        />
+        {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
+      </div>
+
+
+      <div className="mb-4">
+        <label htmlFor="fecha" className="block text-sm font-medium text-gray-700 mb-1">
+          Fecha
+        </label>
+        <input
+          id="fecha"
+          type="date"
+          className="w-full mb-2 p-2 border rounded text-sm"
+          value={nuevoItem.fecha}
+          onChange={handleChangeDate}
+        />
+
+        {errores.fecha && <p className="text-red-500 text-sm">{errores.fecha}</p>}
+      </div>
 
       {/* Input para subir imagen (SOLO si es noticia) */}
       {storageKey === "noticias" && (
-        <>
+        <div className="mb-4">
+          <label htmlFor="imagen" className="block text-sm font-medium text-gray-700 mb-1">
+            Imagen
+          </label>
           <input
-            ref={fileInputRef} // Asignar ref al input de archivo
+            id="imagen"
+            ref={fileInputRef}
             type="file"
             accept="image/png, image/jpeg, image/jpg"
-            onChange={handleImageUpload}
+            onChange={handleChangeImage}
             className="w-full mb-2 p-2 border rounded text-sm"
           />
           {errores.imagen && <p className="text-red-500 text-sm">{errores.imagen}</p>}
-        </>
+        </div>
       )}
 
       <button

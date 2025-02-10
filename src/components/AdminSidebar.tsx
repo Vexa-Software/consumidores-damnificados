@@ -1,15 +1,24 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { auth } from "../firebase/config";
+import { signOut } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const AdminSidebar: React.FC = () => {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false); // Estado del sidebar en mobile
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false); 
 
-  // Función para cerrar sesión (puedes modificarla según tu lógica de autenticación)
-  const handleLogout = () => {
-    localStorage.removeItem("userToken"); // Elimina el token de autenticación (si usas uno)
-    window.location.href = "/login"; // Redirige al login o página de inicio
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast.success("Sesión cerrada exitosamente");
+      navigate("/login");
+    } catch (error) {
+      toast.error("Error al cerrar sesión");
+      console.error("Error al cerrar sesión:", error);
+    }
   };
 
   return (

@@ -9,6 +9,7 @@ import QuienesSomos from "./pages/QuienesSomos";
 import Login from "./pages/Login"; // Importamos la nueva página de Login
 import AvisosJudicialesAdmin from "./pages/AvisosJudicialesAdmin";
 import NoticiasAdmin from "./pages/NoticiasAdmin";
+import PrivateRoute from './components/PrivateRoute';
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +24,21 @@ export const router = createBrowserRouter([
       { path: "/contacto", element: <Contacto /> },
     ],
   },
-  { path: "/login", element: <Login /> }, // Ruta de Login fuera del Layout
-  { path: "/avisos-judiciales-admin", element: <AvisosJudicialesAdmin /> },
-  { path: "/noticias-admin", element: <NoticiasAdmin/> },
+  { path: "/login", element: <Login /> },
+  {
+    path: "/avisos-judiciales-admin",
+    element: (
+      <PrivateRoute>
+        <AvisosJudicialesAdmin />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/noticias-admin",
+    element: (
+      <PrivateRoute>
+        <NoticiasAdmin />
+      </PrivateRoute>
+    ),
+  },
 ]);

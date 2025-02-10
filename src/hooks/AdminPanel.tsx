@@ -34,9 +34,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
     const [modalEliminarOpen, setModalEliminarOpen] = useState<boolean>(false);
     const [itemAEliminar, setItemAEliminar] = useState<number | null>(null);
 
-    const [modalEditarOpen, setModalEditarOpen] = useState<boolean>(false);
-    const [itemAEditar, setItemAEditar] = useState<Item | null>(null);
-
     useEffect(() => {
         const savedItems = localStorage.getItem(storageKey);
         if (savedItems) {
@@ -46,22 +43,33 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
 
     // ✅ Validar campos
     const validarCampos = (): boolean => {
+        let mensajesError = {
+            titulo: "",
+            descripcion: "",
+            fecha: "",
+            imagen: ""
+
+        };
+
         if (nuevoItem.titulo.length < 3 || nuevoItem.titulo.length > 1000) {
-            toast.error("El título debe tener entre 3 y 1000 caracteres.");
-            return false;
+            mensajesError.titulo = "El título debe tener entre 3 y 1000 caracteres";
         }
         if (nuevoItem.descripcion.length < 3 || nuevoItem.descripcion.length > 7000) {
-            toast.error("La descripción debe tener entre 3 y 7000 caracteres.");
-            return false;
+            mensajesError.descripcion = "La descripción debe tener entre 3 y 7000 caracteres";
         }
         if (!nuevoItem.fecha) {
-            toast.error("Debe ingresar una fecha.");
+            mensajesError.fecha = "Debe ingresar una fecha";
+        }
+
+        if (Object.values(mensajesError).some(error => error !== "")) {
+            setErrores(mensajesError);
+            toast.error("Por favor, corrija los errores en el formulario");
             return false;
         }
+        
+        setErrores({ titulo: "", descripcion: "", fecha: "", imagen: "" });
         return true;
     };
-
-
 
     const handleAgregarItem = (onSuccess?: () => void) => {
         if (!validarCampos()) {
@@ -83,20 +91,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
     
     // ✅ Modal de confirmación para editar
     const handleEditarItem = (item: Item) => {
-        setModalEditarOpen(true);
-        setItemAEditar(item);
-    };
-
-    const confirmarEdicion = () => {
-        if (!itemAEditar) return;
-
         setEditando(true);
-        setItemEditadoId(itemAEditar.id);
-        setNuevoItem(itemAEditar);
-        setModalEditarOpen(false);
+        setItemEditadoId(item.id);
+        setNuevoItem(item);
     };
-
-
 
     // ✅ Guardar edición
     const handleGuardarEdicion = () => {
@@ -114,7 +112,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
         setItemEditadoId(null);
         toast.success(`${title} editado con éxito.`);
     };
-
 
     // ✅ Modal de confirmación para eliminar
     const handleEliminarItem = (id: number) => {
@@ -150,8 +147,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
                     validarCampos={validarCampos}
                 />
 
-
-
                 <table className="w-full border-collapse border border-gray-300">
                     <thead>
                         <tr className="bg-gray-200">
@@ -184,19 +179,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
                         <div className="flex flex-row justify-evenly">
                             <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalEliminarOpen(false)}>Cancelar</button>
                             <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmarEliminar}>Confirmar</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Modal de Confirmación para editar */}
-            {modalEditarOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg ">
-                        <p className="text-lg font-bold mb-4">¿Quieres editar esta noticia?</p>
-                        <div className="flex flex-row justify-evenly">
-                            <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalEditarOpen(false)}>Cancelar</button>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={confirmarEdicion}>Confirmar</button>
                         </div>
                     </div>
                 </div>
