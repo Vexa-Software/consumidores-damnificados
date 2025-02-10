@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import AdminSidebar from "../components/AdminSidebar";
 import AdminForm from "../components/AdminForm";
+import {DataTableDemo} from "../components/Grid";
 import { toast } from "react-toastify";
+import { db } from "../firebase/config"; // Asegúrate de tener este archivo configurado correctamente
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
+
 
 interface Item {
-    id: number;
+    id: string;
     titulo: string;
     descripcion: string;
     fecha: string;
@@ -19,7 +23,7 @@ interface AdminPanelProps {
 const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
     const [items, setItems] = useState<Item[]>([]);
     const [nuevoItem, setNuevoItem] = useState<Item>({
-        id: 0,
+        id: "",
         titulo: "",
         descripcion: "",
         fecha: "",
@@ -27,19 +31,36 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
     });
 
     const [editando, setEditando] = useState<boolean>(false);
-    const [itemEditadoId, setItemEditadoId] = useState<number | null>(null);
+    const [itemEditadoId, setItemEditadoId] = useState<string | null>(null);
+
     const [errores, setErrores] = useState({ titulo: "", descripcion: "", fecha: "", imagen: "" });
 
     // Modales de confirmación
     const [modalEliminarOpen, setModalEliminarOpen] = useState<boolean>(false);
-    const [itemAEliminar, setItemAEliminar] = useState<number | null>(null);
+    const [itemAEliminar, setItemAEliminar] = useState<string | null>(null);
 
-    useEffect(() => {
-        const savedItems = localStorage.getItem(storageKey);
-        if (savedItems) {
-            setItems(JSON.parse(savedItems));
+    const fetchItems = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, storageKey));
+            const itemsData: Item[] = querySnapshot.docs.map((doc) => ({
+                id: doc.id, // Firestore usa un ID string
+                ...(doc.data() as Omit<Item, "id">), // Extrae los datos correctamente
+            }));
+
+            setItems(itemsData);
+        } catch (error) {
+            console.error("Error al obtener datos de Firestore:", error);
+            toast.error("Error al obtener datos.");
         }
-    }, [storageKey]);
+    };
+
+   
+    useEffect(() => {
+       
+        fetchItems();
+    }, [storageKey]); // Se ejecuta cada vez que cambia storageKey
+    
+    
 
     // ✅ Validar campos
     const validarCampos = (): boolean => {
@@ -71,23 +92,32 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
         return true;
     };
 
-    const handleAgregarItem = (onSuccess?: () => void) => {
-        if (!validarCampos()) {
-            return; // Si hay errores, salimos de la función sin modificar el estado
-        }
+    const handleAgregarItem = async () => {
+        if (!validarCampos()) return;
     
-        // ✅ Solo si pasa la validación, agregamos la noticia
-        const nuevosItems = [...items, { ...nuevoItem, id: Date.now() }];
-        setItems(nuevosItems);
-        localStorage.setItem(storageKey, JSON.stringify(nuevosItems));
+        try {
+            // 🔹 Guardar en Firestore SIN ID (Firestore genera el ID automáticamente)
+            await addDoc(collection(db, storageKey), {
+                titulo: nuevoItem.titulo,
+                descripcion: nuevoItem.descripcion,
+                fecha: nuevoItem.fecha,
+                imagen: nuevoItem.imagen || "", // Si la imagen es opcional
+            });
     
-        toast.success(`${title} agregado con éxito.`);
+            // 🔹 Actualizar estado local con el ID de Firestore
+           fetchItems();
+            toast.success(`${title} agregado con éxito.`);
     
-        // ✅ Llamar a la función `onSuccess` si se proporciona
-        if (onSuccess) {
-            onSuccess();
+            // 🔹 Resetear formulario
+            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
+        } catch (error) {
+            console.error("Error al agregar item:", error);
+            toast.error("Hubo un error al agregar el item.");
         }
     };
+    
+    
+    
     
     // ✅ Modal de confirmación para editar
     const handleEditarItem = (item: Item) => {
@@ -97,38 +127,67 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
     };
 
     // ✅ Guardar edición
-    const handleGuardarEdicion = () => {
-        if (!validarCampos()) return;
-
-        const itemsActualizados = items.map((item) =>
-            item.id === itemEditadoId ? nuevoItem : item
-        );
-
-        setItems(itemsActualizados);
-        localStorage.setItem(storageKey, JSON.stringify(itemsActualizados));
-
-        setNuevoItem({ id: 0, titulo: "", descripcion: "", fecha: "", imagen: "" });
-        setEditando(false);
-        setItemEditadoId(null);
-        toast.success(`${title} editado con éxito.`);
+    const handleGuardarEdicion = async () => {
+        if (!validarCampos() || !itemEditadoId) return;
+    
+        try {
+            const itemRef = doc(db, storageKey, itemEditadoId);
+            
+            console.log("Editando el documento con ID:", itemEditadoId); // ✅ Verificar el ID
+            console.log("Datos a actualizar:", nuevoItem); // ✅ Verificar datos
+            
+            await updateDoc(itemRef, {
+                titulo: nuevoItem.titulo,
+                descripcion: nuevoItem.descripcion,
+                fecha: nuevoItem.fecha,
+                imagen: nuevoItem.imagen || "",
+            });
+    
+            // ✅ Actualizar el estado local correctamente
+            const itemsActualizados = items.map((item) =>
+                item.id === itemEditadoId ? { ...item, ...nuevoItem } : item
+            );
+    
+            setItems(itemsActualizados);
+            toast.success(`${title} editado con éxito.`);
+    
+            // ✅ Resetear el formulario
+            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
+            setEditando(false);
+            setItemEditadoId(null);
+        } catch (error) {
+            console.error("Error al editar item:", error);
+            toast.error("Hubo un error al editar el item.");
+        }
     };
+    
+    
 
     // ✅ Modal de confirmación para eliminar
-    const handleEliminarItem = (id: number) => {
+    const handleEliminarItem = (id: string) => {
         setModalEliminarOpen(true);
         setItemAEliminar(id);
     };
 
-    const confirmarEliminar = () => {
-        if (itemAEliminar !== null) {
-            const itemsActualizados = items.filter((item) => item.id !== itemAEliminar);
-            setItems(itemsActualizados);
-            localStorage.setItem(storageKey, JSON.stringify(itemsActualizados));
+    const confirmarEliminar = async () => {
+        if (!itemAEliminar) return;
+    
+        try {
+            const docRef=doc(db, storageKey, itemAEliminar)
+            await deleteDoc(docRef);
+    
+            // Filtrar el estado local
+            fetchItems();
             toast.success(`${title} eliminado con éxito.`);
+        } catch (error) {
+            console.error("Error al eliminar item:", error);
+            toast.error("Hubo un error al eliminar el ítem.");
         }
+    
         setModalEliminarOpen(false);
         setItemAEliminar(null);
     };
+    
 
     return (
         <div className="flex">
@@ -183,6 +242,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title }) => {
                     </div>
                 </div>
             )}
+
+<DataTableDemo/>
+
         </div>
     );
 };

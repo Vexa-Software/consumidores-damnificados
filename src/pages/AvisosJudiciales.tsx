@@ -4,6 +4,7 @@ import PaginatedList from "../hooks/PaginatedList"; // Importa el componente gen
 
 const AvisosJudiciales: React.FC = () => {
   return <PaginatedList storageKey="avisosJudiciales" title="Avisos Judiciales" />;
+  
 
 };
 
