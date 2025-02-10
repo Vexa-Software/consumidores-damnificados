@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 import {
     ColumnDef,
@@ -15,8 +13,9 @@ import {
 } from "@tanstack/react-table"
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Button } from "../components/ui/button"
+import { Checkbox } from "../components/ui/checkbox"
+
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
@@ -25,18 +24,230 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "../components/ui/dropdown-menu"
+import { Input } from "../components/ui/input"
 import {
     Table,
+
     TableBody,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "../components/ui/table"
+
 
 const data: Payment[] = [
+    {
+        id: "m5gr84i9",
+        amount: 316,
+        status: "success",
+        email: "ken99@yahoo.com",
+    },
+    {
+        id: "3u1reuv4",
+        amount: 242,
+        status: "success",
+        email: "Abe45@gmail.com",
+    },
+    {
+        id: "derv1ws0",
+        amount: 837,
+        status: "processing",
+        email: "Monserrat44@gmail.com",
+    },
+    {
+        id: "5kma53ae",
+        amount: 874,
+        status: "success",
+        email: "Silas22@gmail.com",
+    },
+    {
+        id: "bhqecj4p",
+        amount: 721,
+        status: "failed",
+        email: "carmella@hotmail.com",
+    },
+    {
+        id: "m5gr84i9",
+        amount: 316,
+        status: "success",
+        email: "ken99@yahoo.com",
+    },
+    {
+        id: "3u1reuv4",
+        amount: 242,
+        status: "success",
+        email: "Abe45@gmail.com",
+    },
+    {
+        id: "derv1ws0",
+        amount: 837,
+        status: "processing",
+        email: "Monserrat44@gmail.com",
+    },
+    {
+        id: "5kma53ae",
+        amount: 874,
+        status: "success",
+        email: "Silas22@gmail.com",
+    },
+    {
+        id: "bhqecj4p",
+        amount: 721,
+        status: "failed",
+        email: "carmella@hotmail.com",
+    },
+    {
+        id: "m5gr84i9",
+        amount: 316,
+        status: "success",
+        email: "ken99@yahoo.com",
+    },
+    {
+        id: "3u1reuv4",
+        amount: 242,
+        status: "success",
+        email: "Abe45@gmail.com",
+    },
+    {
+        id: "derv1ws0",
+        amount: 837,
+        status: "processing",
+        email: "Monserrat44@gmail.com",
+    },
+    {
+        id: "5kma53ae",
+        amount: 874,
+        status: "success",
+        email: "Silas22@gmail.com",
+    },
+    {
+        id: "bhqecj4p",
+        amount: 721,
+        status: "failed",
+        email: "carmella@hotmail.com",
+    },
+    {
+        id: "m5gr84i9",
+        amount: 316,
+        status: "success",
+        email: "ken99@yahoo.com",
+    },
+    {
+        id: "3u1reuv4",
+        amount: 242,
+        status: "success",
+        email: "Abe45@gmail.com",
+    },
+    {
+        id: "derv1ws0",
+        amount: 837,
+        status: "processing",
+        email: "Monserrat44@gmail.com",
+    },
+    {
+        id: "5kma53ae",
+        amount: 874,
+        status: "success",
+        email: "Silas22@gmail.com",
+    },
+    {
+        id: "bhqecj4p",
+        amount: 721,
+        status: "failed",
+        email: "carmella@hotmail.com",
+    },
+    {
+        id: "m5gr84i9",
+        amount: 316,
+        status: "success",
+        email: "ken99@yahoo.com",
+    },
+    {
+        id: "3u1reuv4",
+        amount: 242,
+        status: "success",
+        email: "Abe45@gmail.com",
+    },
+    {
+        id: "derv1ws0",
+        amount: 837,
+        status: "processing",
+        email: "Monserrat44@gmail.com",
+    },
+    {
+        id: "5kma53ae",
+        amount: 874,
+        status: "success",
+        email: "Silas22@gmail.com",
+    },
+    {
+        id: "bhqecj4p",
+        amount: 721,
+        status: "failed",
+        email: "carmella@hotmail.com",
+    },
+    {
+        id: "m5gr84i9",
+        amount: 316,
+        status: "success",
+        email: "ken99@yahoo.com",
+    },
+    {
+        id: "3u1reuv4",
+        amount: 242,
+        status: "success",
+        email: "Abe45@gmail.com",
+    },
+    {
+        id: "derv1ws0",
+        amount: 837,
+        status: "processing",
+        email: "Monserrat44@gmail.com",
+    },
+    {
+        id: "5kma53ae",
+        amount: 874,
+        status: "success",
+        email: "Silas22@gmail.com",
+    },
+    {
+        id: "bhqecj4p",
+        amount: 721,
+        status: "failed",
+        email: "carmella@hotmail.com",
+    },
+    {
+        id: "m5gr84i9",
+        amount: 316,
+        status: "success",
+        email: "ken99@yahoo.com",
+    },
+    {
+        id: "3u1reuv4",
+        amount: 242,
+        status: "success",
+        email: "Abe45@gmail.com",
+    },
+    {
+        id: "derv1ws0",
+        amount: 837,
+        status: "processing",
+        email: "Monserrat44@gmail.com",
+    },
+    {
+        id: "5kma53ae",
+        amount: 874,
+        status: "success",
+        email: "Silas22@gmail.com",
+    },
+    {
+        id: "bhqecj4p",
+        amount: 721,
+        status: "failed",
+        email: "carmella@hotmail.com",
+    },
     {
         id: "m5gr84i9",
         amount: 316,
@@ -206,32 +417,6 @@ export function DataTableDemo() {
                     }
                     className="max-w-sm"
                 />
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table
-                            .getAllColumns()
-                            .filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
             </div>
             <div className="rounded-md border">
                 <Table>
