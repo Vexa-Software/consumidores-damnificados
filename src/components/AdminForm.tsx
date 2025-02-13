@@ -121,7 +121,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
         <textarea
           id="descripcion"
           placeholder="Descripción"
-          className="w-full mb-2 p-2 border rounded text-sm"
+          className="w-full mb-2 p-2 border rounded text-sm "
           value={nuevoItem.descripcion}
           onChange={handleChangeDescription}
         />

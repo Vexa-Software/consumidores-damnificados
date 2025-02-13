@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
+import { collection, onSnapshot, query, orderBy} from "firebase/firestore";
+import { toast } from "react-toastify";
+import { db } from "../firebase/config";
 
 interface Item {
-  id: number;
+  id: string;
   titulo: string;
   descripcion: string;
   fecha: string;
@@ -16,21 +19,30 @@ interface PaginatedListProps {
 
 const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
   const [items, setItems] = useState<Item[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [itemsMostrados, setItemsMostrados] = useState<number>(3); // Mostrar inicialmente 3 elementos
   const pdfUrl = "/assets/pdf/EDICTO-MAPFRE.pdf"; // Cambia esta ruta por la correcta
 
   useEffect(() => {
-    const savedItems = localStorage.getItem(storageKey);
-    if (savedItems) {
-      const parsedItems: Item[] = JSON.parse(savedItems);
-
-      // Ordenar por fecha más reciente primero
-      parsedItems.sort((a: Item, b: Item) =>
-        new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
-      );
-
-      setItems(parsedItems);
-
+    setLoading(true);
+    try {
+      const q = query(collection(db, storageKey), orderBy("fecha", "desc"));
+  
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const itemsData: Item[] = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...(doc.data() as Omit<Item, "id">),
+        }));
+  
+        setItems(itemsData);
+        setLoading(false);
+      });
+  
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("Error al obtener datos en tiempo real:", error);
+      toast.error("Error al obtener datos.");
+      setLoading(false);
     }
   }, [storageKey]);
 
@@ -42,6 +54,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
   return (
     <div className="max-w-full px-[12%] lg:px-[7.5%] 2xl:px-[13%] p-6">
       <h1 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-6">{title}</h1>
+      
 
       {storageKey === "noticias" && (
         <div className="bg-white p-6 rounded-lg  mb-6  ">
@@ -104,39 +117,55 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
         </div>
       )}
 
-      {/* Mostrar elementos paginados */}
-      {items.slice(0, itemsMostrados).map((item) => (
-        <div
-          key={item.id}
-          className="bg-[#F7F7F7] w-full p-6 my-4 rounded-lg shadow-md flex flex-col sm:flex-row sm:items-center sm:space-x-4"
-        >
-          {/* Mostrar imagen si es una noticia y si tiene imagen */}
-          {storageKey === "noticias" && item.imagen && (
-            <div className="flex justify-center sm:justify-start w-full sm:w-auto">
-              <img src={item.imagen} alt="Noticia" className="w-full h-[200px] sm:w-[200px] sm:h-[300px] 2xl:w-[300px] 2xl:h-[300px] object-cover rounded-lg mb-4 sm:mb-0" />
-            </div>
-          )}
 
-          {/* Si es "avisosJudiciales", muestra el icono de check, si es "noticias", no muestra nada */}
-          {storageKey === "avisosJudiciales" && (
-            <div className="flex justify-center sm:justify-start">
-              <FaCheckCircle className="text-sky-500 text-3xl sm:text-4xl lg:text-5xl flex-shrink-0 mb-2" />
-            </div>
-          )}
-
-          {/* Contenedor de contenido */}
-          <div className="flex-1">
-            {/* Título y fecha alineados horizontalmente en sm */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center ">
-              <h1 className="font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start">{item.titulo}</h1>
-              <span className="text-[#1C244B] text-sm sm:text-[90%] lg:text-lg 2xl:text-xl font-medium mb-2 sm:ml-4">{item.fecha}</span>
-            </div>
-
-            {/* Descripción alineada a la izquierda en sm y ocupando todo el ancho en mobile */}
-            <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify">{item.descripcion}</p>
-          </div>
+{loading ? (
+        <div className="flex justify-center items-center h-40">
+          <p className="text-gray-600 text-lg">Cargando...</p>
         </div>
-      ))}
+      ) : (
+        items.slice(0, itemsMostrados).map((item) => (
+          <div
+            key={item.id}
+            className="bg-[#F7F7F7] w-full p-6 my-4 rounded-lg shadow-md flex flex-col sm:flex-row sm:items-center sm:space-x-4"
+          >
+            {/* Mostrar imagen si es una noticia y si tiene imagen */}
+            {storageKey === "noticias" && item.imagen && (
+              <div className="flex justify-center sm:justify-start w-full sm:w-auto">
+                <img
+                  src={item.imagen}
+                  alt="Noticia"
+                  className="w-full h-[200px] sm:w-[200px] sm:h-[300px] 2xl:w-[300px] 2xl:h-[300px] object-cover rounded-lg mb-4 sm:mb-0"
+                />
+              </div>
+            )}
+
+            {/* Si es "avisosJudiciales", muestra el icono de check */}
+            {storageKey === "avisosJudiciales" && (
+              <div className="flex justify-center sm:justify-start">
+                <FaCheckCircle className="text-sky-500 text-3xl sm:text-4xl lg:text-5xl flex-shrink-0 mb-2" />
+              </div>
+            )}
+
+            {/* Contenedor de contenido */}
+            <div className="flex-1">
+              {/* Título y fecha alineados horizontalmente en sm */}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center ">
+                <h1 className="font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start">
+                  {item.titulo}
+                </h1>
+                <span className="text-[#1C244B] text-sm sm:text-[90%] lg:text-lg 2xl:text-xl font-medium mb-2 sm:ml-4">
+                  {item.fecha}
+                </span>
+              </div>
+
+              {/* Descripción alineada a la izquierda en sm y ocupando todo el ancho en mobile */}
+              <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify">
+                {item.descripcion}
+              </p>
+            </div>
+          </div>
+        ))
+      )}
 
       {/* Botón "Cargar más" */}
       {itemsMostrados < items.length && (

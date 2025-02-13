@@ -33,7 +33,7 @@ const AdminSidebar: React.FC = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-64 h-screen bg-gray-800 text-white p-6 flex flex-col justify-between transform ${
+        className={`fixed top-0 left-0 w-64 h-[%100] bg-gray-800 text-white p-6 flex flex-col justify-between transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform sm:translate-x-0 sm:w-1/4 sm:relative z-50`}
       >

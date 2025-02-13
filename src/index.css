@@ -137,6 +137,7 @@ body {
 }
 .swiper-button-next{
   color: #0E121A !important;
+  
 }
 @layer base {
   :root {
