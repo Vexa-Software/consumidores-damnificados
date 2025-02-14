@@ -21,7 +21,7 @@ interface NoticiasSliderProps {
 export function NoticiasSlider({ items }: NoticiasSliderProps) {
   return (
     <div className="bg-[#F7F7F7] h-[700px] w-full my-16 flex flex-col justify-center ">
-      <h1 className="text-3xl font-bold text-center mb-16">Últimas Noticias</h1>
+      <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-16">Últimas Noticias</h1>
     <div className=" flex flex-row justify-center items-center">
       
       <Swiper
@@ -46,12 +46,12 @@ export function NoticiasSlider({ items }: NoticiasSliderProps) {
           modifier: 1,
           slideShadows: false,
         }}
-        className="relative w-[100rem] mx-10 "
+        className="relative w-[70rem] 2xl:w-[90rem] mx-10 "
       >
         {items.map((item) => (
           <SwiperSlide
             key={item.id}
-            className="w-[550px] "
+            className="w-[550px] xl:w-[370px] 2xl:w-[520px] "
           >
              <NewsCard
              imagen={item.imagen}
@@ -68,7 +68,7 @@ export function NoticiasSlider({ items }: NoticiasSliderProps) {
         <div className="swiper-button-next absolute -right-12 top-1/2 transform -translate-y-1/2 z-50 text-black hover:text-gray-900 text-3xl cursor-pointer"></div> */}
       </Swiper>
     </div>
-    <Link to="/noticias" className="flex flex-row justify-center">Ver todas las Noticias </Link>
+    <Link to="/noticias" className="text-sky-600 flex flex-row justify-center">Ver todas las Noticias </Link>
     </div>
   );
 }
