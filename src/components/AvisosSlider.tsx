@@ -68,7 +68,7 @@ export function AvisosSlider({ items }: AvisosSliderProps) {
                   </div>
 
                   
-                  <div className="flex justify-end w-full 2xl:mt-2">
+                  <div className="flex justify-end w-full 2xl:mt-6">
                     <Link to="/avisos-judiciales">
                       <button className="bg-sky-500 text-white rounded-lg px-6 py-0 2xl:py-1 w-[110px] 2xl:w-[170px] ">
                         Ver más
