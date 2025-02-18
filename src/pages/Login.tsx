@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -7,13 +7,23 @@ import { useNavigate } from "react-router-dom";
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [rememberMe, setRememberMe] = useState(false); // Estado para "Recordar usuario"
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    // Cargar email guardado en localStorage
+    useEffect(() => {
+        const savedEmail = localStorage.getItem("rememberedEmail");
+        if (savedEmail) {
+            setEmail(savedEmail);
+            setRememberMe(true); // Si hay un email guardado, marcar el checkbox
+        }
+    }, []);
 
     const isValidEmail = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
-      };
+    };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -26,6 +36,14 @@ const Login: React.FC = () => {
             setLoading(true);
             await signInWithEmailAndPassword(auth, email, password);
             toast.success("Inicio de sesión exitoso");
+
+            // Guardar o eliminar el email según el checkbox
+            if (rememberMe) {
+                localStorage.setItem("rememberedEmail", email);
+            } else {
+                localStorage.removeItem("rememberedEmail");
+            }
+
             navigate("/avisos-judiciales-admin");
         } catch (error: any) {
             let errorMessage = "Error al iniciar sesión";
@@ -41,41 +59,38 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-start min-h-screen bg-white">
-            {/* Header minimalista con logo y título centrado */}
-            <div className="relative w-full bg-[#f7f7f7] border border-[#0EA5E9] py-6 px-12 sm:px-24 2xl:py-4 2xl:px-[13%] flex flex-row justify-between items-center">
-                {/* Logo alineado a la izquierda */}
+        <div className="flex flex-col items-center justify-center min-h-screen bg-white py-24 px-8">
+            <div className='columnaLogo mb-16'>
                 <img
                     src="/assets/img/consumidores-damnificados/consulogo.png"
-                    alt="Consumidores Damnificados"
-                    className="w-[60%] h-auto lg:w-[30%] 2xl:w-[30%] 2xl:h-auto"
+                    alt="Logo"
+                    className='w-full h-full object-contain'
                 />
-                 {/* Texto "ADMIN PANEL" centrado */}
-                 <h1 className="text-center 2xl:my-4 text-black text-[60%] sm:text-lg lg:text-lg 2xl:text-2xl font-medium sm:font-semibold">
-                    Panel de Administracion
-                </h1>
             </div>
 
-            {/* Contenedor de Login */}
-            <div className="bg-white shadow-2xl rounded-lg w-[75%] 2xl:w-full max-w-md mt-8 2xl:mt-20">
-               
-                <div className="bg-sky-500 w-full rounded-t-lg py-2">
-                    <h2 className="text-lg 2xl:text-2xl font-bold text-center text-white">Iniciar Sesión</h2>
-                </div>
-                <form className="mt-6 2xl:mt-8 px-8 pb-6 2xl:pb-10" onSubmit={handleLogin}>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 font-medium">Email</label>
+            <h1 className="text-2xl sm:text-3xl xl:text-4xl 2xl:text-4xl font-bold text-center text-sky-500">
+                Bienvenido
+            </h1>
+            <p className="text-center 2xl:text-xl py-4">
+                Ingresa tu email y contraseña para acceder a tu cuenta
+            </p>
+
+            <div className="bg-white rounded-lg w-[75%] 2xl:w-full max-w-2xl mt-8">
+                <form className="mt-6 xl:px-8 pb-6" onSubmit={handleLogin}>
+                    <div className="mb-10">
+                        <label className="block mb-4 text-sky-500 font-medium">Email</label>
                         <input
                             type="email"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                            placeholder="Correo electronico"
+                            placeholder="Correo electrónico"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700 font-medium">Contraseña</label>
+
+                    <div className="mb-10">
+                        <label className="block mb-4 text-sky-500 font-medium">Contraseña</label>
                         <input
                             type="password"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
@@ -86,16 +101,27 @@ const Login: React.FC = () => {
                         />
                     </div>
 
-                    
+                    {/* Checkbox para recordar usuario */}
+                    <div className="flex items-center mb-6">
+                        <input
+                            id="rememberMe"
+                            type="checkbox"
+                            className="mr-2"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                        />
+                        <label htmlFor="rememberMe" className="text-gray-600 text-sm">
+                            Recordarme
+                        </label>
+                    </div>
 
                     <button
                         type="submit"
                         className="w-full bg-[#0EA5E9] text-white py-2 rounded-lg hover:bg-[#2498ce] transition disabled:opacity-50"
                         disabled={loading}
                     >
-                        {loading ? "Cargando..." : "Ingresar"}
+                        {loading ? "Cargando..." : "Iniciar sesión"}
                     </button>
-
                 </form>
             </div>
         </div>

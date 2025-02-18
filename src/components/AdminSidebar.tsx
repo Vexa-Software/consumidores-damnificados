@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const AdminSidebar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false); 
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -23,58 +23,60 @@ const AdminSidebar: React.FC = () => {
 
   return (
     <>
-      {/* Botón Hamburguesa en Mobile */}
+  {/* Botón Hamburguesa en Mobile */}
+  <button
+    className="fixed top-4 left-4 text-white bg-gray-800 p-2 rounded-md sm:hidden z-50"
+    onClick={() => setIsOpen(!isOpen)}
+  >
+    <FaBars size={20} />
+  </button>
+
+  {/* Sidebar */}
+  <div
+    className={`fixed top-0 left-0  bg-white border-r border-sky-500 text-black 
+    pt-6 pr-4 pb-6   flex flex-col justify-between transform 
+    ${isOpen ? "translate-x-0 h-[100%]" : "-translate-x-full "} 
+    transition-transform sm:translate-x-0 sm:relative  
+    w-64  z-50 `}
+  >
+    <div>
+      {/* Botón "X" para cerrar Sidebar en Mobile */}
       <button
-        className="fixed top-4 left-4 text-white bg-gray-800 p-2 rounded-md sm:hidden z-50"
-        onClick={() => setIsOpen(!isOpen)}
+        className="absolute top-4 right-4 text-black sm:hidden"
+        onClick={() => setIsOpen(false)}
       >
-        <FaBars size={24} />
+        <FaTimes className="text-2xl" />
       </button>
 
-      {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 w-64 h-[%100] bg-gray-800 text-white p-6 flex flex-col justify-between transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform sm:translate-x-0 sm:w-1/4 sm:relative z-50`}
-      >
-        <div>
-          {/* Botón "X" para cerrar Sidebar en Mobile */}
-          <button
-            className="absolute top-4 right-4 text-white sm:hidden"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaTimes className="text-2xl" />
-          </button>
+      <ul>
+        <li className={`mb-2 ${location.pathname === "/noticias-admin" ? "bg-sky-500 rounded-full text-white" : "border rounded-full "}`}>
+          <Link to="/noticias-admin" className="block p-2  text-center" onClick={() => setIsOpen(false)}>
+            Noticias
+          </Link>
+        </li>
+        <li className={`mb-2 ${location.pathname === "/avisos-judiciales-admin" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
+          <Link to="/avisos-judiciales-admin" className="block p-2  text-center" onClick={() => setIsOpen(false)}>
+            Avisos Judiciales
+          </Link>
+        </li>
+      </ul>
+    </div>
 
-          <h2 className="text-xl font-bold mb-4">Panel de Administración</h2>
-          <ul>
-            <li className={`mb-2 ${location.pathname === "/avisos-judiciales-admin" ? "bg-gray-600" : ""}`}>
-              <Link to="/avisos-judiciales-admin" className="block p-2" onClick={() => setIsOpen(false)}>
-                Avisos Judiciales
-              </Link>
-            </li>
-            <li className={`mb-2 ${location.pathname === "/noticias-admin" ? "bg-gray-600" : ""}`}>
-              <Link to="/noticias-admin" className="block p-2" onClick={() => setIsOpen(false)}>
-                Noticias
-              </Link>
-            </li>
-          </ul>
-        </div>
+    {/* Botón de Cerrar Sesión en la parte inferior */}
+    <button
+      onClick={handleLogout}
+      className="w-full mt-auto bg-white text-black py-2 rounded-md hover:text-red-600 transition"
+    >
+      Cerrar Sesión
+    </button>
+  </div>
 
-        {/* Botón de Cerrar Sesión en la parte inferior */}
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition"
-        >
-          Cerrar Sesión
-        </button>
-      </div>
+  {/* Fondo oscuro para cerrar Sidebar en mobile */}
+  {isOpen && (
+    <div className="fixed inset-0 bg-black opacity-50 sm:hidden" onClick={() => setIsOpen(false)}></div>
+  )}
+</>
 
-      {/* Fondo oscuro para cerrar Sidebar en mobile */}
-      {isOpen && (
-        <div className="fixed inset-0 bg-black opacity-50 sm:hidden" onClick={() => setIsOpen(false)}></div>
-      )}
-    </>
   );
 };
 

@@ -10,6 +10,7 @@ import Login from "./pages/Login"; // Importamos la nueva página de Login
 import AvisosJudicialesAdmin from "./pages/AvisosJudicialesAdmin";
 import NoticiasAdmin from "./pages/NoticiasAdmin";
 import PrivateRoute from './components/PrivateRoute';
+import HeaderAdmin from "./components/HeaderAdmin";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
     path: "/avisos-judiciales-admin",
     element: (
       <PrivateRoute>
+        <HeaderAdmin/>
         <AvisosJudicialesAdmin />
       </PrivateRoute>
     ),
@@ -37,6 +39,7 @@ export const router = createBrowserRouter([
     path: "/noticias-admin",
     element: (
       <PrivateRoute>
+        <HeaderAdmin/>
         <NoticiasAdmin />
       </PrivateRoute>
     ),
