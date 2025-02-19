@@ -17,10 +17,10 @@ const Home: React.FC = () => {
           backgroundSize: 'cover',
           minHeight: "59vh"
         }}>
-        <div className='flex flex-col sm:flex-col lg:flex-row  2xl:flex-row    items-center justify-between px-12 sm:px-5 2xl:px-8 '>
+        <div className='flex flex-col sm:flex-col lg:flex-row  2xl:flex-row    items-center justify-between px-12 sm:px-5 2xl:px-4 '>
 
-         
-          <div className="h-auto sm:h-[50%] lg:h-auto 2xl:h-auto w-[100%] sm:w-[80%] lg:w-[45%] 2xl:w-[40%] mb-6 sm:mb-10 lg:mb-0  ">
+
+          <div className="h-auto sm:h-[50%] lg:h-auto 2xl:h-auto w-[100%] sm:w-[80%] lg:w-[45%] 2xl:w-[45%] mb-6 sm:mb-10 lg:mb-0  ">
             <img
               src="/assets/img/consumidores-damnificados/bannerpic.png"
               alt="Dirección de Defensa del Consumidor"
@@ -28,7 +28,7 @@ const Home: React.FC = () => {
             />
           </div>
 
-          
+
           <div className="w-[1/2] sm:w-[80%] lg:w-[45%] 2xl:w-[45%] h-full flex flex-col justify-center items-center ">
             <h1 className="text-bg-customBlue text-center text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold">¡Conocé Tus Derechos!</h1>
             <p className="text-bg-customBlue mt-4 text-center text-sm lg:text-xl 2xl:text-2xl">
@@ -36,10 +36,10 @@ const Home: React.FC = () => {
               Llevamos más de 10 años trabajando sobre los Derechos Financieros.
             </p>
             <div className="flex justify-center w-full">
-               <Link to="/denuncia" >
-              <button className="w-[186px] h-[48px] mt-6 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition">
-                Denunciá
-              </button>
+              <Link to="/denuncia" >
+                <button className="w-[186px] h-[48px] mt-6 bg-black text-white font-semibold rounded-lg hover:bg-gray-800 transition">
+                  Denunciá
+                </button>
               </Link>
             </div>
           </div>
@@ -90,9 +90,9 @@ const Home: React.FC = () => {
 
         <div className=" mx-auto ">
 
-          
+
           {loading ? <p className="text-center">Cargando...</p> : <AvisosSlider items={avisos} />}
-          
+
           {loading ? <p className="text-center">Cargando...</p> : <NoticiasSlider items={noticias} />}
 
         </div>
