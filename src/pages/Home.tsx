@@ -17,12 +17,12 @@ const Home: React.FC = () => {
           backgroundSize: 'cover',
           minHeight: "59vh"
         }}>
-        <div className='flex flex-col sm:flex-col lg:flex-row  2xl:flex-row    items-center justify-between px-12 sm:px-5 2xl:px-4 '>
+        <div className='flex flex-col sm:flex-col lg:flex-row  2xl:flex-row    items-center justify-between px-12 sm:px-5 2xl:px-6 '>
 
 
           <div className="h-auto sm:h-[50%] lg:h-auto 2xl:h-auto w-[100%] sm:w-[80%] lg:w-[45%] 2xl:w-[45%] mb-6 sm:mb-10 lg:mb-0  ">
             <img
-              src="/assets/img/consumidores-damnificados/bannerpic.png"
+              src="/assets/img/consumidores-damnificados/img-banner-home.jpg"
               alt="Dirección de Defensa del Consumidor"
               className="w-full h-full object-cover  items-center"
             />
@@ -33,7 +33,7 @@ const Home: React.FC = () => {
             <h1 className="text-bg-customBlue text-center text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold">¡Conocé Tus Derechos!</h1>
             <p className="text-bg-customBlue mt-4 text-center text-sm lg:text-xl 2xl:text-2xl">
               Ofrecemos diferentes soluciones para que puedas llevar a cabo tus denuncias.
-              Llevamos más de 10 años trabajando sobre los Derechos Financieros.
+              Llevamos más de 20 años trabajando sobre los Derechos Financieros.
             </p>
             <div className="flex justify-center w-full">
               <Link to="/denuncia" >
@@ -47,17 +47,17 @@ const Home: React.FC = () => {
       </div>
 
       <div className="w-full flex justify-center bg-gray-100 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 w-[65%]   lg:w-[78%] 2xl:w-[60%] h-[auto] sm:h-[auto] lg:h-[auto]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-[65%]   lg:w-[78%] 2xl:w-[60%] h-[auto] sm:h-[auto] lg:h-[auto]">
           {[
             {
-              title: "Defensa Al Consumidor",
+              title: "Dirección Nacional de Defensa del Consumidor y Arbitraje del Consumo",
               description:
-                "Organismo oficial encargado de aplicar las leyes que protegen a los ciudadanos de Buenos Aires en su rol de consumidores de productos y servicios.",
+                "Es el organismo oficial encargado de ejecutar las acciones para la aplicación y control de las políticas vinculadas con la defensa del consumidor.",
             },
             {
-              title: "COPREC",
+              title: "“Reclamos a nivel nacional",
               description:
-                "Si tenés un problema con un producto que compraste o un servicio que contrataste, reclamá para tener una audiencia de conciliación con el proveedor.",
+                "Si tenés un problema con un producto o servicio adquirido o contratado en cualquier parte del país, podes hacer tu reclamo a través de la Ventanilla Única Federal de Defensa al Consumidor.",
             },
             {
               title: "Ley N° 24.240",
@@ -65,19 +65,19 @@ const Home: React.FC = () => {
                 "Normas de Protección y Defensa de los Consumidores. Autoridad de Aplicación. Procedimiento y Sanciones. Disposiciones Finales.",
             },
             {
-              title: "Ley N° 26.361",
+              title: "Reclamos en CABA",
               description:
-                "Modificación de la Ley N° 24.240. Disposiciones complementarias.",
+                "Si tenés un problema con un producto o servicio en CABA, podes hacer tu reclamo de manera digital o presencial –además de la Ventanilla Única Federal de Defensa al Consumidor- ante la Defensa al Consumidor de CABA o ante el Consejo de la Magistratura de CABA.",
             },
           ].map((card, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105"
+              className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105 w-auto"
             >
-              <div className="bg-sky-500 text-white text-center font-semibold py-3">
+              <h1 className="bg-sky-500 text-white text-center text-sm  font-semibold py-3 h-16 flex flex-col justify-center">
                 {card.title}
-              </div>
-              <div className="p-4 text-center text-gray-700">{card.description}</div>
+              </h1>
+              <div className="p-4 text-center text-sm text-gray-700">{card.description}</div>
             </div>
           ))}
         </div>
