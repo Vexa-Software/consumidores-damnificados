@@ -30,24 +30,24 @@ const Header: React.FC = () => {
 
         {/* Navigation */}
         <nav
-          className={`absolute top-[70px] left-0 w-full bg-white text-black flex flex-col items-center space-y-4 transition-all duration-300 lg:px-12 2xl:px-12 ${isMenuOpen ? 'h-auto opacity-100 py-8' : 'h-0 opacity-0 overflow-hidden'
-            } lg:static lg:h-auto lg:opacity-100 lg:overflow-visible lg:flex lg:flex-row lg:py-0 lg:space-x-6 2xl:space-x-8 lg:justify-end lg:items-center lg:space-y-0`}
+          className={`absolute top-[70px] left-0 w-full bg-white text-black flex flex-col items-center space-y-4 transition-all duration-300 lg:px-2 2xl:px-12 ${isMenuOpen ? 'h-auto opacity-100 py-8' : 'h-0 opacity-0 overflow-hidden'
+            } lg:static lg:h-auto lg:opacity-100 lg:overflow-visible lg:flex lg:flex-row lg:py-0 lg:space-x-6  2xl:space-x-8 lg:justify-end lg:items-center lg:space-y-0`}
         >
           <Link to="/" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Home
           </Link>
-          <Link to="/quienes-somos" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
+          <Link to="/quienes-somos" className="custom-link transition font-normal  py-2 px-4 lg:py-0 lg:px-0">
             Quienes Somos
           </Link>
-          <Link to="/avisos-judiciales" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
-            Avisos Judiciales
+          <Link to="/nuestros-logros" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
+            Nuestros Logros
           </Link>
           <Link to="/denuncia" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Denunciá
           </Link>
           <Link to="/noticias" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
-            {/* Linker bien */}
-            Noticias
+
+            Noticias y Avisos Judiciales
           </Link>
           <Link to="/contacto" className="custom-link transition font-normal py-2 px-4 lg:py-0 lg:px-0">
             Contacto

@@ -12,14 +12,14 @@ interface Item {
 
 }
 
-interface AvisosSliderProps {
+interface NuestrosLogrosSliderProps {
   items: Item[];
 }
 
-export function AvisosSlider({ items }: AvisosSliderProps) {
+export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
   return (
     <div className="bg-[#F7F7F7] h-[450px] sm:h-[500px] 2xl:h-[700px] w-full my-16 flex flex-col justify-center ">
-      <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-16">Últimos Avisos Judiciales</h1>
+      <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-16">Últimos Logros</h1>
       <div className="flex justify-center items-center  w-full">
         <Swiper
           modules={[Autoplay, EffectCoverflow]}
@@ -69,7 +69,7 @@ export function AvisosSlider({ items }: AvisosSliderProps) {
 
                   
                   <div className="flex justify-end w-full 2xl:mt-6">
-                    <Link to="/avisos-judiciales">
+                    <Link to="/nuestros-logros">
                       <button className="bg-sky-500 text-white rounded-lg px-6 py-0 2xl:py-1 w-[110px] 2xl:w-[170px] ">
                         Ver más
                       </button>
@@ -82,7 +82,7 @@ export function AvisosSlider({ items }: AvisosSliderProps) {
         </Swiper>
       </div>
 
-      <Link to="/avisos-judiciales" className="text-sky-600 flex flex-row justify-center">Ver todos los Avisos Judiciales </Link>
+      <Link to="/nuestros-logros" className="text-sky-600 flex flex-row justify-center">Ver todos Nuestros Logros </Link>
     </div>
   );
 }

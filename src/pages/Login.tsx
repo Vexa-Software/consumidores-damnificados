@@ -44,7 +44,7 @@ const Login: React.FC = () => {
                 localStorage.removeItem("rememberedEmail");
             }
 
-            navigate("/avisos-judiciales-admin");
+            navigate("/nuestros-logros-admin");
         } catch (error: any) {
             let errorMessage = "Error al iniciar sesión";
             if (error.code === 'auth/user-not-found') {

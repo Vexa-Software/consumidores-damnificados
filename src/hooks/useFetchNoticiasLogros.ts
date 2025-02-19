@@ -10,9 +10,9 @@ interface Item {
   imagen?: string;
 }
 
-export function useFetchNoticiasAvisos() {
+export function useFetchNoticiasLogros() {
   const [noticias, setNoticias] = useState<Item[]>([]);
-  const [avisos, setAvisos] = useState<Item[]>([]);
+  const [nuestrosLogros, setNuestrosLogros] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -33,13 +33,13 @@ export function useFetchNoticiasAvisos() {
     };
 
     const unsubscribeNoticias = fetchCollection("noticias", setNoticias);
-    const unsubscribeAvisos = fetchCollection("avisosJudiciales", setAvisos);
+    const unsubscribeNuestrosLogros = fetchCollection("nuestrosLogros", setNuestrosLogros);
 
     return () => {
       unsubscribeNoticias();
-      unsubscribeAvisos();
+      unsubscribeNuestrosLogros();
     };
   }, []);
 
-  return { noticias, avisos, loading };
+  return { noticias, nuestrosLogros, loading };
 }

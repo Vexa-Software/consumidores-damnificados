@@ -51,12 +51,12 @@ const AdminSidebar: React.FC = () => {
       <ul>
         <li className={`mb-2 ${location.pathname === "/noticias-admin" ? "bg-sky-500 rounded-full text-white" : "border rounded-full "}`}>
           <Link to="/noticias-admin" className="block p-2  text-center" onClick={() => setIsOpen(false)}>
-            Noticias
+            Noticias y Avisos Judiciales
           </Link>
         </li>
-        <li className={`mb-2 ${location.pathname === "/avisos-judiciales-admin" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
-          <Link to="/avisos-judiciales-admin" className="block p-2  text-center" onClick={() => setIsOpen(false)}>
-            Avisos Judiciales
+        <li className={`mb-2 ${location.pathname === "/nuestros-logros-admin" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
+          <Link to="/nuestros-logros-admin" className="block p-2  text-center" onClick={() => setIsOpen(false)}>
+          Nuestros Logros
           </Link>
         </li>
       </ul>

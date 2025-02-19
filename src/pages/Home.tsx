@@ -1,12 +1,12 @@
 import React from 'react';
-import { useFetchNoticiasAvisos } from "../hooks/useFetchNoticiasAvisos";
-import { AvisosSlider } from "../components/AvisosSlider";
+import { useFetchNoticiasLogros } from "../hooks/useFetchNoticiasLogros";
+import { NuestrosLogrosSlider } from "../components/NuestrosLogrosSlider";
 import { NoticiasSlider } from "../components/NoticiasSlider";
 import { Link } from 'react-router-dom';
 
 
 const Home: React.FC = () => {
-  const { noticias, avisos, loading } = useFetchNoticiasAvisos();
+  const { noticias, nuestrosLogros, loading } = useFetchNoticiasLogros();
 
   return (
     <>
@@ -91,7 +91,7 @@ const Home: React.FC = () => {
         <div className=" mx-auto ">
 
 
-          {loading ? <p className="text-center">Cargando...</p> : <AvisosSlider items={avisos} />}
+          {loading ? <p className="text-center">Cargando...</p> : <NuestrosLogrosSlider items={nuestrosLogros} />}
 
           {loading ? <p className="text-center">Cargando...</p> : <NoticiasSlider items={noticias} />}
 
