@@ -20,8 +20,7 @@ interface NoticiasSliderProps {
 
 export function NoticiasSlider({ items }: NoticiasSliderProps) {
   return (
-    <div className="bg-[#F7F7F7] h-[700px] w-full my-16 flex flex-col justify-center ">
-      <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-16">Últimas Noticias y Avisos Judiciales</h1>
+    <div className="h-[700px] w-full mb-8 flex flex-col justify-center ">
     <div className=" flex flex-row justify-center items-center">
       
       <Swiper

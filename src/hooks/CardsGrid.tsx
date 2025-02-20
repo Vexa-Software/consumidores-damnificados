@@ -71,7 +71,7 @@ const cardsData = [
 
 const CardsGrid = () => {
   return (
-    <div className="min-h-screen mt-20 flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen mt-20 flex items-center justify-center">
       <div className="container-cards-home flex flex-wrap justify-center gap-6 p-6">
         {cardsData.map((card, index) => (
           <div

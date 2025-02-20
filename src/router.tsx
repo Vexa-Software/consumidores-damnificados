@@ -9,6 +9,7 @@ import QuienesSomos from "./pages/QuienesSomos";
 import Login from "./pages/Login"; // Importamos la nueva página de Login
 import NuestrosLogrosAdmin from "./pages/NuestrosLogrosAdmin";
 import NoticiasAdmin from "./pages/NoticiasAdmin";
+import AlertasAdmin from "./pages/AlertasAdmin";
 import PrivateRoute from './components/PrivateRoute';
 import HeaderAdmin from "./components/HeaderAdmin";
 
@@ -41,6 +42,15 @@ export const router = createBrowserRouter([
       <PrivateRoute>
         <HeaderAdmin/>
         <NoticiasAdmin />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/alertas-admin",
+    element: (
+      <PrivateRoute>
+        <HeaderAdmin/>
+        <AlertasAdmin />
       </PrivateRoute>
     ),
   },

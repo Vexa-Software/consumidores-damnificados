@@ -18,8 +18,7 @@ interface NuestrosLogrosSliderProps {
 
 export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
   return (
-    <div className="bg-[#F7F7F7] h-[450px] sm:h-[500px] 2xl:h-[700px] w-full my-16 flex flex-col justify-center ">
-      <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-16">Últimos Logros</h1>
+    <div className="w-full flex flex-col justify-center ">
       <div className="flex justify-center items-center  w-full">
         <Swiper
           modules={[Autoplay, EffectCoverflow]}
@@ -51,7 +50,7 @@ export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
               className="flex justify-center w-[300px] sm:w-[600px] xl:w-[360px] 2xl:w-[470px] scale-90 transition-all duration-300 hover:scale-100 "
             >
               <div
-                className="bg-white rounded-lg px-4 py-2 flex items-center space-x-4 min-h-[100px] 2xl:min-h-[200px] max-h-[350px] 2xl:max-h-[250px] w-[400px] sm:w-[full] xl:w-[full] 2xl:w-[90%] shadow-xl"
+                className="bg-white rounded-lg px-4 py-2 flex items-center space-x-4 min-h-[100px] 2xl:min-h-[200px] max-h-[350px] 2xl:max-h-[850px] w-[400px] sm:w-[full] xl:w-[full] 2xl:w-[90%] shadow-xl"
               >
              
                 <div className="flex items-center justify-center">
@@ -59,10 +58,10 @@ export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
                 </div>
 
                 
-                <div className="flex flex-col flex-grow w-[90%] min-h-36 2xl:h-42 ">
-                  <div className="flex flex-col h-28 2xl:h-26">
+                <div className="flex flex-col gap-4 justify-center flex-grow w-[90%] min-h-48 2xl:h-72 p-4 ">
+                  <div className="flex flex-col">
                     <h1 className="text-lg 2xl:text-xl font-bold text-gray-800 ">{item.titulo}</h1>
-                    <p className="text-gray-600 text-sm mt-2 break-words line-clamp-3 2xl:line-clamp-5 overflow-hidden w-full whitespace-normal ">
+                    <p className="text-gray-600 text-sm mt-2 break-words line-clamp-2 2xl:line-clamp-4 overflow-hidden w-full whitespace-normal ">
                       {item.descripcion}
                     </p>
                   </div>

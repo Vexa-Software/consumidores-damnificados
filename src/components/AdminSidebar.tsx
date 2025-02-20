@@ -59,6 +59,11 @@ const AdminSidebar: React.FC = () => {
           Nuestros Logros
           </Link>
         </li>
+        <li className={`mb-2 ${location.pathname === "/alertas-admin" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
+          <Link to="/alertas-admin" className="block p-2  text-center" onClick={() => setIsOpen(false)}>
+          Alertas
+          </Link>
+        </li>
       </ul>
     </div>
 

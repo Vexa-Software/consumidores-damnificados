@@ -54,16 +54,9 @@ const Denuncia: React.FC = () => {
                         </li>
                         
                     </ul>
-                    
-
-                   
-
-
-
-
 
                     <div className="mt-10">
-                        <h1 className="font-bold text-sm xl:text-xl text-[#0E153A]">
+                        <h1 className="font-bold italic text-sm xl:text-xl text-[#0E153A]">
                         Si tuviste algún problema con algún proveedor de bienes y servicios, 
                         existen distintos canales para efectuar tu reclamo al margen de nuestra intervención:
                         </h1>

@@ -3,7 +3,7 @@ import { useFetchNoticiasLogros } from "../hooks/useFetchNoticiasLogros";
 import { NuestrosLogrosSlider } from "../components/NuestrosLogrosSlider";
 import { NoticiasSlider } from "../components/NoticiasSlider";
 import { Link } from 'react-router-dom';
-
+import SimpleLoader from '@/components/SimpleLoader/SimpleLoader';
 
 const Home: React.FC = () => {
   const { noticias, nuestrosLogros, loading } = useFetchNoticiasLogros();
@@ -11,7 +11,7 @@ const Home: React.FC = () => {
   return (
     <>
 
-      <div className="relative w-full h-[auto] flex flex-col justify-center  bg-gradient-to-r sm:py-16 lg:px-20 2xl:px-56"
+      <div className="relative w-full h-[auto] flex flex-col justify-center my-8 bg-gradient-to-r sm:py-16 lg:px-20 2xl:px-56"
         style={{
           backgroundImage: " url('/assets/img/consumidores-damnificados/Background.png')",
           backgroundSize: 'cover',
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full flex justify-center bg-gray-100 py-10">
+      <div className="w-full flex justify-center py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-[65%]   lg:w-[78%] 2xl:w-[60%] h-[auto] sm:h-[auto] lg:h-[auto]">
           {[
             {
@@ -55,7 +55,7 @@ const Home: React.FC = () => {
                 "Es el organismo oficial encargado de ejecutar las acciones para la aplicación y control de las políticas vinculadas con la defensa del consumidor.",
             },
             {
-              title: "“Reclamos a nivel nacional",
+              title: "Reclamos a nivel nacional",
               description:
                 "Si tenés un problema con un producto o servicio adquirido o contratado en cualquier parte del país, podes hacer tu reclamo a través de la Ventanilla Única Federal de Defensa al Consumidor.",
             },
@@ -83,24 +83,16 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-
-
       <div>
+        <div className="mx-auto ">
 
-
-        <div className=" mx-auto ">
-
-
-          {loading ? <p className="text-center">Cargando...</p> : <NuestrosLogrosSlider items={nuestrosLogros} />}
-
-          {loading ? <p className="text-center">Cargando...</p> : <NoticiasSlider items={noticias} />}
-
+          <div className='bg-[#F7F7F7] my-16 py-16 flex flex-col gap-16'>
+            <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center">Últimos Logros</h1>
+            {loading ? <SimpleLoader /> : <NuestrosLogrosSlider items={nuestrosLogros} />}
+          </div>
+          <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center">Últimas Noticias y Avisos Judiciales</h1>
+          {loading ? <SimpleLoader /> : <NoticiasSlider items={noticias} />}
         </div>
-
-
-
-
-
       </div>
     </>
   );

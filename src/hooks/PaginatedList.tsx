@@ -118,7 +118,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
       )}
 
 
-{loading ? (
+      {loading ? (
         <div className="flex justify-center items-center h-40">
           <p className="text-gray-600 text-lg">Cargando...</p>
         </div>
@@ -126,7 +126,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
         items.slice(0, itemsMostrados).map((item) => (
           <div
             key={item.id}
-            className="bg-[#F7F7F7] w-full p-6 my-4 rounded-lg shadow-md flex flex-col sm:flex-row sm:items-center sm:space-x-4"
+            className="w-full p-6 my-4 rounded-lg shadow-md flex flex-col sm:flex-row sm:items-center sm:space-x-4"
           >
             {/* Mostrar imagen si es una noticia y si tiene imagen */}
             {storageKey === "noticias" && item.imagen && (
@@ -150,7 +150,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
             <div className="flex-1">
               {/* Título y fecha alineados horizontalmente en sm */}
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center ">
-                <h1 className="font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start">
+                <h1 className={`font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start sm:w-[60%] md:w-auto}`}>
                   {item.titulo}
                 </h1>
                 <span className="text-[#1C244B] text-sm sm:text-[90%] lg:text-lg 2xl:text-xl font-medium mb-2 sm:ml-4">

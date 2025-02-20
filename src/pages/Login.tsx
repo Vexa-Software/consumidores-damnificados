@@ -35,7 +35,6 @@ const Login: React.FC = () => {
         try {
             setLoading(true);
             await signInWithEmailAndPassword(auth, email, password);
-            toast.success("Inicio de sesión exitoso");
 
             // Guardar o eliminar el email según el checkbox
             if (rememberMe) {
@@ -82,7 +81,7 @@ const Login: React.FC = () => {
                         <input
                             type="email"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                            placeholder="Correo electrónico"
+                            placeholder="Ingrese su email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -94,7 +93,7 @@ const Login: React.FC = () => {
                         <input
                             type="password"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                            placeholder="********"
+                            placeholder="Ingrese su contraseña"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
