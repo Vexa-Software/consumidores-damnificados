@@ -67,15 +67,15 @@ const Denuncia: React.FC = () => {
                             { name: "B) Ventanilla Única Federal de Defensa del Consumidor: Deberá ingresar al siguiente link completando la información solicitada en el formulario y enviarlo. Luego de ello, recibirá por correo electrónico el número de reclamo asignado y Defensa al Consumidor o la autoridad local se pondrá en contacto con usted a fin de informarte los pasos a seguir.", url: "https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario%20" },
                             { name: "C) Dirección del Sistema de Conciliación Previa en las Relaciones de Consumo del Consejo de la Magistratura de la Ciudad de Buenos Aires: Deberá ingresar desde su celular a la App “Mi reclamo” y seguir los pasos que allí se indican. Luego de la admisión de su reclamo, será citado a una audiencia online con un conciliador. Importante: Si tu pretensión en pesos es hasta 20 UMAS no necesitarás abogado, pero si supera este monto deberás estar acompañado en la audiencia online con un letrado que te patrocine." },
                             { name: "D) Dependiendo el tipo de servicio con el que hayas tenido problemas, podrás realizar tu denuncia en el ente regulador correspondiente, donde además encontraras información adicional respecto de cada uno de los servicios: " },
-                            { name: "Banco Central de la República Argentina (BCRA)", url: "www.bcra.gov.ar" },
-                            { name: "Ente Nacional de Comunicaciones", url: "www.enacom.gob.ar/" },
-                            { name: "Comisión Nacional de Regulación del Transporte (CNRT)", url: "www.cnrt.gov.ar" },
-                            { name: "Ente Nacional Regulador de la Electricidad (ENRE)", url: "www.enre.gov.ar" },
-                            { name: "Ente Nacional Regulador del Gas (ENARGAS)", url: "www.enargas.gov.ar" },
-                            { name: "Ente Regulador de Aguas y Saneamiento (ERAS)", url: "www.eras.gov.ar" },
-                            { name: "Organismo de Control de la Energía Eléctrica de la Provincia de Buenos Aires (OCEBA)", url: "www.gba.gov.ar" },
-                            { name: "Organismo Regulador del Sistema Nacional de Aeropuertos (ORSNA)", url: "www.orsna.gov.ar" },
-                            { name: "Comisión Nacional de Valores", url: "www.cnv.gob.ar" }
+                            { name: "Banco Central de la República Argentina (BCRA)", url: "https://www.bcra.gov.ar" },
+                            { name: "Ente Nacional de Comunicaciones", url: "https://www.enacom.gob.ar/" },
+                            { name: "Comisión Nacional de Regulación del Transporte (CNRT)", url: "https://www.cnrt.gov.ar" },
+                            { name: "Ente Nacional Regulador de la Electricidad (ENRE)", url: "https://www.enre.gov.ar" },
+                            { name: "Ente Nacional Regulador del Gas (ENARGAS)", url: "https://www.enargas.gov.ar" },
+                            { name: "Ente Regulador de Aguas y Saneamiento (ERAS)", url: "https://www.eras.gov.ar" },
+                            { name: "Organismo de Control de la Energía Eléctrica de la Provincia de Buenos Aires (OCEBA)", url: "https://www.gba.gov.ar" },
+                            { name: "Organismo Regulador del Sistema Nacional de Aeropuertos (ORSNA)", url: "https://www.orsna.gov.ar" },
+                            { name: "Comisión Nacional de Valores", url: "https://www.cnv.gob.ar" }
                         ].map((ente, index) => (
                             <div key={index} className="mt-4">
                                 <p className="text-sm lg:text-lg">{ente.name}</p>

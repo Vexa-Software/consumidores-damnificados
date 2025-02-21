@@ -2,17 +2,17 @@
 
 import * as React from "react";
 import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table"
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
 import { Button } from "../components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -38,9 +38,10 @@ interface DataTableDemoProps {
   data: Item[];
   onEdit: (item: Item) => void;
   onDelete: (id: string) => void;
+  storageKey: string;
 }
 
-export function DataTableDemo({ data, onEdit, onDelete }: DataTableDemoProps) {
+export function DataTableDemo({ data, onEdit, onDelete, storageKey }: DataTableDemoProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -72,18 +73,38 @@ export function DataTableDemo({ data, onEdit, onDelete }: DataTableDemoProps) {
     {
       accessorKey: "titulo",
       header: "Título",
-      cell: ({ row }) => <div className="capitalize">{row.getValue("titulo")}</div>,
+      cell: ({ row }) => <div className="capitalize min-w-[100%] max-w-[200px] ">{row.getValue("titulo")}</div>,
     },
     {
       accessorKey: "descripcion",
       header: "Descripción",
-      cell: ({ row }) => <div className="lowercase">{row.getValue("descripcion")}</div>,
+      cell: ({ row }) => <div className="min-w-[100%] w-[300px] sm:w-[500px] xl:w-[900px] max-w-[900px] h-full flex items-center justify-center text-center  ">{row.getValue("descripcion")}</div>,
     },
     {
       accessorKey: "fecha",
       header: "Fecha",
       cell: ({ row }) => <div className="text-center">{row.getValue("fecha")}</div>,
     },
+    ...(storageKey === "noticias"
+      ? [
+        {
+          accessorKey: "imagen",
+          header: "Imagen",
+          cell: ({ row }: { row: { original: Item } }) => {
+            const imagen = row.original.imagen;
+            return imagen ? (
+              <img
+                src={imagen}
+                alt="Miniatura"
+                className="max-w-16 sm:max-w-40 h-auto rounded-md shadow-md"
+              />
+            ) : (
+              <span className="text-gray-400 text-sm">Sin imagen</span>
+            );
+          },
+        },
+      ]
+      : []),
     {
       id: "actions",
       header: "Acciones",
@@ -91,7 +112,7 @@ export function DataTableDemo({ data, onEdit, onDelete }: DataTableDemoProps) {
       cell: ({ row }) => {
         const item = row.original;
         return (
-          <div className="flex justify-center gap-2">
+          <div className="flex flex-col justify-between gap-2">
             <Button variant="outline" className="bg-yellow-500 text-white" onClick={() => onEdit(item)}>
               Editar
             </Button>
@@ -134,27 +155,6 @@ export function DataTableDemo({ data, onEdit, onDelete }: DataTableDemoProps) {
           }
           className="max-w-sm"
         />
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columnas <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => {
-              return (
-                <DropdownMenuCheckboxItem
-                  key={column.id}
-                  className="capitalize"
-                  checked={column.getIsVisible()}
-                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                >
-                  {column.id}
-                </DropdownMenuCheckboxItem>
-              );
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -207,4 +207,3 @@ export function DataTableDemo({ data, onEdit, onDelete }: DataTableDemoProps) {
     </div>
   );
 }
-

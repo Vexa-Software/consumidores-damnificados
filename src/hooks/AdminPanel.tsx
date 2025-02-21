@@ -193,45 +193,57 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
 
 
     return (
-        <div className="flex px-4 ">
-            <AdminSidebar />
-            <div className="py-8 px-4 max-w-[100%] sm:max-w-[67%] xl:sm:max-w-[80%]">
+        <div className="flex h-screen px-4">
+        {/* Sidebar fijo */}
+        <AdminSidebar />
+
+        {/* Panel admin con scroll interno */}
+        <div className="flex flex-col flex-grow h-screen  overflow-y-auto max-w-[100%] sm:max-w-[67%] xl:sm:max-w-[80%]">
+            <div className=" flex-grow py-8 px-4 ">
                 <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">{title}</h1>
                 <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">{subtitle}</p>
+
+                {/* Formulario */}
                 <AdminForm
                     storageKey={storageKey}
                     nuevoItem={nuevoItem}
                     setNuevoItem={setNuevoItem}
                     editando={editando}
+                    setEditando={setEditando}
                     handleAgregarItem={handleAgregarItem}
                     handleGuardarEdicion={handleGuardarEdicion}
                     errores={errores}
                     setErrores={setErrores}
                     validarCampos={validarCampos}
                 />
-                <DataTableDemo
-                    data={items}
-                    onEdit={handleEditarItem}
-                    onDelete={handleEliminarItem}
-                />
 
+                {/* Tabla de datos con scroll si es necesario */}
+                <div className=" max-h-[500px]">
+                    <DataTableDemo
+                        data={items}
+                        onEdit={handleEditarItem}
+                        onDelete={handleEliminarItem}
+                        storageKey={storageKey}
+                    />
+                </div>
             </div>
-            {/* Modal de Confirmación para eliminar */}
-            {modalEliminarOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white p-6 rounded-lg">
-                        <p className="text-lg font-bold mb-4">¿Estás seguro de eliminar esta noticia?</p>
-                        <div className="flex flex-row justify-evenly">
-                            <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalEliminarOpen(false)}>Cancelar</button>
-                            <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmarEliminar}>Confirmar</button>
-                        </div>
+
+           
+        </div>
+
+        {/* Modal de Confirmación para eliminar */}
+        {modalEliminarOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <div className="bg-white p-6 rounded-lg">
+                    <p className="text-lg font-bold mb-4">¿Estás seguro de eliminar esta noticia?</p>
+                    <div className="flex flex-row justify-evenly">
+                        <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalEliminarOpen(false)}>Cancelar</button>
+                        <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmarEliminar}>Confirmar</button>
                     </div>
                 </div>
-            )}
-
-
-
-        </div>
+            </div>
+        )}
+    </div>
     );
 };
 

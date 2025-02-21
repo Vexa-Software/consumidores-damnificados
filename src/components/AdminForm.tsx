@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 
 interface AdminFormProps {
   storageKey: string;
   nuevoItem: { titulo: string; descripcion: string; fecha: string; imagen?: string };
   setNuevoItem: (item: any) => void;
   editando: boolean;
+  setEditando: (editando: any) => void;
   handleGuardarEdicion: () => void; // ✅ Debe estar definido aquí
   handleAgregarItem: () => void;
   errores: { titulo: string; descripcion: string; fecha: string; imagen: string };
@@ -17,6 +18,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
   nuevoItem,
   setNuevoItem,
   editando,
+  setEditando,
   handleGuardarEdicion, // ✅ Ahora está correctamente definido
   handleAgregarItem,
   errores,
@@ -26,6 +28,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
   // ✅ Ref para resetear el input de archivo
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isDirty, setIsDirty] = useState(false);
 
   // ✅ Manejo de subida de imagen (SOLO si es noticia)
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,43 +59,51 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
   const handleSubmit = () => {
     if (editando) {
-      handleGuardarEdicion(); // Llamamos la función directamente
-      resetFormulario(); // Solo se ejecuta después de editar
+      handleGuardarEdicion(); // ✅ Guardar edición sin preguntar
+      resetFormulario(true); // ✅ No preguntar al guardar
     } else {
-
-      if (!validarCampos()) {
-        return;
-      }
-      handleAgregarItem(); // Llamamos la función directamente
+      if (!validarCampos()) return;
+      handleAgregarItem();
       resetFormulario();
     }
   };
 
-  const resetFormulario = () => {
-    setNuevoItem({ id: 0, titulo: "", descripcion: "", fecha: "", imagen: "" });
+  const resetFormulario = (forceReset = false) => {
+    if (!forceReset && editando && isDirty) {
+      const confirmCancel = window.confirm("Tienes cambios sin guardar. ¿Seguro que quieres cancelar?");
+      if (!confirmCancel) return; // ❌ Si el usuario cancela, no hacemos nada
+    }
+
+    setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
+    setEditando(false);
+    setIsDirty(false); // ✅ Resetear "dirty"
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // 🔵 Resetear input de imagen
+      fileInputRef.current.value = "";
     }
   };
 
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNuevoItem({ ...nuevoItem, titulo: e.target.value });
     setErrores((prev: any) => ({ ...prev, titulo: "" }));
+    setIsDirty(true);  // ✅ Detecta cambios en el formulario
   };
 
   const handleChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNuevoItem({ ...nuevoItem, descripcion: e.target.value });
     setErrores((prev: any) => ({ ...prev, descripcion: "" }));
+    setIsDirty(true);
   };
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNuevoItem({ ...nuevoItem, fecha: e.target.value });
     setErrores((prev: any) => ({ ...prev, fecha: "" }));
+    setIsDirty(true);
   };
 
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleImageUpload(e);
     setErrores((prev: any) => ({ ...prev, imagen: "" }));
+    setIsDirty(true);
   };
 
   return (
@@ -174,16 +185,16 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
 
         {/* Botones de acción alineados al final */}
-        <div className="flex justify-end  sm:mt-0 xl:mt-4 2xl:mt-">
+        <div className="flex justify-end sm:mt-0 xl:mt-4 2xl:mt-">
           <button
             className="bg-white border border-gray-300 text-sky-500 px-6 py-2 rounded-lg hover:bg-sky-100 transition text-sm mr-4"
-            onClick={resetFormulario}
+            onClick={() => resetFormulario()} // ✅ Ahora solo pregunta en "Cancelar"
           >
             Cancelar
           </button>
           <button
             className="bg-sky-500 text-white px-9 py-2 rounded-lg hover:bg-sky-600 transition text-sm"
-            onClick={handleSubmit}
+            onClick={handleSubmit} // ✅ Guardar no pregunta si es "dirty"
           >
             {editando ? "Guardar Edición" : "Crear"}
           </button>
