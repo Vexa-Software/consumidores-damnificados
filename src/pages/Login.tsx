@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../firebase/config";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { FaSignInAlt } from "react-icons/fa"; //
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [rememberMe, setRememberMe] = useState(false); // Estado para "Recordar usuario"
+    const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ const Login: React.FC = () => {
         const savedEmail = localStorage.getItem("rememberedEmail");
         if (savedEmail) {
             setEmail(savedEmail);
-            setRememberMe(true); // Si hay un email guardado, marcar el checkbox
+            setRememberMe(true);
         }
     }, []);
 
@@ -36,7 +37,6 @@ const Login: React.FC = () => {
             setLoading(true);
             await signInWithEmailAndPassword(auth, email, password);
 
-            // Guardar o eliminar el email según el checkbox
             if (rememberMe) {
                 localStorage.setItem("rememberedEmail", email);
             } else {
@@ -57,6 +57,20 @@ const Login: React.FC = () => {
         }
     };
 
+    const handleForgotPassword = async () => {
+        if (!isValidEmail(email)) {
+            toast.error("Por favor, ingresa un email válido para restablecer tu contraseña.");
+            return;
+        }
+
+        try {
+            await sendPasswordResetEmail(auth, email);
+            toast.success("Correo de restablecimiento enviado. Revisa tu bandeja de entrada.");
+        } catch (error: any) {
+            toast.error("Error al enviar el correo de restablecimiento.");
+        }
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-white py-24 px-8">
             <div className='columnaLogo mb-16'>
@@ -67,17 +81,17 @@ const Login: React.FC = () => {
                 />
             </div>
 
-            <h1 className="text-2xl sm:text-3xl xl:text-4xl 2xl:text-4xl font-bold text-center text-sky-500">
+            <h1 className="text-2xl sm:text-3xl xl:text-4xl font-bold text-center text-sky-500">
                 Bienvenido
             </h1>
             <p className="text-center 2xl:text-xl py-4">
                 Ingresa tu email y contraseña para acceder a tu cuenta
             </p>
 
-            <div className="bg-white rounded-lg w-[75%] 2xl:w-full max-w-2xl mt-8">
+            <div className="bg-white rounded-lg w-[75%] max-w-2xl mt-8">
                 <form className="mt-6 xl:px-8 pb-6" onSubmit={handleLogin}>
-                    <div className="mb-10">
-                        <label className="block mb-4 text-sky-500 font-medium">Email</label>
+                    <div className="mb-6">
+                        <label className="block mb-2 text-sky-500 font-medium">Email</label>
                         <input
                             type="email"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
@@ -88,8 +102,8 @@ const Login: React.FC = () => {
                         />
                     </div>
 
-                    <div className="mb-10">
-                        <label className="block mb-4 text-sky-500 font-medium">Contraseña</label>
+                    <div className="mb-6">
+                        <label className="block mb-2 text-sky-500 font-medium">Contraseña</label>
                         <input
                             type="password"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
@@ -115,11 +129,21 @@ const Login: React.FC = () => {
                     </div>
 
                     <button
-                        type="submit"
-                        className="w-full bg-[#0EA5E9] text-white py-2 rounded-lg hover:bg-[#2498ce] transition disabled:opacity-50"
-                        disabled={loading}
+    type="submit"
+    className="w-full bg-[#0EA5E9] text-white py-2 rounded-lg hover:bg-[#2498ce] transition disabled:opacity-50 flex items-center justify-center pr-6"
+    disabled={loading}
+>
+    <FaSignInAlt size={18} className="mr-2" /> {/* 🔹 Ícono de inicio de sesión */}
+    {loading ? "Cargando..." : "Iniciar sesión"}
+</button>
+
+                    {/* Botón "Olvidé mi contraseña" */}
+                    <button
+                        type="button"
+                        className="w-full mt-4 text-sm text-sky-500 hover:underline"
+                        onClick={handleForgotPassword}
                     >
-                        {loading ? "Cargando..." : "Iniciar sesión"}
+                        Olvidé mi contraseña
                     </button>
                 </form>
             </div>

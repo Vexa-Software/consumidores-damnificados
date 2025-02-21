@@ -195,7 +195,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
     return (
         <div className="flex px-4 ">
             <AdminSidebar />
-            <div className="py-8 px-4 max-w-[100%] sm:max-w-[75%] xl:sm:max-w-[85%]">
+            <div className="py-8 px-4 max-w-[100%] sm:max-w-[67%] xl:sm:max-w-[80%]">
                 <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">{title}</h1>
                 <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">{subtitle}</p>
                 <AdminForm
