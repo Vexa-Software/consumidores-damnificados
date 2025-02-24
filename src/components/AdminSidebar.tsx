@@ -63,6 +63,11 @@ const AdminSidebar: React.FC = () => {
                 <FaExclamationCircle className={` text-xl 2xl:text-2xl ${location.pathname === "/alertas-admin" ? " text-white" : "text-sky-500 "}`} /> Alertas
               </Link>
             </li>
+            <li className={`mb-2 flex items-center ${location.pathname === "/textos-sistema-admin" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
+              <Link to="/textos-sistema-admin" className="p-2 text-center flex items-center gap-2" onClick={() => setIsOpen(false)}>
+                <FaRegNewspaper className={` text-xl 2xl:text-2xl ${location.pathname === "/textos-sistema-admin" ? " text-white" : "text-sky-500 "}`} /> Textos Sistema
+              </Link>
+            </li>
           </ul>
            {/* Botón de Cerrar Sesión en la parte inferior */}
         <button

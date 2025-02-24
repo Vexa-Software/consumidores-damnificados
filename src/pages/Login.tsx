@@ -74,7 +74,7 @@ const Login: React.FC = () => {
                 toast.error("Este correo no está registrado en el sistema.");
                 return;
             }
-    
+       //solucionar problema de popup
             // Si el email existe y tiene un método de autenticación, enviamos el email de recuperación
             await sendPasswordResetEmail(auth, email);
             toast.success("Correo de restablecimiento enviado. Revisa tu bandeja de entrada.");

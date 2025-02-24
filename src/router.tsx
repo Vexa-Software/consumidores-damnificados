@@ -12,6 +12,7 @@ import NoticiasAdmin from "./pages/NoticiasAdmin";
 import AlertasAdmin from "./pages/AlertasAdmin";
 import PrivateRoute from './components/PrivateRoute';
 import HeaderAdmin from "./components/HeaderAdmin";
+import TextosSistemaAdmin from "./pages/TextosSistemaAdmin";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,15 @@ export const router = createBrowserRouter([
       <PrivateRoute>
         <HeaderAdmin/>
         <AlertasAdmin />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: "/textos-sistema-admin",
+    element: (
+      <PrivateRoute>
+        <HeaderAdmin/>
+        <TextosSistemaAdmin />
       </PrivateRoute>
     ),
   },
