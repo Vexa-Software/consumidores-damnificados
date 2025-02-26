@@ -1,5 +1,5 @@
 import React from "react";
-import PaginatedList from "../hooks/PaginatedList"; // Importa el componente genérico
+import PaginatedList from "../hooks/PaginatedList"; 
 
 const Noticias: React.FC = () => {
   return <PaginatedList storageKey="noticias" title="Noticias y Avisos Judiciales" />;  

@@ -45,8 +45,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             const q = query(collection(db, storageKey), orderBy("fecha", "desc"));
             const querySnapshot = await getDocs(q);
             const itemsData: Item[] = querySnapshot.docs.map((doc) => ({
-                id: doc.id, // Firestore usa un ID string
-                ...(doc.data() as Omit<Item, "id">), // Extrae los datos correctamente
+                id: doc.id, 
+                ...(doc.data() as Omit<Item, "id">), 
             }));
 
 
@@ -61,11 +61,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
     useEffect(() => {
 
         fetchItems();
-    }, [storageKey]); // Se ejecuta cada vez que cambia storageKey
+    }, [storageKey]); 
 
 
 
-    // ✅ Validar campos
+    
     const validarCampos = (): boolean => {
         let mensajesError = {
             titulo: "",
@@ -99,19 +99,19 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         if (!validarCampos()) return;
 
         try {
-            // 🔹 Guardar en Firestore SIN ID (Firestore genera el ID automáticamente)
+           
             await addDoc(collection(db, storageKey), {
                 titulo: nuevoItem.titulo,
                 descripcion: nuevoItem.descripcion,
                 fecha: nuevoItem.fecha,
-                imagen: nuevoItem.imagen || "", // Si la imagen es opcional
+                imagen: nuevoItem.imagen || "", 
             });
 
-            // 🔹 Actualizar estado local con el ID de Firestore
+          
             fetchItems();
             toast.success(`${title} agregado con éxito.`);
 
-            // 🔹 Resetear formulario
+       
             setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
         } catch (error) {
             console.error("Error al agregar item:", error);
@@ -122,22 +122,22 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
 
 
 
-    // ✅ Modal de confirmación para editar
+   
     const handleEditarItem = (item: Item) => {
         setEditando(true);
         setItemEditadoId(item.id);
         setNuevoItem(item);
     };
 
-    // ✅ Guardar edición
+   
     const handleGuardarEdicion = async () => {
         if (!validarCampos() || !itemEditadoId) return;
 
         try {
             const itemRef = doc(db, storageKey, itemEditadoId);
 
-            console.log("Editando el documento con ID:", itemEditadoId); // ✅ Verificar el ID
-            console.log("Datos a actualizar:", nuevoItem); // ✅ Verificar datos
+            console.log("Editando el documento con ID:", itemEditadoId); 
+            console.log("Datos a actualizar:", nuevoItem);
 
             await updateDoc(itemRef, {
                 titulo: nuevoItem.titulo,
@@ -146,7 +146,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
                 imagen: nuevoItem.imagen || "",
             });
 
-            // ✅ Actualizar el estado local correctamente
+           
             const itemsActualizados = items.map((item) =>
                 item.id === itemEditadoId ? { ...item, ...nuevoItem } : item
             );
@@ -154,7 +154,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             setItems(itemsActualizados);
             toast.success(`${title} editado con éxito.`);
 
-            // ✅ Resetear el formulario
+           
             setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
             setEditando(false);
             setItemEditadoId(null);
@@ -166,7 +166,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
 
 
 
-    // ✅ Modal de confirmación para eliminar
+    
     const handleEliminarItem = (id: string) => {
         setModalEliminarOpen(true);
         setItemAEliminar(id);
@@ -179,7 +179,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             const docRef = doc(db, storageKey, itemAEliminar)
             await deleteDoc(docRef);
 
-            // Filtrar el estado local
+            
             fetchItems();
             toast.success(`${title} eliminado con éxito.`);
         } catch (error) {
@@ -194,16 +194,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
 
     return (
         <div className="flex h-screen px-4">
-        {/* Sidebar fijo */}
+        
         <AdminSidebar />
 
-        {/* Panel admin con scroll interno */}
+       
         <div className="flex flex-col flex-grow h-screen  overflow-y-auto max-w-[100%] sm:max-w-[67%] xl:sm:max-w-[80%]">
             <div className=" flex-grow py-8 px-4 ">
                 <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">{title}</h1>
                 <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">{subtitle}</p>
 
-                {/* Formulario */}
+               
                 <AdminForm
                     storageKey={storageKey}
                     nuevoItem={nuevoItem}
@@ -217,7 +217,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
                     validarCampos={validarCampos}
                 />
 
-                {/* Tabla de datos con scroll si es necesario */}
+               
                 <div className=" max-h-[500px]">
                     <DataTableDemo
                         data={items}
@@ -231,7 +231,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
            
         </div>
 
-        {/* Modal de Confirmación para eliminar */}
+      
         {modalEliminarOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <div className="bg-white p-6 rounded-lg">

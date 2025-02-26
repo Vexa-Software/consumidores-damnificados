@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
-import { collection, onSnapshot, query, orderBy} from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
 
@@ -13,31 +13,31 @@ interface Item {
 }
 
 interface PaginatedListProps {
-  storageKey: string; // Clave en localStorage ("nuestrosLogros" o "noticias")
-  title: string; // Título principal ("Nuestros Logros" o "Últimas Noticias")
+  storageKey: string;
+  title: string;
 }
 
 const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [itemsMostrados, setItemsMostrados] = useState<number>(3); // Mostrar inicialmente 3 elementos
-  const pdfUrl = "/assets/pdf/EDICTO-MAPFRE.pdf"; // Cambia esta ruta por la correcta
+  const [itemsMostrados, setItemsMostrados] = useState<number>(3);
+  const pdfUrl = "/assets/pdf/EDICTO-MAPFRE.pdf";
 
   useEffect(() => {
     setLoading(true);
     try {
       const q = query(collection(db, storageKey), orderBy("fecha", "desc"));
-  
+
       const unsubscribe = onSnapshot(q, (snapshot) => {
         const itemsData: Item[] = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...(doc.data() as Omit<Item, "id">),
         }));
-  
+
         setItems(itemsData);
         setLoading(false);
       });
-  
+
       return () => unsubscribe();
     } catch (error) {
       console.error("Error al obtener datos en tiempo real:", error);
@@ -46,25 +46,25 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
     }
   }, [storageKey]);
 
-  // Función para cargar más elementos
+
   const handleCargarMas = () => {
-    setItemsMostrados((prev) => prev + 3); // Cargar 3 más
+    setItemsMostrados((prev) => prev + 3);
   };
 
   return (
     <div className="max-w-full px-[12%] lg:px-[7.5%] 2xl:px-[13%] p-6">
       <h1 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl font-bold text-center mb-6">{title}</h1>
-      
+
 
       {storageKey === "noticias" && (
         <div className="bg-white p-6 rounded-lg  mb-6  ">
-          {/* Encabezado con ícono */}
+
           <div className="flex items-center space-x-4">
             <FaInfoCircle className="text-[#1C244B] text-xl 2xl:text-4xl" />
             <h1 className="text-sm sm:text-[90%] lg:text-lg 2xl:text-xl font-bold text-[#1C244B]">INFORMACIÓN IMPORTANTE.-</h1>
           </div>
 
-          {/* Contenido */}
+
           <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 ">
             Se hace saber que ante el Juzgado Nacional de Primera Instancia en lo Comercial Nº 8, Secretaría N° 15, sito en Libertad 533, planta baja, de esta Ciudad, tramita el proceso colectivo
             caratulado “Proconsumer y Otro c/ Sumiplan S.A. de Ahorro P/F Determinados y Otro s/ Sumarísimo (Expte N° 7545/2007)” y que se ha dispuesto la publicación de avisos a fin de hacer
@@ -128,7 +128,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
             key={item.id}
             className="w-full p-6 my-4 rounded-lg shadow-md flex flex-col sm:flex-row sm:items-center sm:space-x-4"
           >
-            {/* Mostrar imagen si es una noticia y si tiene imagen */}
+
             {storageKey === "noticias" && item.imagen && (
               <div className="flex justify-center sm:justify-start w-full sm:w-auto">
                 <img
@@ -139,16 +139,16 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
               </div>
             )}
 
-        
+
             {storageKey === "nuestrosLogros" && (
               <div className="flex justify-center sm:justify-start">
                 <FaCheckCircle className="text-sky-500 text-3xl sm:text-4xl lg:text-5xl flex-shrink-0 mb-2" />
               </div>
             )}
 
-            {/* Contenedor de contenido */}
+
             <div className="flex-1">
-              {/* Título y fecha alineados horizontalmente en sm */}
+
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center ">
                 <h1 className={`font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start sm:w-[60%] md:w-auto}`}>
                   {item.titulo}
@@ -158,7 +158,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
                 </span>
               </div>
 
-              {/* Descripción alineada a la izquierda en sm y ocupando todo el ancho en mobile */}
+
               <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify">
                 {item.descripcion}
               </p>
@@ -167,7 +167,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
         ))
       )}
 
-      {/* Botón "Cargar más" */}
+
       {itemsMostrados < items.length && (
         <div className="flex justify-center mt-4">
           <button

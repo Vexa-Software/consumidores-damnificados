@@ -4,39 +4,39 @@ const Denuncia: React.FC = () => {
     return (
         <>
             <div className="w-full flex flex-col items-center py-16 bg-white px-10">
-                {/* Título Principal */}
+
                 <h1 className="text-5xl font-bold text-center text-[#1C244B] mb-16">
                     Denuncia
                 </h1>
 
-                {/* Subtítulo */}
+
                 <div className="w-[77%] text-[#324A6D] mt-6 text-lg leading-relaxed">
                     <h1 className=" text-[#0E153A] font-semibold text-sm xl:text-xl text-left ">
-                   
+
                         <span>Tu denuncia es útil para que nuestra asociación se involucre:</span>
                     </h1>
                     <p className='mt-5 text-sm lg:text-lg'>Además, facilitará el reclamo si aportas algún comprobante que acredite la relación de consumo entre el proveedor y vos. Puede ser un mail pidiendo información sobre un bien o servicio, un ticket, factura, contrato de adhesión, una carta o cualquier otro medio.</p>
 
-                    {/* Información */}
+
 
                     <h1 className="font-semibold text-sm xl:text-xl mt-6 text-[#0E153A]">¿Cómo denunciar?</h1>
                     <p className="mt-6 text-sm lg:text-lg">
-                    Puede ser de forma personal, por teléfono, correo electrónico y/o correspondencia postal:
+                        Puede ser de forma personal, por teléfono, correo electrónico y/o correspondencia postal:
                     </p>
 
                     <ul className=" list-disc mt-4 space-y-2 pl-10 text-sm lg:text-lg">
                         <li>
-                            <span className="font-semibold ">Personalmente: </span> 
-                            concurrir a Tte. Gral. J. D. Perón 315, Piso 6º, Of. 23 – CABA de 
-                            Lunes a Viernes (hábiles) de 9 a 13 horas. 
-                            Si prefieres que participe un profesional relacionado con la índole de tu consulta, 
-                            debes pedirla con una anticipación mínima de cinco días 
+                            <span className="font-semibold ">Personalmente: </span>
+                            concurrir a Tte. Gral. J. D. Perón 315, Piso 6º, Of. 23 – CABA de
+                            Lunes a Viernes (hábiles) de 9 a 13 horas.
+                            Si prefieres que participe un profesional relacionado con la índole de tu consulta,
+                            debes pedirla con una anticipación mínima de cinco días
                             a fin de que nosotros convoquemos a dicho especialista.
                         </li>
                         <li>
                             <span className="font-semibold">Teléfono: </span> comunicarse al{" "}
-                            <span className="text-[#0E153A] font-semibold">+54 11 6884 0597 </span> 
-                            de Lunes a Viernes (hábiles) de 9 a 13 horas. 
+                            <span className="text-[#0E153A] font-semibold">+54 11 6884 0597 </span>
+                            de Lunes a Viernes (hábiles) de 9 a 13 horas.
                             En su caso, dejar un mensaje y te responderemos a la brevedad.
                         </li>
                         <li>
@@ -49,19 +49,19 @@ const Denuncia: React.FC = () => {
                             </a>
                         </li>
                         <li>
-                            <span className="font-semibold">Correspondencia Postal: </span> 
+                            <span className="font-semibold">Correspondencia Postal: </span>
                             enviar una nota a Tte. Gral. J. D. Perón 315, Piso 6º, Of. 23 – CABA.
                         </li>
-                        
+
                     </ul>
 
                     <div className="mt-10">
                         <h1 className="font-bold italic text-sm xl:text-xl text-[#0E153A]">
-                        Si tuviste algún problema con algún proveedor de bienes y servicios, 
-                        existen distintos canales para efectuar tu reclamo al margen de nuestra intervención:
+                            Si tuviste algún problema con algún proveedor de bienes y servicios,
+                            existen distintos canales para efectuar tu reclamo al margen de nuestra intervención:
                         </h1>
 
-                        {/* Organismos con URL en línea */}
+
                         {[
                             { name: "A) Defensa del Consumidor de C.A.B.A. de forma digital ingresando al siguiente link: ", url: "https://buenosaires.gob.ar/tramites/denuncia-ante-defensa-al-consumidor" },
                             { name: "B) Ventanilla Única Federal de Defensa del Consumidor: Deberá ingresar al siguiente link completando la información solicitada en el formulario y enviarlo. Luego de ello, recibirá por correo electrónico el número de reclamo asignado y Defensa al Consumidor o la autoridad local se pondrá en contacto con usted a fin de informarte los pasos a seguir.", url: "https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario%20" },
@@ -84,11 +84,11 @@ const Denuncia: React.FC = () => {
                         ))}
 
                         <p className="mt-6 text-sm lg:text-lg">
-                        También podés consultar en las oficinas de tu municipio la existencia de oficinas de defensa del consumidor locales, 
-                        que variaran según la organización de cada provincia.
+                            También podés consultar en las oficinas de tu municipio la existencia de oficinas de defensa del consumidor locales,
+                            que variaran según la organización de cada provincia.
                         </p>
 
-                        
+
                     </div>
 
                 </div>

@@ -1,4 +1,7 @@
 import React, { useRef, useState } from "react";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getAuth } from "firebase/auth";
+import imageCompression from 'browser-image-compression';
 
 interface AdminFormProps {
   storageKey: string;
@@ -6,7 +9,7 @@ interface AdminFormProps {
   setNuevoItem: (item: any) => void;
   editando: boolean;
   setEditando: (editando: any) => void;
-  handleGuardarEdicion: () => void; // ✅ Debe estar definido aquí
+  handleGuardarEdicion: () => void;
   handleAgregarItem: () => void;
   errores: { titulo: string; descripcion: string; fecha: string; imagen: string };
   setErrores: (errores: any) => void;
@@ -19,48 +22,80 @@ const AdminForm: React.FC<AdminFormProps> = ({
   setNuevoItem,
   editando,
   setEditando,
-  handleGuardarEdicion, // ✅ Ahora está correctamente definido
+  handleGuardarEdicion,
   handleAgregarItem,
   errores,
   setErrores,
   validarCampos,
 }) => {
 
-  // ✅ Ref para resetear el input de archivo
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDirty, setIsDirty] = useState(false);
 
-  // ✅ Manejo de subida de imagen (SOLO si es noticia)
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (storageKey !== "noticias") return; // Solo permitir si es noticia
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (storageKey !== "noticias") return;
 
     const file = event.target.files?.[0];
-    if (file) {
-      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-      const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!file) return;
+    console.log(`📂 Tamaño original: ${(file.size / 1024).toFixed(2)} KB`);
 
-      if (!allowedTypes.includes(file.type)) {
-        setErrores((prev: any) => ({ ...prev, imagen: "Formato inválido. Solo JPG, JPEG o PNG." }));
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    const maxSize = 5 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+      setErrores((prev: any) => ({ ...prev, imagen: "Formato inválido. Solo JPG, JPEG o PNG." }));
+      return;
+    }
+    if (file.size > maxSize) {
+      setErrores((prev: any) => ({ ...prev, imagen: "La imagen no puede superar los 5MB." }));
+      return;
+    }
+
+    setErrores((prev: any) => ({ ...prev, imagen: "" }));
+
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        alert("Debes iniciar sesión para subir imágenes.");
         return;
       }
-      if (file.size > maxSize) {
-        setErrores((prev: any) => ({ ...prev, imagen: "La imagen no puede superar los 5MB." }));
-        return;
-      }
-
-      setErrores((prev: any) => ({ ...prev, imagen: "" }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNuevoItem({ ...nuevoItem, imagen: reader.result as string });
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 800,
+        useWebWorker: true
       };
-      reader.readAsDataURL(file);
+
+
+      const compressedFile = await imageCompression(file, options);
+      console.log(`📉 Tamaño después de compresión: ${(compressedFile.size / 1024).toFixed(2)} KB`);
+
+      const storage = getStorage();
+      const storageRef = ref(storage, `noticias/${user.uid}/${file.name}`);
+
+
+      const snapshot = await uploadBytes(storageRef, compressedFile);
+
+
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setNuevoItem({ ...nuevoItem, imagen: downloadURL });
+
+
+      console.log("Imagen subida correctamente:", downloadURL);
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      setErrores((prev: any) => ({ ...prev, imagen: "Error al subir la imagen." }));
     }
   };
 
+
   const handleSubmit = () => {
     if (editando) {
-      handleGuardarEdicion(); // ✅ Guardar edición sin preguntar
-      resetFormulario(true); // ✅ No preguntar al guardar
+      handleGuardarEdicion();
+      resetFormulario(true);
     } else {
       if (!validarCampos()) return;
       handleAgregarItem();
@@ -71,12 +106,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
   const resetFormulario = (forceReset = false) => {
     if (!forceReset && editando && isDirty) {
       const confirmCancel = window.confirm("Tienes cambios sin guardar. ¿Seguro que quieres cancelar?");
-      if (!confirmCancel) return; // ❌ Si el usuario cancela, no hacemos nada
+      if (!confirmCancel) return;
     }
 
     setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
     setEditando(false);
-    setIsDirty(false); // ✅ Resetear "dirty"
+    setIsDirty(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -85,7 +120,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNuevoItem({ ...nuevoItem, titulo: e.target.value });
     setErrores((prev: any) => ({ ...prev, titulo: "" }));
-    setIsDirty(true);  // ✅ Detecta cambios en el formulario
+    setIsDirty(true);
   };
 
   const handleChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -106,11 +141,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
     setIsDirty(true);
   };
 
+
   return (
     <div className="mb-6 bg-white w-full  rounded-lg flex flex-col  xl:flex-row justify-between sm:h-auto">
-      {/* Contenedor principal */}
+
       <div className=" w-[100%] sm:w-[100%] xl:w-[49%]">
-        {/* Título */}
+
         <div className="mb-4 flex flex-col justify-between ">
           <label htmlFor="titulo" className="block text-xs font-medium text-sky-500 mb-1">
             Título (*)
@@ -127,7 +163,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
         </div>
 
         <div className="flex flex-col sm:flex-col xl:flex-row mt-7 justify-between ">
-          {/* Fecha de publicación */}
+
           <div className="mb-4 w-[100%] sm:w-[100%]  xl:w-[39%] flex flex-col justify-between">
             <label htmlFor="fecha" className="block text-xs font-medium text-sky-500 mb-1">
               Fecha de publicación (*)
@@ -143,7 +179,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
               {errores.fecha && <p className="text-red-500 text-sm">{errores.fecha}</p>}
             </div>
           </div>
-          {/* Input para subir imagen (SOLO si es noticia) */}
+
           {storageKey === "noticias" && (
             <div className="mb-4 w-[100%] sm:w-[100%] xl:w-[59%]">
               <label htmlFor="imagen" className="block text-xs font-medium text-sky-500 mb-1">
@@ -166,7 +202,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
 
       <div className="flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] ">
-        {/* Descripción */}
+
         <div className="mb-0 xl:mb-4 2xl:mb-4 h-full">
           <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
             Descripción (*)
@@ -184,17 +220,17 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
 
 
-        {/* Botones de acción alineados al final */}
+
         <div className="flex justify-end sm:mt-0 xl:mt-4 2xl:mt-">
           <button
             className="bg-white border border-gray-300 text-sky-500 px-6 py-2 rounded-lg hover:bg-sky-100 transition text-sm mr-4"
-            onClick={() => resetFormulario()} // ✅ Ahora solo pregunta en "Cancelar"
+            onClick={() => resetFormulario()}
           >
             Cancelar
           </button>
           <button
             className="bg-sky-500 text-white px-9 py-2 rounded-lg hover:bg-sky-600 transition text-sm"
-            onClick={handleSubmit} // ✅ Guardar no pregunta si es "dirty"
+            onClick={handleSubmit}
           >
             {editando ? "Guardar Edición" : "Crear"}
           </button>

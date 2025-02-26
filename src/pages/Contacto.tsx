@@ -4,14 +4,14 @@ import React from "react";
 const Contacto: React.FC = () => {
   return (
     <div className="w-full flex flex-col items-center py-16 bg-white px-10">
-      {/* Título */}
+
       <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-[#1C244B] mb-10">
         Contáctenos
       </h1>
 
-      {/* Contenedor de dos columnas */}
+
       <div className="w-[95%]  flex flex-col sm:flex-col lg:flex-row justify-between items-center gap-10 lg:px-[2%]  2xl:px-[9%]">
-        {/* Columna Izquierda - Google Maps */}
+
         <div className="w-full sm:w-[88%] lg:w-[50%] 2xl:w-[60%]">
           <iframe
             title="Ubicación"
@@ -25,27 +25,27 @@ const Contacto: React.FC = () => {
           ></iframe>
         </div>
 
-        {/* Columna Derecha - Información */}
-<div className="w-full sm:w-[88%] lg:w-[50%] 2xl:w-[45%] flex flex-col justify-center space-y-2 sm:space-y-6 2xl:space-y-8 sm:mt-6 lg:mt-0 2xl:mt-0">
-  <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-    <span className="font-semibold">Domicilio:</span> Tte. Gral. Juan D. Perón 315 P6 ofic.23 – C1038 – CABA
-  </p>
 
-  <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-    <span className="font-semibold">Horario de atención:</span> Lunes a Jueves de 9 a 13 horas
-  </p>
+        <div className="w-full sm:w-[88%] lg:w-[50%] 2xl:w-[45%] flex flex-col justify-center space-y-2 sm:space-y-6 2xl:space-y-8 sm:mt-6 lg:mt-0 2xl:mt-0">
+          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
+            <span className="font-semibold">Domicilio:</span> Tte. Gral. Juan D. Perón 315 P6 ofic.23 – C1038 – CABA
+          </p>
 
-  <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-    <span className="font-semibold">Teléfono:</span> +54 9 11 6884 0597
-  </p>
+          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
+            <span className="font-semibold">Horario de atención:</span> Lunes a Jueves de 9 a 13 horas
+          </p>
 
-  <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-    <span className="font-semibold">Correo Electrónico: </span> 
-    <a href="mailto:consumidoresdamnificados@gmail.com" className=" hover:underline">
-      consumidoresdamnificados@gmail.com
-    </a>
-  </p>
-</div>
+          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
+            <span className="font-semibold">Teléfono:</span> +54 9 11 6884 0597
+          </p>
+
+          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
+            <span className="font-semibold">Correo Electrónico: </span>
+            <a href="mailto:consumidoresdamnificados@gmail.com" className=" hover:underline">
+              consumidoresdamnificados@gmail.com
+            </a>
+          </p>
+        </div>
 
       </div>
     </div>

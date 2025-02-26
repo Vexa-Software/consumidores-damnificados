@@ -3,14 +3,14 @@ import React from "react";
 const QuienesSomos: React.FC = () => {
     return (
         <div className="w-full flex flex-col items-center py-16 bg-white px-10">
-            {/* Título */}
+
             <h1 className="text-3xl 2xl:text-6xl font-bold text-center text-[#0E153A] mb-10">
                 Quiénes Somos
             </h1>
 
-            {/* Contenedor en tres columnas */}
+
             <div className="w-[85%] sm:w-[84%] lg:sm:w-[91%] 2xl:sm:w-[77%] grid grid-cols-1 lg:grid-cols-3 gap-12 text-[#324A6D] text-sm leading-relaxed">
-                {/* Columna 1 - Nuestro Origen */}
+
                 <div>
                     <h2 className="text-xl 2xl:text-2xl font-semibold text-[#324A6D] mb-4">
                         Nuestro <span className="font-extrabold">Origen</span>
@@ -52,7 +52,7 @@ const QuienesSomos: React.FC = () => {
                     </p>
                 </div>
 
-                {/* Columna 2 - Cómo Trabajamos */}
+
                 <div className="">
                     <h2 className="text-xl 2xl:text-2xl font-semibold text-[#324A6D] mb-4">
                         Cómo <span className="font-extrabold">Trabajamos</span>
@@ -64,37 +64,37 @@ const QuienesSomos: React.FC = () => {
                         por diversas patologías ambientales o económicas.
                     </p>
                     <p className="mt-4">
-                    Estas últimas principalmente en el ámbito de los retails, 
-                    bancos y otras entidades financieras que otorgan préstamos con tasas abusivas, 
-                    cobran comisiones o cargos ilegales (entre otras patologías), 
-                    como así también en materia de mercado de capitales 
-                    respecto a empresas que captan ahorros de consumidores 
-                    pero incurren en mala praxis en diversos campos de la operatoria con títulos bursátiles.
+                        Estas últimas principalmente en el ámbito de los retails,
+                        bancos y otras entidades financieras que otorgan préstamos con tasas abusivas,
+                        cobran comisiones o cargos ilegales (entre otras patologías),
+                        como así también en materia de mercado de capitales
+                        respecto a empresas que captan ahorros de consumidores
+                        pero incurren en mala praxis en diversos campos de la operatoria con títulos bursátiles.
                     </p>
                     <p className="mt-4">
-                    Se involucró también la asociación en materia ambiental, 
-                    defendiendo la protección de humedales en el país, 
-                    verdaderos reservorios de oxígeno y vidas silvestres.
+                        Se involucró también la asociación en materia ambiental,
+                        defendiendo la protección de humedales en el país,
+                        verdaderos reservorios de oxígeno y vidas silvestres.
                     </p>
                     <p className="mt-4">
-                    Dentro del plexo de sus voluntarios colaboradores hay especialistas 
-                    en diversas materias vinculadas con los objetivos institucionales de la asociación.
+                        Dentro del plexo de sus voluntarios colaboradores hay especialistas
+                        en diversas materias vinculadas con los objetivos institucionales de la asociación.
                     </p>
-                    
-                    
-                    
+
+
+
                 </div>
 
-                {/* Columna 3 - Ejemplos (sin título) */}
+
                 <div className="text-[#324A6D]">
                     <p className="pt-12">
-                    Como ejemplo de los programas de educación e información a los usuarios y consumidores, 
-                    desarrollamos diversos temas de interés por medio de internet y/o presencialmente, 
-                    en la sede de la FUNDACION DE ESTUDIOS SUPERIORES E INVESTIGACION (FUNDESI). 
-                   
+                        Como ejemplo de los programas de educación e información a los usuarios y consumidores,
+                        desarrollamos diversos temas de interés por medio de internet y/o presencialmente,
+                        en la sede de la FUNDACION DE ESTUDIOS SUPERIORES E INVESTIGACION (FUNDESI).
+
                     </p>
                     <p className="">
-                    Entre ellos:
+                        Entre ellos:
                     </p>
 
                     <ul className="list-disc  space-y-1  pl-10 pt-4">
@@ -121,17 +121,17 @@ const QuienesSomos: React.FC = () => {
                         ))}
                     </ul>
                     <p className="pt-6">
-                    En otro orden, contamos con una activa presencia en convocatorias del ENRE (temas de energía), 
-                    ORSNA (temas de aeropuertos) y diversos Organismos públicos de Defensa del Consumidor.
+                        En otro orden, contamos con una activa presencia en convocatorias del ENRE (temas de energía),
+                        ORSNA (temas de aeropuertos) y diversos Organismos públicos de Defensa del Consumidor.
                     </p >
                     <p className="pt-6">
-                    Integramos el Consejo Consultivo del CU (Control de Servicios Públicos de la Ciudad de Bs As) 
-                    y de la Dirección Nacional de Defensa del Consumidor.
+                        Integramos el Consejo Consultivo del CU (Control de Servicios Públicos de la Ciudad de Bs As)
+                        y de la Dirección Nacional de Defensa del Consumidor.
                     </p>
                     <p className="pt-6">
-                    Cabe señalar también que formulamos presentaciones institucionales ante la 
-                    Cámara de Diputados de la Nación en la etapa gestatoria de la que luego fue 
-                    la Ley 27.441, de Financiamiento Productivo.
+                        Cabe señalar también que formulamos presentaciones institucionales ante la
+                        Cámara de Diputados de la Nación en la etapa gestatoria de la que luego fue
+                        la Ley 27.441, de Financiamiento Productivo.
                     </p>
                 </div>
             </div>

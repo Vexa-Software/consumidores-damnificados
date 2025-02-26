@@ -2,7 +2,7 @@
 import { Link } from "react-router-dom";
 import { truncateText } from '../utils/string-utils';
 
-// Info
+
 const cardsData = [
   {
     img: "/assets/img/AREA_ACCION_CLASE.jpg",
@@ -78,13 +78,13 @@ const CardsGrid = () => {
             key={index}
             className="cards-home group shadow-xl overflow-hidden bg-customBlue flex flex-col items-center text-center transition-all duration-300 w-[90%] min-h-[700px] h-[100%] md:w-[507px] md:min-h-[800px] md:h-[800px] md:hover:h-[830px]"
           >
-            {/* Imagen */}
+
             <img
               src={card.img}
               alt={card.alt}
               className="object-cover w-full h-[35%] md:h-[368px]"
             />
-            {/* Contenido */}
+
             <div className="p-4 relative w-full flex flex-col justify-between flex-grow">
               <div>
                 <h3 className="title-cards-areasdepractica font-bold text-start text-white mb-2 px-4">
@@ -95,11 +95,11 @@ const CardsGrid = () => {
                 </p>
               </div>
 
-              {/* Botón "Quiero asesorarme" */}
+
               <div
                 className={`${window.innerWidth < 768
-                    ? "opacity-100 mb-5"
-                    : "opacity-0 group-hover:opacity-100"
+                  ? "opacity-100 mb-5"
+                  : "opacity-0 group-hover:opacity-100"
                   } transition-opacity duration-500 mt-4`}
               >
                 <Link
@@ -110,7 +110,7 @@ const CardsGrid = () => {
                 </Link>
               </div>
 
-              {/* Flecha */}
+
               <div className="hidden lg:flex lg:flex-col lg:items-center">
                 <span className="text-xl font-bold text-white border-[3px] border-white rounded-full px-4 p-2 transition-transform duration-300 transform group-hover:rotate-180">
                   ↓

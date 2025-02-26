@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { auth } from "../firebase/config";
-import { signInWithEmailAndPassword, sendPasswordResetEmail,  fetchSignInMethodsForEmail } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail, fetchSignInMethodsForEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { FaSignInAlt } from "react-icons/fa"; //
+import { FaSignInAlt } from "react-icons/fa"; 
 
 
 const Login: React.FC = () => {
@@ -13,7 +13,7 @@ const Login: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Cargar email guardado en localStorage
+   
     useEffect(() => {
         const savedEmail = localStorage.getItem("rememberedEmail");
         if (savedEmail) {
@@ -60,27 +60,26 @@ const Login: React.FC = () => {
 
     const handleForgotPassword = async () => {
         console.log("handleForgotPassword se está ejecutando");
-    
+
         if (!isValidEmail(email)) {
             toast.error("Por favor, ingresa un email válido para restablecer tu contraseña.");
             return;
         }
-    
+
         try {
             const methods = await fetchSignInMethodsForEmail(auth, email);
             console.log("Métodos de autenticación para este email:", methods);
-    
+
             if (methods.length === 0) {
                 toast.error("Este correo no está registrado en el sistema.");
                 return;
             }
-       //solucionar problema de popup
-            // Si el email existe y tiene un método de autenticación, enviamos el email de recuperación
+
             await sendPasswordResetEmail(auth, email);
             toast.success("Correo de restablecimiento enviado. Revisa tu bandeja de entrada.");
         } catch (error: any) {
             console.error("Error al verificar el email:", error);
-    
+
             if (error.code === "auth/user-not-found") {
                 toast.error("Este correo no está registrado en Firebase.");
             } else {
@@ -88,30 +87,6 @@ const Login: React.FC = () => {
             }
         }
     };
-
-
-
-
-
-
-    // const handleForgotPassword = async () => {
-    //     if (!isValidEmail(email)) {
-    //         toast.error("Por favor, ingresa un email válido para restablecer tu contraseña.");
-    //         return;
-    //     }
-
-    //     try {
-    //         await sendPasswordResetEmail(auth, email);
-    //         toast.success("Correo de restablecimiento enviado. Revisa tu bandeja de entrada.");
-    //     } catch (error: any) {
-    //         toast.error("Error al enviar el correo de restablecimiento.");
-    //     }
-    // };
-
-
-    
-    
-    
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-white py-24 px-8">
@@ -156,7 +131,7 @@ const Login: React.FC = () => {
                         />
                     </div>
 
-                    {/* Checkbox para recordar usuario */}
+
                     <div className="flex items-center mb-6">
                         <input
                             id="rememberMe"
@@ -175,11 +150,11 @@ const Login: React.FC = () => {
                         className="w-full bg-[#0EA5E9] text-white py-2 rounded-lg hover:bg-[#2498ce] transition disabled:opacity-50 flex items-center justify-center pr-6"
                         disabled={loading}
                     >
-                        <FaSignInAlt size={18} className="mr-2" /> {/* 🔹 Ícono de inicio de sesión */}
+                        <FaSignInAlt size={18} className="mr-2" />
                         {loading ? "Cargando..." : "Iniciar sesión"}
                     </button>
 
-                    {/* Botón "Olvidé mi contraseña" */}
+
                     <button
                         type="button"
                         className="w-full mt-4 text-sm text-sky-500 hover:underline"
