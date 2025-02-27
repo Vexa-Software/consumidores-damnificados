@@ -8,14 +8,18 @@ const LayoutAdmin: React.FC = () => {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen">
       <ScrollToTop />
       <HeaderAdmin />
-      <div className="flex flex-1">
-        <AdminSidebar />
-        <main className="flex-1">
-          <Outlet />
-        </main>
+      <div className="flex pt-[100px]">
+        <div className="fixed w-[300px] h-full">
+          <AdminSidebar />
+        </div>
+        <div className="ml-[300px] w-full">
+          <main className="p-6">
+            <Outlet />
+          </main>
+        </div>
       </div>
     </div>
   );

@@ -31,8 +31,7 @@ const AdminSidebar: React.FC = () => {
       </button>
 
       <div
-        className={`min-h-full w-72 sm:w-[300px] bg-white border-r border-sky-500 text-black 
-          p-4 flex flex-col
+        className={`h-full w-[300px] bg-white border-r border-sky-500 text-black p-4
           ${isOpen ? "translate-x-0" : "-translate-x-full"} 
           transition-transform duration-300 sm:translate-x-0`}
       >
