@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
 
         <div className="flex items-center gap-4 mt-6 lg:mt-0">
           <a
-            href="https://www.facebook.com/consumidoresdamnificados"
+            href="https://www.facebook.com/consumidoresdamnificados/"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-2 rounded-full text-[#2A2A2B] hover:bg-gray-300 transition text-xl w-10 h-10 flex items-center justify-center"
@@ -47,12 +47,12 @@ const Footer: React.FC = () => {
             <FaFacebookF />
           </a>
           <a
-            href="https://www.linkedin.com"
+            href="https://www.instagram.com/CONSUMIDORESDAMNIFICADOS/"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-2 rounded-full text-[#2A2A2B] hover:bg-gray-300 transition text-xl w-10 h-10 flex items-center justify-center"
           >
-            <FaLinkedinIn />
+            <FaInstagram />
           </a>
         </div>
       </div>

@@ -4,9 +4,22 @@ import { NuestrosLogrosSlider } from "../components/NuestrosLogrosSlider";
 import { NoticiasSlider } from "../components/NoticiasSlider";
 import { Link } from 'react-router-dom';
 import SimpleLoader from '@/components/SimpleLoader/SimpleLoader';
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
   const { noticias, nuestrosLogros, loading } = useFetchNoticiasLogros();
+
+    const navigate = useNavigate(); // Hook para navegar sin recargar la página
+  
+    const handleClick = (link: string) => {
+      if (link.startsWith("http")) {
+        // Si el link es externo, abrir en nueva pestaña
+        window.open(link, "_blank");
+      } else {
+        // Si es interno (ej. "/denuncia"), navegar dentro de la SPA sin recargar
+        navigate(link);
+      }
+    };
 
   return (
     <>
@@ -53,26 +66,32 @@ const Home: React.FC = () => {
               title: "Dirección Nacional de Defensa del Consumidor y Arbitraje del Consumo",
               description:
                 "Es el organismo oficial encargado de ejecutar las acciones para la aplicación y control de las políticas vinculadas con la defensa del consumidor.",
+                link: "https://www.argentina.gob.ar/economia/industria-y-comercio/defensadelconsumidor",
+            },
+            
+            {
+              title: "Ley N° 24.240",
+              description:
+                "Normas de Protección y Defensa de los Consumidores. Autoridad de Aplicación. Procedimiento y Sanciones. Disposiciones Finales.",
+                link: "https://servicios.infoleg.gob.ar/infolegInternet/anexos/0-4999/638/texact.htm",
             },
             {
               title: "Reclamos a nivel nacional",
               description:
                 "Si tenés un problema con un producto o servicio adquirido o contratado en cualquier parte del país, podes hacer tu reclamo a través de la Ventanilla Única Federal de Defensa al Consumidor.",
-            },
-            {
-              title: "Ley N° 24.240",
-              description:
-                "Normas de Protección y Defensa de los Consumidores. Autoridad de Aplicación. Procedimiento y Sanciones. Disposiciones Finales.",
+                link: "/denuncia",
             },
             {
               title: "Reclamos en CABA",
               description:
                 "Si tenés un problema con un producto o servicio en CABA, podes hacer tu reclamo de manera digital o presencial –además de la Ventanilla Única Federal de Defensa al Consumidor- ante la Defensa al Consumidor de CABA o ante el Consejo de la Magistratura de CABA.",
-            },
+                link: "/denuncia",
+              },
           ].map((card, index) => (
             <div
               key={index}
               className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105 w-auto"
+              onClick={() => handleClick(card.link)}
             >
               <h1 className="bg-sky-500 text-white text-center text-sm  font-semibold py-3 h-16 flex flex-col justify-center">
                 {card.title}

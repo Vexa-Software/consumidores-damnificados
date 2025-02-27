@@ -80,10 +80,18 @@ const QuienesSomos: React.FC = () => {
                         Dentro del plexo de sus voluntarios colaboradores hay especialistas
                         en diversas materias vinculadas con los objetivos institucionales de la asociación.
                     </p>
-
-
+                    <div className=" flex flex-row justify-center">
+                        <img
+                            src="/assets/img/consumidores-damnificados/img-logo-consumidores.jpg"
+                            alt="Dirección de Defensa del Consumidor"
+                            className="w-60 h-auto object-cover  items-center"
+                        />
+                    </div>
 
                 </div>
+
+
+
 
 
                 <div className="text-[#324A6D]">

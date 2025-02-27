@@ -32,7 +32,7 @@ const Contacto: React.FC = () => {
           </p>
 
           <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-            <span className="font-semibold">Horario de atención:</span> Lunes a Jueves de 9 a 13 horas
+            <span className="font-semibold">Horario de atención:</span> Lunes a Jueves de 12 a 16 horas
           </p>
 
           <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">

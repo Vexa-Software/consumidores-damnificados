@@ -36,7 +36,7 @@ const Denuncia: React.FC = () => {
                         <li>
                             <span className="font-semibold">Teléfono: </span> comunicarse al{" "}
                             <span className="text-[#0E153A] font-semibold">+54 11 6884 0597 </span>
-                            de Lunes a Viernes (hábiles) de 9 a 13 horas.
+                            de Lunes a Viernes (hábiles) de 12 a 16 horas.
                             En su caso, dejar un mensaje y te responderemos a la brevedad.
                         </li>
                         <li>
@@ -50,14 +50,14 @@ const Denuncia: React.FC = () => {
                         </li>
                         <li>
                             <span className="font-semibold">Correspondencia Postal: </span>
-                            enviar una nota a Tte. Gral. J. D. Perón 315, Piso 6º, Of. 23 – CABA.
+                            enviar una nota a Tte. Gral. J. D. Perón 315, Piso 6º, Of. 23, CP 1038 – CABA.
                         </li>
 
                     </ul>
 
                     <div className="mt-10">
                         <h1 className="font-bold italic text-sm xl:text-xl text-[#0E153A]">
-                            Si tuviste algún problema con algún proveedor de bienes y servicios,
+                            Si sos consumidor final y tuviste algún problema con algún proveedor de bienes y servicios,
                             existen distintos canales para efectuar tu reclamo al margen de nuestra intervención:
                         </h1>
 
@@ -84,8 +84,7 @@ const Denuncia: React.FC = () => {
                         ))}
 
                         <p className="mt-6 text-sm lg:text-lg">
-                            También podés consultar en las oficinas de tu municipio la existencia de oficinas de defensa del consumidor locales,
-                            que variaran según la organización de cada provincia.
+                            También podes consultar tu municipio la existencia de oficinas de defensa del consumidor locales (OMIC), que variaran según la organización de cada provincia.
                         </p>
 
 
