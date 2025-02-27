@@ -6,7 +6,7 @@ const Denuncia: React.FC = () => {
             <div className="w-full flex flex-col items-center py-16 bg-white px-10">
 
                 <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center text-[#1C244B] mb-16">
-                    Denuncia
+                    Denunciá
                 </h1>
 
 
@@ -28,7 +28,7 @@ const Denuncia: React.FC = () => {
                         <li>
                             <span className="font-semibold ">Personalmente: </span>
                             concurrir a Tte. Gral. J. D. Perón 315, Piso 6º, Of. 23 – CABA de
-                            Lunes a Viernes (hábiles) de 9 a 13 horas.
+                            Lunes a Viernes (hábiles) de 12 a 16 horas.
                             Si prefieres que participe un profesional relacionado con la índole de tu consulta,
                             debes pedirla con una anticipación mínima de cinco días
                             a fin de que nosotros convoquemos a dicho especialista.

@@ -60,7 +60,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="w-full flex justify-center py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-[65%]   lg:w-[78%] 2xl:w-[60%] h-[auto] sm:h-[auto] lg:h-[auto]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-[65%] lg:w-[78%] 2xl:w-[60%] h-[auto] sm:h-[auto] lg:h-[auto]">
           {[
             {
               title: "Dirección Nacional de Defensa del Consumidor y Arbitraje del Consumo",
@@ -90,7 +90,7 @@ const Home: React.FC = () => {
           ].map((card, index) => (
             <div
               key={index}
-              className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:scale-105 w-auto"
+              className="bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:cursor-pointer hover:shadow-lg hover:scale-105 w-auto"
               onClick={() => handleClick(card.link)}
             >
               <h1 className="bg-sky-500 text-white text-center text-sm  font-semibold py-3 h-16 flex flex-col justify-center">
