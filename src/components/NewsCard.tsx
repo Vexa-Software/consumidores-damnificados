@@ -10,7 +10,7 @@ interface NewsCardProps {
 
 const NewsCard: React.FC<NewsCardProps> = ({ title, description, date, imagen }) => {
     return (
-        <div className="bg-white shadow-lg rounded-lg w-[300px] 2xl:w-80 min-h-[350px] max-h-[500px] flex flex-col justify-self-center overflow-hidden">
+        <div className="bg-white shadow-lg rounded-lg w-[300px] 2xl:w-80 min-h-[400px] max-h-[500px] flex flex-col justify-self-center overflow-hidden">
 
             {imagen && (
                 <div className="h-40 w-full">

@@ -23,7 +23,7 @@ export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
         <Swiper
           modules={[Autoplay, EffectCoverflow]}
           autoplay={{
-            delay: 3000,
+            delay: 6000,
             disableOnInteraction: false,
           }}
           navigation={{

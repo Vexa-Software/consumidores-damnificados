@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { EffectCoverflow, Autoplay } from "swiper/modules";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import NewsCard from "./NewsCard";
 import { Link } from "react-router-dom";
 
@@ -21,36 +21,35 @@ interface NoticiasSliderProps {
 export function NoticiasSlider({ items }: NoticiasSliderProps) {
   return (
     <div className="h-[700px] w-full mb-8 flex flex-col justify-center ">
-      <div className=" flex flex-row justify-center items-center">
-
+      <div className="h-[500px]">
         <Swiper
-          modules={[Autoplay, EffectCoverflow]}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
+          modules={[Navigation, Pagination]}
+          spaceBetween={30}
+          slidesPerView={3}
+          breakpoints={{
+            320: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            }
           }}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          }}
-          effect="coverflow"
-          centeredSlides={true}
-          slidesPerView="auto"
-          spaceBetween={120}
+          navigation
+          pagination={{ clickable: true }}
+          centeredSlides={false}
           loop={true}
-          coverflowEffect={{
-            rotate: 0,
-            stretch: 0,
-            depth: 150,
-            modifier: 1,
-            slideShadows: false,
-          }}
-          className="relative w-[70rem] 2xl:w-[90rem] mx-10 "
+          className="w-full"
         >
           {items.map((item) => (
             <SwiperSlide
               key={item.id}
-              className="w-[550px] xl:w-[370px] 2xl:w-[520px] "
+              className="w-full"
             >
               <NewsCard
                 imagen={item.imagen}
