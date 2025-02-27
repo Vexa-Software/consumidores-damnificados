@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { db, storage } from '../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, query, getDocs, updateDoc, doc, deleteDoc, orderBy } from 'firebase/firestore';
@@ -7,7 +7,6 @@ import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import imageCompression from "browser-image-compression";
 import "react-quill/dist/quill.snow.css";
-import { DataTableDemo } from "@/components/Grid";
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
@@ -65,7 +64,7 @@ const AlertasAdmin: React.FC = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [modalActivarFormularioOpen, setModalActivarFormularioOpen] = useState<boolean>(false);
-  const [accionPendiente, setAccionPendiente] = useState<(() => Promise<void>) | null>(null);
+
 
   const quillRef = useRef<ReactQuill>(null);
 
