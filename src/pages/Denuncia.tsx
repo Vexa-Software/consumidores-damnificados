@@ -5,7 +5,7 @@ const Denuncia: React.FC = () => {
         <>
             <div className="w-full flex flex-col items-center py-16 bg-white px-10">
 
-                <h1 className="text-5xl font-bold text-center text-[#1C244B] mb-16">
+                <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center text-[#1C244B] mb-16">
                     Denuncia
                 </h1>
 

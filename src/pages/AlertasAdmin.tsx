@@ -222,7 +222,7 @@ const AlertasAdmin: React.FC = () => {
     {
       accessorKey: "titulo",
       header: "Título",
-      cell: ({ row }) => <div className="capitalize min-w-[100%] max-w-[200px]">{row.getValue("titulo")}</div>,
+      cell: ({ row }) => <div className="capitalize min-w-[100%] max-w-[200px] ">{row.getValue("titulo")}</div>,
     },
     {
       accessorKey: "descripcion",
@@ -503,7 +503,7 @@ const AlertasAdmin: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="max-w-2xl mb-8">
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Título</label>
+              <label className="block text-xs font-medium text-sky-500 mb-1">Título (*)</label>
               <input
                 type="text"
                 value={titulo}
@@ -514,12 +514,12 @@ const AlertasAdmin: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Contenido</label>
+              <label className="block text-xs font-medium text-sky-500 mb-1">Contenido(*)</label>
               <ReactQuill value={contenido} onChange={setContenido} ref={quillRef} modules={modules} className="bg-white" />
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">Imagen</label>
+              <label className="block text-xs font-medium text-sky-500 mb-1">Imagen(*)</label>
               <input
                 type="file"
                 accept="image/*"
@@ -529,12 +529,12 @@ const AlertasAdmin: React.FC = () => {
                     setImagenUrl(URL.createObjectURL(e.target.files[0]));
                   }
                 }}
-                className="w-full"
+                className="w-full p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
               />
               {imagenUrl && <img src={imagenUrl} alt="Vista previa" className="w-48 h-auto mt-2 rounded" />}
             </div>
 
-            <div className="mb-4">
+            <div className="mb-4 ">
               <label className="flex items-center">
                 <input 
                   type="checkbox" 
@@ -542,14 +542,14 @@ const AlertasAdmin: React.FC = () => {
                   onChange={handleCheckboxChange} 
                   className="mr-2" 
                 />
-                <span className="text-gray-700">Activar alerta</span>
+                <span className="text-gray-700 ">Activar alerta</span>
               </label>
             </div>
 
             <div className="flex space-x-4">
               <button 
                 type="submit" 
-                className="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded" 
+                className="bg-sky-500 text-white px-6 py-2 rounded-lg hover:bg-sky-600 transition text-sm" 
                 disabled={cargando}
               >
                 {cargando ? "Guardando..." : editando ? "Actualizar Alerta" : "Guardar Alerta"}

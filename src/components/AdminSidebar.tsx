@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaBars, FaTimes, FaRegNewspaper, FaExclamationCircle } from "react-icons/fa";
+import { FaBars, FaTimes, FaRegNewspaper, FaExclamationCircle, FaTrophy, FaFileAlt, FaSignOutAlt } from "react-icons/fa";
 import { auth } from "../firebase/config";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
@@ -51,7 +51,7 @@ const AdminSidebar: React.FC = () => {
             </li>
             <li className={`mb-2 flex items-center ${location.pathname === "/admin/nuestros-logros" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
               <Link to="/admin/nuestros-logros" className="p-2 text-center flex items-center gap-2 w-full" onClick={() => setIsOpen(false)}>
-                <FaExclamationCircle className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/nuestros-logros" ? " text-white" : "text-sky-500 "}`} /> Nuestros Logros
+                <FaTrophy className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/nuestros-logros" ? " text-white" : "text-sky-500 "}`} /> Nuestros Logros
               </Link>
             </li>
             <li className={`mb-2 flex items-center ${location.pathname === "/admin/alertas" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
@@ -61,17 +61,21 @@ const AdminSidebar: React.FC = () => {
             </li>
             <li className={`mb-2 flex items-center ${location.pathname === "/admin/textos-sistema" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
               <Link to="/admin/textos-sistema" className="p-2 text-center flex items-center gap-2 w-full" onClick={() => setIsOpen(false)}>
-                <FaRegNewspaper className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/textos-sistema" ? " text-white" : "text-sky-500 "}`} /> Textos Sistema
+                <FaFileAlt className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/textos-sistema" ? " text-white" : "text-sky-500 "}`} /> Textos Sistema
               </Link>
             </li>
+           
           </ul>
 
+          <hr className="my-6 border-t border-gray-300" />
           <button
-            onClick={handleLogout}
-            className="w-full mt-auto bg-white text-black py-2 rounded-md hover:text-red-600 transition"
-          >
-            Cerrar Sesión
-          </button>
+                onClick={handleLogout}
+                className="w-full mt-auto bg-white  text-black py-2 rounded-md  hover:text-red-600 transition flex flex-row justify-center items-center gap-2"
+              >
+                < FaSignOutAlt className=" text-xl 2xl:text-2xl text-sky-500" />
+                Cerrar Sesión
+              </button>
+
         </div>
       </div>
 

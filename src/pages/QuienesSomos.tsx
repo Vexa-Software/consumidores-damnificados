@@ -4,7 +4,7 @@ const QuienesSomos: React.FC = () => {
     return (
         <div className="w-full flex flex-col items-center py-16 bg-white px-10">
 
-            <h1 className="text-3xl 2xl:text-6xl font-bold text-center text-[#0E153A] mb-10">
+            <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center text-[#0E153A] mb-10">
                 Quiénes Somos
             </h1>
 

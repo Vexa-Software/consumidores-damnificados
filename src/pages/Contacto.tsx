@@ -5,7 +5,7 @@ const Contacto: React.FC = () => {
   return (
     <div className="w-full flex flex-col items-center py-16 bg-white px-10">
 
-      <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-[#1C244B] mb-10">
+      <h1 className="text-2xl sm:text-4xl lg:text-4xl 2xl:text-5xl font-bold text-center text-[#1C244B] mb-10">
         Contáctenos
       </h1>
 
