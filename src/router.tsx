@@ -5,14 +5,15 @@ import NuestrosLogros from "./pages/NuestrosLogros";
 import Contacto from "./pages/Contacto";
 import Noticias from "./pages/Noticias";
 import Layout from "./pages/Layout";
+import LayoutAdmin from "./pages/LayoutAdmin";
 import QuienesSomos from "./pages/QuienesSomos";
 import Login from "./pages/Login"; // Importamos la nueva página de Login
 import NuestrosLogrosAdmin from "./pages/NuestrosLogrosAdmin";
 import NoticiasAdmin from "./pages/NoticiasAdmin";
 import AlertasAdmin from "./pages/AlertasAdmin";
 import PrivateRoute from './components/PrivateRoute';
-import HeaderAdmin from "./components/HeaderAdmin";
 import TextosSistemaAdmin from "./pages/TextosSistemaAdmin";
+import NotFound from "./pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -25,43 +26,30 @@ export const router = createBrowserRouter([
       { path: "/denuncia", element: <Denuncia /> },
       { path: "/noticias", element: <Noticias /> },
       { path: "/contacto", element: <Contacto /> },
+      { path: "*", element: <NotFound /> }, // Ruta para manejar páginas no encontradas dentro del Layout
     ],
   },
-  { path: "/login", element: <Login /> },
+  { path: "/login-admin", element: <Login /> },
   {
-    path: "/nuestros-logros-admin",
+    path: "/admin",
     element: (
       <PrivateRoute>
-        <HeaderAdmin/>
-        <NuestrosLogrosAdmin />
+        <LayoutAdmin />
       </PrivateRoute>
     ),
+    children: [
+      { path: "nuestros-logros", element: <NuestrosLogrosAdmin /> },
+      { path: "noticias", element: <NoticiasAdmin /> },
+      { path: "alertas", element: <AlertasAdmin /> },
+      { path: "textos-sistema", element: <TextosSistemaAdmin /> },
+    ],
   },
-  {
-    path: "/noticias-admin",
-    element: (
-      <PrivateRoute>
-        <HeaderAdmin/>
-        <NoticiasAdmin />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: "/alertas-admin",
-    element: (
-      <PrivateRoute>
-        <HeaderAdmin/>
-        <AlertasAdmin />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: "/textos-sistema-admin",
-    element: (
-      <PrivateRoute>
-        <HeaderAdmin/>
-        <TextosSistemaAdmin />
-      </PrivateRoute>
-    ),
+  // Ruta para manejar cualquier otra ruta no definida fuera del Layout
+  { 
+    path: "*", 
+    element: <Layout />,
+    children: [
+      { path: "*", element: <NotFound /> }
+    ]
   },
 ]);

@@ -36,7 +36,7 @@ const Login: React.FC = () => {
 
         try {
             setLoading(true);
-            await signInWithEmailAndPassword(auth, email, password);
+            const user = await signInWithEmailAndPassword(auth, email, password);
 
             if (rememberMe) {
                 localStorage.setItem("rememberedEmail", email);
@@ -44,7 +44,9 @@ const Login: React.FC = () => {
                 localStorage.removeItem("rememberedEmail");
             }
 
-            navigate("/nuestros-logros-admin");
+            if (user) {
+                navigate("/admin/noticias");
+            }
         } catch (error: any) {
             let errorMessage = "Error al iniciar sesión";
             if (error.code === 'auth/user-not-found') {

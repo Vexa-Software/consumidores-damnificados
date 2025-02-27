@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import AdminSidebar from "../components/AdminSidebar";
 import AdminForm from "../components/AdminForm";
 import { DataTableDemo } from "../components/Grid";
 import { toast } from "react-toastify";
@@ -193,13 +192,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
 
 
     return (
-        <div className="flex h-screen px-4">
-        
-        <AdminSidebar />
-
-       
-        <div className="flex flex-col flex-grow h-screen  overflow-y-auto max-w-[100%] sm:max-w-[67%] xl:sm:max-w-[80%]">
-            <div className=" flex-grow py-8 px-4 ">
+        <div className="flex h-screen px-4">       
+        <div className="flex flex-col flex-grow h-screen  max-w-[100%]">
+            <div className=" flex-grow pb-8 pt-32 px-4 ">
                 <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">{title}</h1>
                 <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">{subtitle}</p>
 

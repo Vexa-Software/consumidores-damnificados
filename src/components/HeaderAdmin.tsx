@@ -3,7 +3,7 @@ import { FaUser } from "react-icons/fa";
 const HeaderAdmin: React.FC = () => {
     return (
         <>
-            <header className='bg-white w-full h-[100px] border-b border-sky-500 flex flex-row justify-between items-center'>
+            <header className='bg-white h-[100px] border-b border-sky-500 flex flex-row justify-between items-center'>
                 <div className='w-full flex flex-row justify-between items-center mx-16'>
                     <div className='columnaLogo '>
                         <img
@@ -22,9 +22,6 @@ const HeaderAdmin: React.FC = () => {
                     </div>
 
                 </div>
-
-
-
             </header>
         </>
 

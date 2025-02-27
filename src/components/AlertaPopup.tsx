@@ -68,14 +68,6 @@ const AlertaPopup: React.FC = () => {
               dangerouslySetInnerHTML={{ __html: alerta.contenido }}
             />
           </div>
-
-
-          <div className="flex justify-center items-end h-1/4 xl:h-1/4">
-            <button className="bg-sky-500 text-white  px-4 h-8 rounded-md w-full  hover:bg-gray-800 transition">
-              ¡Ver más!
-            </button>
-          </div>
-
         </div>
       </div>
     </div>
