@@ -124,7 +124,8 @@ const AlertasAdmin: React.FC = () => {
       setAlertas(alertasData);
     } catch (error) {
       console.error('Error al cargar alertas:', error);
-      toast.error('Error al cargar las alertas');
+      toast.error('Error al cargar las alertas. Por favor, intente nuevamente.');
+
     }
   };
 
@@ -172,8 +173,7 @@ const AlertasAdmin: React.FC = () => {
       toast.success("Estado de alerta actualizado exitosamente");
       cargarAlertas();
     } catch (error) {
-      console.error("❌ Error al actualizar estado:", error);
-      toast.error("Error al actualizar el estado de la alerta");
+      toast.error("Error al actualizar el estado de la alerta. Por favor, intente nuevamente.");
     } finally {
       setCargando(false);
       setModalActivarOpen(false);
@@ -188,8 +188,7 @@ const AlertasAdmin: React.FC = () => {
       toast.success(` Alerta ${nuevoEstado ? 'activada' : 'desactivada'} exitosamente`);
       cargarAlertas();
     } catch (error) {
-      console.error("❌ Error al actualizar estado:", error);
-      toast.error("Error al actualizar el estado de la alerta");
+      toast.error("Error al actualizar el estado de la alerta. Por favor, intente nuevamente.");
     } finally {
       setCargando(false);
     }
@@ -310,8 +309,6 @@ const AlertasAdmin: React.FC = () => {
       setCargando(true);
 
       console.log(`📂 Tamaño original: ${(archivo.size / 1024).toFixed(2)} KB`);
-
-
       const options = {
         maxSizeMB: 1,
         maxWidthOrHeight: 800,
@@ -326,11 +323,10 @@ const AlertasAdmin: React.FC = () => {
       await uploadBytes(storageRef, compressedFile);
       const imageUrl = await getDownloadURL(storageRef);
 
-      console.log("Imagen comprimida y subida con éxito:", imageUrl);
+      toast.success("Imagen comprimida y subida con éxito");
       return imageUrl;
     } catch (error) {
-      console.error("❌ Error al subir la imagen:", error);
-      toast.error("Error al subir la imagen.");
+      toast.error("Error al subir la imagen. Por favor, intente nuevamente.");
       return null;
     } finally {
       setCargando(false);
@@ -429,7 +425,7 @@ const AlertasAdmin: React.FC = () => {
       cargarAlertas();
     } catch (error) {
       console.error("❌ Error al gestionar alerta:", error);
-      toast.error(editando ? "Error al actualizar la alerta" : "Error al crear la alerta");
+      toast.error(editando ? "Error al actualizar la alerta. Por favor, intente nuevamente." : "Error al crear la alerta. Por favor, intente nuevamente.");
     } finally {
       setCargando(false);
     }
@@ -463,7 +459,8 @@ const AlertasAdmin: React.FC = () => {
       cargarAlertas();
     } catch (error) {
       console.error("❌ Error al eliminar alerta:", error);
-      toast.error("Error al eliminar la alerta");
+      toast.error("Error al eliminar la alerta. Por favor, intente nuevamente.");
+
     }
 
     setModalEliminarOpen(false);

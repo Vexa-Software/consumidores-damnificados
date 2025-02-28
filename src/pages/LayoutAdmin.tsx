@@ -1,11 +1,10 @@
 import React from 'react';
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import HeaderAdmin from '../components/HeaderAdmin';
 import AdminSidebar from '../components/AdminSidebar';
 import ScrollToTop from '../hooks/ScrollToTop';
 
 const LayoutAdmin: React.FC = () => {
-  const location = useLocation();
 
   return (
     <div className="min-h-screen">
