@@ -78,12 +78,22 @@ export function DataTableDemo({ data, onEdit, onDelete, storageKey }: DataTableD
     {
       accessorKey: "descripcion",
       header: "Descripción",
-      cell: ({ row }) => <div className="min-w-[100%] w-[300px] sm:w-[500px] xl:w-[900px] max-w-[900px] h-full flex items-center justify-center text-center  ">{row.getValue("descripcion")}</div>,
+      cell: ({ row }) => {
+        const descripcion = row.getValue("descripcion") as string;
+        const textoLimitado = descripcion.length > 250 
+          ? `${descripcion.substring(0, 250)}...` 
+          : descripcion;
+        return (
+          <div className="min-w-[100%] w-[100px] sm:w-[170px] xl:w-[300px] max-w-[300px] h-full flex items-center justify-center text-center">
+            {textoLimitado}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "fecha",
       header: "Fecha",
-      cell: ({ row }) => <div className="text-center">{row.getValue("fecha")}</div>,
+      cell: ({ row }) => <div className="text-center min-w-[150px] w-[100%]">{row.getValue("fecha")}</div>,
     },
     ...(storageKey === "noticias"
       ? [
