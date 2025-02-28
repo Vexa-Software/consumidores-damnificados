@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
-import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
+import {  collection, onSnapshot, query, orderBy, doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
 
@@ -22,6 +22,26 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [itemsMostrados, setItemsMostrados] = useState<number>(3);
   const pdfUrl = "/assets/pdf/EDICTO-MAPFRE.pdf";
+  const [infoImportante, setInfoImportante] = useState<string>("");
+
+  useEffect(() => {
+    const fetchInfoImportante = async () => {
+      try {
+        const docRef = doc(db, "textos_sistema", "noticias", "textos", "informacion_importante");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setInfoImportante(docSnap.data().contenido);
+        } else {
+          setInfoImportante(""); 
+        }
+      } catch (error) {
+        console.error("Error al obtener el texto de información importante:", error);
+        toast.error("Error al cargar la información importante.");
+      }
+    };
+
+    fetchInfoImportante();
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -65,45 +85,8 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
           </div>
 
 
-          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 ">
-            Se hace saber que ante el Juzgado Nacional de Primera Instancia en lo Comercial Nº 8, Secretaría N° 15, sito en Libertad 533, planta baja, de esta Ciudad, tramita el proceso colectivo
-            caratulado “Proconsumer y Otro c/ Sumiplan S.A. de Ahorro P/F Determinados y Otro s/ Sumarísimo (Expte N° 7545/2007)” y que se ha dispuesto la publicación de avisos a fin de hacer
-            saber a los clientes y ex clientes personas físicas que hayan sido prestatarios, mutuarios y/o clientes con saldos en descubierto y que abonaron cargos por seguro de vida a Sumiplan S.A
-            de Ahorro Para Fines Determinados, que la Asociaciones de Defensa del Consumidor “Proconsumer” y “Consumidores Damnificados Asociación Civil” han demandado a la mencionada
-            entidad para que proceda a la devolución del cargo por seguro de vida colectivo sobre saldo deudor por considerar que sus clientes y ex clientes han abonado dichos conceptos en
-            exceso (sobreprecio) como también por no disminuir el cargo por tal concepto a medida que los préstamos iban siendo amortizados. El artículo 54 de la Ley N° 24.240 (texto según Ley N°
-            26.361) establece: “La sentencia que haga lugar a la pretensión hará cosa juzgada para el demandado y para todos los consumidores o usuarios que se encuentren en similares
-            condiciones, excepto de aquellos que manifiesten su voluntad en contrario previo a la sentencia…” En consecuencia los clientes o ex clientes de “Sumiplan S.A. Para Fines Determinados”
-            que hubieren abonado cargos por cualquier concepto vinculado a los seguros de vida, durante el periodo comprendido entre Marzo de 2004 y el presente, y que no quieran ser
-            beneficiados por la sentencia que eventualmente se dicte, deberán comunicar su decisión dentro de los 30 días de efectuada esta comunicación a la Asociación “Consumidores
-            Damnificados Asociación Civil”, previo al dictado de la sentencia. La comunicación deberá efectuarse por escrito a través del siguiente correo
-            electrónico  a través de una nota presentada en la sede de la parte actora sita en Tte. Gral. Juan D. Perón 315, piso 6°, of. “23” de lunes a viernes de 09:00 hs a 13:00 hs sin necesidad de intervención de
-            letrado. Por el contrario, los clientes y ex clientes de la entidad bancaria demandada que quieran ser beneficiados por una eventual sentencia favorable que se dicte, no deben realizar
-            ninguna manifestación y en caso de denegarse el reclamo colectivo, subsistirá la vía judicial individual
-            .<br />
-            <br />
-            Estimados consumidores y usuarios que son o hayan sido clientes de Argos Compañía de Seguros SA: queremos informarles que en la fecha 11 de marzo del 2011, iniciamos contra la
-            mencionada compañía de seguros un juicio colectivo por supuestas irregularidades al momento de pagar las indemnizaciones por siniestros de “robo o destrucción total” durante el
-            periodo marzo/2001 hasta la fecha. Lo cuestionado sería que, al momento de liquidar el pago del siniestro, no se descontaría la carga financiera (intereses) por elegir pagar la póliza en
-            cuotas.
-            <br />
-            <br />
-            Aquellos que no quieran ser representados por esta asociación de consumidores y por ende, ser incluidos en esta acción, lo pueden comunicar directamente al juzgado por carta simple o
-            correo electrónico, hasta el momento previo a que se dicte sentencia.
-            El juzgado interviniente es el Juzgado Nacional en Comercial Nº21 Sec. 41 ubicado en M.T. Alvear 1840 3º PISO, de la CABA y su correo electrónico es jncomercial21.sec41@pjn.gov.ar. Les
-            informamos que la causa se encuentra denominada “Consumidores Damnificados Asociación Civil c/ Argos Compañía Argentina de Seguros Generales S.A. S/ Ordinario” y lleva el número
-            5830/2011.
-            <br />
-            <br />
-            Para mayor información consultar{" "}
-            <a href="https:/www.argos-seguros.com" target="_blank" className="text-blue-600 underline">
-              www.argos-seguros.com
-            </a>{" "}
-            y{" "}
-            <a href="https:// www.consumidoresdamnificados.org.ar" target="_blank" className="text-blue-600 underline">
-              www.consumidoresdamnificados.org.ar
-            </a>
-            .
+          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 "  dangerouslySetInnerHTML={{ __html: infoImportante }}>
+           
           </p>
           <div className="flex items-center space-x-4 mt-16">
             <h1 className="text-lg sm:text-[90%] lg:text-lg 2xl:text-xl font-medium text-[#1C244B]">Notificaciones <span className="font-bold">Publicas</span></h1>
@@ -159,8 +142,8 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
               </div>
 
 
-              <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify">
-                {item.descripcion}
+              <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify" dangerouslySetInnerHTML={{ __html: item.descripcion }}>
+             
               </p>
             </div>
           </div>

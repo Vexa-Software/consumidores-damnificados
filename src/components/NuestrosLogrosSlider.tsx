@@ -61,8 +61,8 @@ export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
                 <div className="flex flex-col gap-4 justify-center flex-grow w-[90%] min-h-48 2xl:h-72 p-4 ">
                   <div className="flex flex-col">
                     <h1 className="text-lg 2xl:text-xl font-bold text-gray-800 ">{item.titulo}</h1>
-                    <p className="text-gray-600 text-sm mt-2 break-words line-clamp-2 2xl:line-clamp-4 overflow-hidden w-full whitespace-normal ">
-                      {item.descripcion}
+                    <p className="text-gray-600 text-sm mt-2 break-words line-clamp-2 2xl:line-clamp-4 overflow-hidden w-full whitespace-normal " dangerouslySetInnerHTML={{ __html: item.descripcion }}>
+                     
                     </p>
                   </div>
 

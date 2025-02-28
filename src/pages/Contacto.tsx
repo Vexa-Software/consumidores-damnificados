@@ -1,7 +1,34 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import {  doc, getDoc } from "firebase/firestore";
+import { toast } from "react-toastify";
+import { db } from "../firebase/config";
 
 const Contacto: React.FC = () => {
+  const [infoContacto, setInfoContacto] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const newTextos: { [key: string]: string } = {};
+
+        for (const id of ["contacto_correo", "contacto_telefono", "contacto_horario"]) {
+          const docRef = doc(db, "textos_sistema", "contacto", "textos", id);
+          const docSnap = await getDoc(docRef);
+
+          // 🔥 Solo traemos el contenido
+          newTextos[id] = docSnap.exists() ? docSnap.data().contenido || "" : "";
+        }
+
+        setInfoContacto(newTextos);
+      } catch (error) {
+        console.error("❌ Error obteniendo los textos:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="w-full flex flex-col items-center py-16 bg-white px-10">
 
@@ -31,18 +58,22 @@ const Contacto: React.FC = () => {
             <span className="font-semibold">Domicilio:</span> Tte. Gral. Juan D. Perón 315 P6 ofic.23 – C1038 – CABA
           </p>
 
-          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-            <span className="font-semibold">Horario de atención:</span> Lunes a Jueves de 12 a 16 horas
+          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg flex flex-row justify-start" >
+          <strong>Horario de atención: </strong> {" "}
+           
+            <p className="ml-2" dangerouslySetInnerHTML={{ __html: infoContacto["contacto_horario"] }} />
           </p>
 
-          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-            <span className="font-semibold">Teléfono:</span> +54 9 11 6884 0597
+          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg flex flex-row justify-start" >
+          <strong>Teléfono: </strong> {" "}
+          <p className="ml-2" dangerouslySetInnerHTML={{ __html: infoContacto["contacto_telefono"] }} />
           </p>
 
-          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg">
-            <span className="font-semibold">Correo Electrónico: </span>
+          <p className="text-[#324A6D] text-sm sm:text-lg lg:text-lg 2xl:text-lg flex flex-row justify-start">
+          <strong>Correo Electrónico: </strong> {" "}
+            
             <a href="mailto:consumidoresdamnificados@gmail.com" className=" hover:underline">
-              consumidoresdamnificados@gmail.com
+            <p className="ml-2" dangerouslySetInnerHTML={{ __html: infoContacto["contacto_correo"] }} />
             </a>
           </p>
         </div>

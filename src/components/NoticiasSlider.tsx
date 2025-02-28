@@ -50,6 +50,7 @@ export function NoticiasSlider({ items }: NoticiasSliderProps) {
             <SwiperSlide
               key={item.id}
               className="w-full"
+              
             >
               <NewsCard
                 imagen={item.imagen}

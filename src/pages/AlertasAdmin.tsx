@@ -82,7 +82,7 @@ const AlertasAdmin: React.FC = () => {
       userOnly: true,
     },
     clipboard: {
-      matchVisual: false, 
+      matchVisual: false,
     },
   };
 
@@ -103,7 +103,7 @@ const AlertasAdmin: React.FC = () => {
           const fecha = data.fechaCreacion.toDate();
           fechaFormateada = fecha.toLocaleDateString();
         }
-        
+
         return {
           id: doc.id,
           ...data,
@@ -116,11 +116,11 @@ const AlertasAdmin: React.FC = () => {
           contenido: data.contenido || ''
         };
       });
-      
+
       // Encontrar la alerta activa si existe
       const alertaActiva = alertasData.find(alerta => alerta.activo);
       setAlertaActiva(alertaActiva || null);
-      
+
       setAlertas(alertasData);
     } catch (error) {
       console.error('Error al cargar alertas:', error);
@@ -135,14 +135,14 @@ const AlertasAdmin: React.FC = () => {
       toast.info("No hay imagen disponible para esta alerta");
     }
   };
-  
+
   const handleCambiarEstado = async (alerta: Alerta, nuevoEstado: boolean) => {
     // Si estamos desactivando, simplemente actualizar
     if (!nuevoEstado) {
       await actualizarEstadoAlerta(alerta.id, nuevoEstado);
       return;
     }
-    
+
     // Si estamos activando y ya hay una alerta activa diferente
     const alertaActivaExistente = alertas.find(a => a.activo && a.id !== alerta.id);
     if (alertaActivaExistente) {
@@ -153,22 +153,22 @@ const AlertasAdmin: React.FC = () => {
       await actualizarEstadoAlerta(alerta.id, true);
     }
   };
-  
+
   const confirmarActivacion = async () => {
     if (!alertaAActivar) return;
-    
+
     try {
       setCargando(true);
-      
+
       // Desactivar la alerta activa actual
       const alertaActivaExistente = alertas.find(a => a.activo && a.id !== alertaAActivar.id);
       if (alertaActivaExistente) {
         await updateDoc(doc(db, "alertas", alertaActivaExistente.id), { activo: false });
       }
-      
+
       // Activar la nueva alerta
       await updateDoc(doc(db, "alertas", alertaAActivar.id), { activo: true });
-      
+
       toast.success("Estado de alerta actualizado exitosamente");
       cargarAlertas();
     } catch (error) {
@@ -180,7 +180,7 @@ const AlertasAdmin: React.FC = () => {
       setAlertaAActivar(null);
     }
   };
-  
+
   const actualizarEstadoAlerta = async (alertaId: string, nuevoEstado: boolean) => {
     try {
       setCargando(true);
@@ -229,8 +229,8 @@ const AlertasAdmin: React.FC = () => {
       cell: ({ row }) => {
         const contenido = row.getValue("descripcion") as string;
         // Mostrar solo una parte del contenido para evitar que la tabla sea muy grande
-        const contenidoCorto = contenido?.length > 100 
-          ? contenido.substring(0, 100) + "..." 
+        const contenidoCorto = contenido?.length > 100
+          ? contenido.substring(0, 100) + "..."
           : contenido;
         return <div className="min-w-[100%] w-[300px] sm:w-[400px] xl:w-[500px] max-w-[500px]">{contenidoCorto}</div>;
       },
@@ -246,10 +246,10 @@ const AlertasAdmin: React.FC = () => {
       cell: ({ row }) => {
         const activo = row.getValue("activo") as boolean;
         const alerta = row.original;
-        
+
         return (
           <div className="flex flex-col items-center gap-1">
-            <Switch 
+            <Switch
               checked={activo}
               onCheckedChange={(checked) => handleCambiarEstado(alerta, checked)}
               disabled={cargando}
@@ -269,8 +269,8 @@ const AlertasAdmin: React.FC = () => {
         return (
           <div className="text-center">
             {imagen ? (
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="bg-sky-500 text-white text-xs py-1 px-2"
                 onClick={() => abrirImagen(imagen)}
               >
@@ -302,30 +302,30 @@ const AlertasAdmin: React.FC = () => {
       },
     },
   ];
-  
+
   const subirImagen = async (): Promise<string | null> => {
     if (!archivo) return null;
-  
+
     try {
       setCargando(true);
-  
+
       console.log(`📂 Tamaño original: ${(archivo.size / 1024).toFixed(2)} KB`);
-  
-      
+
+
       const options = {
-        maxSizeMB: 1, 
-        maxWidthOrHeight: 800, 
+        maxSizeMB: 1,
+        maxWidthOrHeight: 800,
         useWebWorker: true,
       };
-  
+
       console.log("⏳ Comenzando compresión...");
       const compressedFile = await imageCompression(archivo, options);
       console.log(`📉 Tamaño después de compresión: ${(compressedFile.size / 1024).toFixed(2)} KB`);
-  
+
       const storageRef = ref(storage, `alertas/${compressedFile.name}`);
       await uploadBytes(storageRef, compressedFile);
       const imageUrl = await getDownloadURL(storageRef);
-      
+
       console.log("Imagen comprimida y subida con éxito:", imageUrl);
       return imageUrl;
     } catch (error) {
@@ -336,7 +336,7 @@ const AlertasAdmin: React.FC = () => {
       setCargando(false);
     }
   };
-  
+
   const limpiarFormulario = () => {
     setTitulo("");
     setContenido("");
@@ -349,13 +349,13 @@ const AlertasAdmin: React.FC = () => {
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const nuevoEstado = e.target.checked;
-    
+
     // Si estamos desactivando, simplemente actualizar el estado
     if (!nuevoEstado) {
       setActivo(false);
       return;
     }
-    
+
     // Si estamos activando y ya hay una alerta activa diferente
     const alertaActivaExistente = alertas.find(a => a.activo && (!editando || a.id !== alertaEditadaId));
     if (alertaActivaExistente) {
@@ -366,12 +366,12 @@ const AlertasAdmin: React.FC = () => {
       setActivo(true);
     }
   };
-  
+
   const confirmarActivacionFormulario = () => {
     setActivo(true);
     setModalActivarFormularioOpen(false);
   };
-  
+
   const cancelarActivacionFormulario = () => {
     setModalActivarFormularioOpen(false);
   };
@@ -380,13 +380,13 @@ const AlertasAdmin: React.FC = () => {
     e.preventDefault();
     try {
       setCargando(true);
-  
+
       let imageUrl = archivo ? await subirImagen() : imagenUrl;
-  
+
       if (editando && alertaEditadaId) {
         // Actualizar alerta existente
         const alertaRef = doc(db, "alertas", alertaEditadaId);
-        
+
         // Si la alerta editada se activa, desactivar las demás
         if (activo) {
           for (const alerta of alertas) {
@@ -395,14 +395,14 @@ const AlertasAdmin: React.FC = () => {
             }
           }
         }
-        
+
         await updateDoc(alertaRef, {
           titulo,
           contenido,
           imagen: imageUrl || "",
           activo
         });
-        
+
         toast.success("Alerta actualizada exitosamente");
       } else {
         // Crear nueva alerta
@@ -413,7 +413,7 @@ const AlertasAdmin: React.FC = () => {
             }
           }
         }
-      
+
         await addDoc(collection(db, "alertas"), {
           titulo,
           contenido,
@@ -421,10 +421,10 @@ const AlertasAdmin: React.FC = () => {
           activo,
           fechaCreacion: new Date(),
         });
-      
+
         toast.success("Alerta creada exitosamente");
       }
-      
+
       limpiarFormulario();
       cargarAlertas();
     } catch (error) {
@@ -434,7 +434,7 @@ const AlertasAdmin: React.FC = () => {
       setCargando(false);
     }
   };
-  
+
   const handleEditarAlerta = (alerta: Alerta) => {
     setEditando(true);
     setAlertaEditadaId(alerta.id);
@@ -442,34 +442,34 @@ const AlertasAdmin: React.FC = () => {
     setContenido(alerta.contenido); // Usamos el campo contenido directamente
     setImagenUrl(alerta.imagen || null);
     setActivo(alerta.activo || false);
-    
+
     // Scroll hacia el formulario
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-  
+
   const handleEliminarAlerta = (id: string) => {
     setModalEliminarOpen(true);
     setAlertaAEliminar(id);
   };
-  
+
   const confirmarEliminar = async () => {
     if (!alertaAEliminar) return;
-    
+
     try {
       const docRef = doc(db, "alertas", alertaAEliminar);
       await deleteDoc(docRef);
-      
+
       toast.success("Alerta eliminada exitosamente");
       cargarAlertas();
     } catch (error) {
       console.error("❌ Error al eliminar alerta:", error);
       toast.error("Error al eliminar la alerta");
     }
-    
+
     setModalEliminarOpen(false);
     setAlertaAEliminar(null);
   };
-  
+
   const cancelarEdicion = () => {
     limpiarFormulario();
   };
@@ -500,72 +500,79 @@ const AlertasAdmin: React.FC = () => {
           <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">Gestión de Alertas</h1>
           <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">Administra las alertas del sistema</p>
 
-          <form onSubmit={handleSubmit} className="max-w-2xl mb-8">
-            <div className="mb-4">
-              <label className="block text-xs font-medium text-sky-500 mb-1">Título (*)</label>
-              <input
-                type="text"
-                value={titulo}
-                onChange={(e) => setTitulo(e.target.value)}
-                className="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-xs font-medium text-sky-500 mb-1">Contenido(*)</label>
-              <ReactQuill value={contenido} onChange={setContenido} ref={quillRef} modules={modules} className="bg-white" />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-xs font-medium text-sky-500 mb-1">Imagen(*)</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files?.[0]) {
-                    setArchivo(e.target.files[0]);
-                    setImagenUrl(URL.createObjectURL(e.target.files[0]));
-                  }
-                }}
-                className="w-full p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-              />
-              {imagenUrl && <img src={imagenUrl} alt="Vista previa" className="w-48 h-auto mt-2 rounded" />}
-            </div>
-
-            <div className="mb-4 ">
-              <label className="flex items-center">
-                <input 
-                  type="checkbox" 
-                  checked={activo} 
-                  onChange={handleCheckboxChange} 
-                  className="mr-2" 
+          <form onSubmit={handleSubmit} className="max-w-8xl mb-8 flex flex-col  xl:flex-row justify-between">
+            <div className='  w-[100%] sm:w-[100%] xl:w-[49%]'>
+              <div className="mb-4 flex flex-col justify-between ">
+                <label className="block text-xs font-medium text-sky-500 mb-1">Título (*)</label>
+                <input
+                  type="text"
+                  value={titulo}
+                  onChange={(e) => setTitulo(e.target.value)}
+                  className="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
+                  
                 />
-                <span className="text-gray-700 ">Activar alerta</span>
-              </label>
-            </div>
+              </div>
 
-            <div className="flex space-x-4">
-              <button 
-                type="submit" 
-                className="bg-sky-500 text-white px-6 py-2 rounded-lg hover:bg-sky-600 transition text-sm" 
-                disabled={cargando}
-              >
-                {cargando ? "Guardando..." : editando ? "Actualizar Alerta" : "Guardar Alerta"}
-              </button>
-              
-              {editando && (
-                <button 
-                  type="button" 
-                  onClick={cancelarEdicion}
-                  className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-                >
-                  Cancelar
-                </button>
-              )}
+
+              <div className="flex flex-col justify-between mb-4 w-[50%]">
+                <label className="block text-xs font-medium text-sky-500 mb-1">Imagen(*)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files?.[0]) {
+                      setArchivo(e.target.files[0]);
+                      setImagenUrl(URL.createObjectURL(e.target.files[0]));
+                    }
+                  }}
+                  className="w-full p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                />
+                {imagenUrl && <img src={imagenUrl} alt="Vista previa" className="w-48 h-auto mt-2 rounded" />}
+              </div>
+
+
+            </div>
+            <div className='flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] '>
+              <div className="mb-4">
+                <label className="block text-xs font-medium text-sky-500 mb-1 ">Contenido(*)</label>
+                <ReactQuill value={contenido} onChange={setContenido} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+              </div>
+              <div className='flex flex-row justify-between'>
+                <div className="mb-4 ">
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={activo}
+                      onChange={handleCheckboxChange}
+                      className="mr-2"
+                    />
+                    <span className="text-gray-700 ">Activar alerta</span>
+                  </label>
+                </div>
+
+                <div className="flex space-x-4 justify-end">
+                  <button
+                    type="submit"
+                    className="bg-sky-500 text-white px-6 py-2 rounded-lg hover:bg-sky-600 transition text-sm"
+                    disabled={cargando}
+                  >
+                    {cargando ? "Guardando..." : editando ? "Actualizar Alerta" : "Guardar Alerta"}
+                  </button>
+
+                  {editando && (
+                    <button
+                      type="button"
+                      onClick={cancelarEdicion}
+                      className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Cancelar
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </form>
-          
+
           <div className="mt-8">
             <div className="w-full">
               <div className="flex items-center py-4">
@@ -630,21 +637,21 @@ const AlertasAdmin: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Modal de confirmación para eliminar */}
       {modalEliminarOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg">
             <p className="text-lg font-bold mb-4">¿Estás seguro de eliminar esta alerta?</p>
             <div className="flex flex-row justify-evenly">
-              <button 
-                className="bg-gray-500 text-white px-4 py-2 rounded" 
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded"
                 onClick={() => setModalEliminarOpen(false)}
               >
                 Cancelar
               </button>
-              <button 
-                className="bg-red-500 text-white px-4 py-2 rounded" 
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded"
                 onClick={confirmarEliminar}
               >
                 Confirmar
@@ -653,19 +660,19 @@ const AlertasAdmin: React.FC = () => {
           </div>
         </div>
       )}
-      
+
       {/* Modal de confirmación para activar */}
       {modalActivarOpen && alertaAActivar && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-md">
             <p className="text-lg font-bold mb-2">Confirmar activación</p>
             <p className="mb-4">
-              Ya existe una alerta activa: <span className="font-semibold">{alertaActiva?.titulo}</span>. 
+              Ya existe una alerta activa: <span className="font-semibold">{alertaActiva?.titulo}</span>.
               Si continúas, esta alerta se desactivará y se activará la nueva alerta: <span className="font-semibold">{alertaAActivar.titulo}</span>.
             </p>
             <div className="flex flex-row justify-evenly">
-              <button 
-                className="bg-gray-500 text-white px-4 py-2 rounded" 
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded"
                 onClick={() => {
                   setModalActivarOpen(false);
                   setAlertaAActivar(null);
@@ -673,8 +680,8 @@ const AlertasAdmin: React.FC = () => {
               >
                 Cancelar
               </button>
-              <button 
-                className="bg-green-500 text-white px-4 py-2 rounded" 
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded"
                 onClick={confirmarActivacion}
                 disabled={cargando}
               >
@@ -691,18 +698,18 @@ const AlertasAdmin: React.FC = () => {
           <div className="bg-white p-6 rounded-lg max-w-md">
             <p className="text-lg font-bold mb-2">Confirmar activación</p>
             <p className="mb-4">
-              Ya existe una alerta activa: <span className="font-semibold">{alertaActiva?.titulo}</span>. 
+              Ya existe una alerta activa: <span className="font-semibold">{alertaActiva?.titulo}</span>.
               Si continúas, esta alerta se desactivará y se activará la nueva alerta.
             </p>
             <div className="flex flex-row justify-evenly">
-              <button 
-                className="bg-gray-500 text-white px-4 py-2 rounded" 
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded"
                 onClick={cancelarActivacionFormulario}
               >
                 Cancelar
               </button>
-              <button 
-                className="bg-green-500 text-white px-4 py-2 rounded" 
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded"
                 onClick={confirmarActivacionFormulario}
               >
                 Confirmar

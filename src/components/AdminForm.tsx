@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import imageCompression from 'browser-image-compression';
+import ReactQuill from 'react-quill';
 
 interface AdminFormProps {
   storageKey: string;
@@ -32,6 +33,25 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDirty, setIsDirty] = useState(false);
+  const quillRef = useRef<ReactQuill>(null);
+  
+    const modules = {
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link"],
+        ["clean"],
+      ],
+      history: {
+        delay: 2000,
+        maxStack: 500,
+        userOnly: true,
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    };
 
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,11 +143,14 @@ const AdminForm: React.FC<AdminFormProps> = ({
     setIsDirty(true);
   };
 
-  const handleChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setNuevoItem({ ...nuevoItem, descripcion: e.target.value });
-    setErrores((prev: any) => ({ ...prev, descripcion: "" }));
+  const handleChangeDescription = (value: string) => {
+    setNuevoItem(prevItem => ({
+        ...prevItem, // 🔹 Mantiene `titulo` y `fecha`
+        descripcion: value // 🔹 Solo cambia `descripcion`
+    }));
+    setErrores(prev => ({ ...prev, descripcion: "" }));
     setIsDirty(true);
-  };
+};
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNuevoItem({ ...nuevoItem, fecha: e.target.value });
@@ -207,14 +230,15 @@ const AdminForm: React.FC<AdminFormProps> = ({
           <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
             Descripción (*)
           </label>
-          <textarea
+          <ReactQuill value={nuevoItem.descripcion} onChange={handleChangeDescription} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+          {/* <textarea
             id="descripcion"
             placeholder="Ingrese descripción"
             className="w-full p-2 h-full sm:h-50 border rounded text-sm outline-none focus:ring-2 focus:ring-sky-500 resize-none"
             rows={4}
             value={nuevoItem.descripcion}
             onChange={handleChangeDescription}
-          />
+          /> */}
           {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
         </div>
 
