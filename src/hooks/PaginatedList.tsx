@@ -125,8 +125,8 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
             <div className="flex-1">
 
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center ">
-                <h1 className={`font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start sm:w-[60%] md:w-auto}`}>
-                  {item.titulo}
+                <h1 className={`font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start sm:w-[60%] md:w-auto}`} dangerouslySetInnerHTML={{ __html: item.titulo }}>
+                 
                 </h1>
                 <span className="text-[#1C244B] text-sm sm:text-[90%] lg:text-lg 2xl:text-xl font-medium mb-2 sm:ml-4">
                   {item.fecha}

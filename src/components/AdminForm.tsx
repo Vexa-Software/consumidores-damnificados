@@ -137,18 +137,23 @@ const AdminForm: React.FC<AdminFormProps> = ({
     }
   };
 
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNuevoItem({ ...nuevoItem, titulo: e.target.value });
+  const handleChangeTitle = (value: string) => {
+    setNuevoItem((prevItem: any) => ({
+      ...prevItem, // 🔹 Mantiene `titulo` y `fecha`
+      titulo: value // 🔹 Solo cambia `descripcion`
+  }));
     setErrores((prev: any) => ({ ...prev, titulo: "" }));
     setIsDirty(true);
+
+    
   };
 
   const handleChangeDescription = (value: string) => {
-    setNuevoItem(prevItem => ({
+    setNuevoItem((prevItem: any) => ({
         ...prevItem, // 🔹 Mantiene `titulo` y `fecha`
         descripcion: value // 🔹 Solo cambia `descripcion`
     }));
-    setErrores(prev => ({ ...prev, descripcion: "" }));
+    setErrores((prev: any) => ({ ...prev, descripcion: "" }));
     setIsDirty(true);
 };
 
@@ -174,14 +179,15 @@ const AdminForm: React.FC<AdminFormProps> = ({
           <label htmlFor="titulo" className="block text-xs font-medium text-sky-500 mb-1">
             Título (*)
           </label>
-          <input
+          <ReactQuill value={nuevoItem.titulo} onChange={handleChangeTitle} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+          {/* <input
             id="titulo"
             type="text"
             placeholder="Ingrese el título"
             className="w-full p-2 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
             value={nuevoItem.titulo}
             onChange={handleChangeTitle}
-          />
+          /> */}
           {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
         </div>
 
