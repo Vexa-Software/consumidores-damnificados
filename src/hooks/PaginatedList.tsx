@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
-import {  collection, onSnapshot, query, orderBy, doc, getDoc } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy, doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
 
@@ -32,7 +32,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
         if (docSnap.exists()) {
           setInfoImportante(docSnap.data().contenido);
         } else {
-          setInfoImportante(""); 
+          setInfoImportante("");
         }
       } catch (error) {
         console.error("Error al obtener el texto de información importante:", error);
@@ -85,18 +85,10 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
           </div>
 
 
-          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 "  dangerouslySetInnerHTML={{ __html: infoImportante }}>
-           
-          </p>
-          <div className="flex items-center space-x-4 mt-16">
-            <h1 className="text-lg sm:text-[90%] lg:text-lg 2xl:text-xl font-medium text-[#1C244B]">Notificaciones <span className="font-bold">Publicas</span></h1>
-          </div>
+          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 " dangerouslySetInnerHTML={{ __html: infoImportante }}>
 
-          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4">Ver documento Edicto MAPFRE {" "}
-            <a
-              href={pdfUrl}
-              download="Edicto-MAPFRE.pdf"
-              className="text-blue-600 underline" >aqui</a>.</p>
+          </p>
+         
         </div>
       )}
 
@@ -143,7 +135,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
 
 
               <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify" dangerouslySetInnerHTML={{ __html: item.descripcion }}>
-             
+
               </p>
             </div>
           </div>
