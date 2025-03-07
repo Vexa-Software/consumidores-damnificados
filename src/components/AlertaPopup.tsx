@@ -32,45 +32,51 @@ const AlertaPopup: React.FC = () => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-sm shadow-xl max-w-lg xl:max-w-2xl 2xl:max-w-4xl w-full h-1/2 2xl:h-1/2 relative flex flex-col xl:flex-row">
+  {/* Container Principal */}
+  <div className="bg-white rounded-sm shadow-xl  flex flex-col xl:flex-row relative overflow-hidden">
 
+    {/* ❌ Botón de Cerrar */}
+    <button
+      onClick={() => setMostrar(false)}
+      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-3xl z-10"
+    >
+      &times;
+    </button>
 
-        <button
-          onClick={() => setMostrar(false)}
-          className="absolute top-1 right-2 text-gray-500 hover:text-gray-700 text-3xl"
-        >
-          &times;
-        </button>
-
-
-        {alerta.imagen && (
-          <div className="w-full h-1/2 xl:h-full xl:w-1/2">
-            <img
-              src={alerta.imagen}
-              alt="Alerta"
-              className="w-full h-full object-cover rounded-l-sm"
-            />
-          </div>
-        )}
-
-
-        <div className="w-full xl:w-1/2 p-6  py-4 2xl:py-12 flex flex-col justify-between h-full xl:h-auto">
-
-
-          <div className="flex justify-center items-start h-1/3 xl:h-1/3">
-            <h2 className="text-xl 2xl:text-2xl font-bold text-gray-900 text-center">{alerta.titulo}</h2>
-          </div>
-
-
-          <div className="flex justify-center items-center h-2/3 xl:h-2/3">
-            <div
-              className="text-gray-700 text-center"
-              dangerouslySetInnerHTML={{ __html: alerta.contenido }}
-            />
-          </div>
-        </div>
+    {/* 📷 Imagen (Siempre se ve completa) */}
+    {alerta.imagen && (
+      <div className="w-auto xl:max-w-md  flex items-center justify-center">
+        <img 
+          src={alerta.imagen} 
+          alt="Alerta" 
+          className="w-full h-auto  rounded-l-sm"
+        />
       </div>
+    )}
+
+    {/* 📄 Contenido (Se adapta al espacio restante y tiene scroll si es necesario) */}
+    <div className="flex-1 p-6 flex flex-col justify-between overflow-auto max-h-[35vh] sm:max-h-[35vh] xl:max-h-[35vh]">
+
+      {/* 📌 Título */}
+      <div className="flex justify-center items-start pb-4">
+        <h2 className="text-xl xl:text-2xl font-bold text-gray-900 text-center" dangerouslySetInnerHTML={{ __html: alerta.titulo }}>
+      
+        </h2>
+      </div>
+
+      {/* 📌 Contenido con Scroll si es muy largo */}
+      <div className="overflow-auto px-4 max-h-[50vh]">
+        <div 
+          className="text-gray-700 text-center"
+          dangerouslySetInnerHTML={{ __html: alerta.contenido }}
+        />
+      </div>
+
     </div>
+
+  </div>
+</div>
+
   );
 };
 
