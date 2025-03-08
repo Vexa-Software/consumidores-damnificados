@@ -35,23 +35,26 @@ const AdminForm: React.FC<AdminFormProps> = ({
   const [isDirty, setIsDirty] = useState(false);
   const quillRef = useRef<ReactQuill>(null);
   
-    const modules = {
-      toolbar: [
-        [{ header: [1, 2, 3, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        ["link"],
-        ["clean"],
-      ],
-      history: {
-        delay: 2000,
-        maxStack: 500,
-        userOnly: true,
-      },
-      clipboard: {
-        matchVisual: false,
-      },
-    };
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }], // 🟢 Agrega la opción de alineación
+      ["link"],
+      ["clean"],
+    ],
+    history: {
+      delay: 2000,
+      maxStack: 500,
+      userOnly: true,
+    },
+    clipboard: {
+      matchVisual: false,
+    },
+  };
+  
+  
 
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {

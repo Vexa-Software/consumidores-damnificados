@@ -21,7 +21,6 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [itemsMostrados, setItemsMostrados] = useState<number>(3);
-  const pdfUrl = "/assets/pdf/EDICTO-MAPFRE.pdf";
   const [infoImportante, setInfoImportante] = useState<string>("");
 
   useEffect(() => {
@@ -85,7 +84,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
           </div>
 
 
-          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 " dangerouslySetInnerHTML={{ __html: infoImportante }}>
+          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg  mt-4 " dangerouslySetInnerHTML={{ __html: infoImportante }}>
 
           </p>
          
@@ -124,7 +123,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
 
             <div className="flex-1">
 
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center ">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center  ">
                 <h1 className={`font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start sm:w-[60%] md:w-auto}`} dangerouslySetInnerHTML={{ __html: item.titulo }}>
                  
                 </h1>
@@ -134,7 +133,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
               </div>
 
 
-              <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify" dangerouslySetInnerHTML={{ __html: item.descripcion }}>
+              <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg " dangerouslySetInnerHTML={{ __html: item.descripcion }}>
 
               </p>
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { db } from "../firebase/config";
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -95,16 +95,26 @@ const TextosSistemaAdmin: React.FC = () => {
   const handleEdit = (id: string) => {
     setEditing((prev) => ({ ...prev, [id]: !prev[id] })); 
   };
-  const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link"],
-      ["clean"],
-    ],
-  };
-
+    const quillRef = useRef<ReactQuill>(null);
+    const modules = {
+      toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ align: [] }], // 🟢 Agrega la opción de alineación
+        ["link"],
+        ["clean"],
+      ],
+      history: {
+        delay: 2000,
+        maxStack: 500,
+        userOnly: true,
+      },
+      clipboard: {
+        matchVisual: false,
+      },
+    };
+    
   
   return (
     <div className="flex flex-col items-center p-6 bg-white">
@@ -124,6 +134,7 @@ const TextosSistemaAdmin: React.FC = () => {
                   console.error("Error al parsear JSON:", error);
                 }
               }}
+              ref={quillRef} modules={modules}
               className="bg-white"
               readOnly={!editing[id]}
             />

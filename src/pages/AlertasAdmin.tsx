@@ -73,6 +73,7 @@ const AlertasAdmin: React.FC = () => {
       [{ header: [1, 2, 3, false] }],
       ["bold", "italic", "underline", "strike"],
       [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }], // 🟢 Agrega la opción de alineación
       ["link"],
       ["clean"],
     ],
@@ -85,7 +86,7 @@ const AlertasAdmin: React.FC = () => {
       matchVisual: false,
     },
   };
-
+  
   useEffect(() => {
     cargarAlertas();
   }, []);
