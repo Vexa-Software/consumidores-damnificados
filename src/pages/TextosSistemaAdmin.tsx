@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { db } from "../firebase/config";
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
@@ -103,17 +103,40 @@ const TextosSistemaAdmin: React.FC = () => {
   const handleEdit = (id: string) => {
     setEditing((prev) => ({ ...prev, [id]: !prev[id] })); 
   };
-  const quillModules = {
+
+  const quillRef = useRef<ReactQuill>(null);
+
+  const modules = {
     toolbar: [
-      [{ header: [1, 2, false] }],
+      [{ header: [1, 2, 3, false] }],
       ["bold", "italic", "underline", "strike"],
       [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }], 
       ["link"],
       ["clean"],
     ],
+    history: {
+      delay: 2000,
+      maxStack: 500,
+      userOnly: true,
+    },
+    clipboard: {
+      matchVisual: false,
+    },
   };
 
-  
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "link",
+    "align", // 🔹 Habilita la alineación en el contenido
+  ];
+
   return (
     <div className="flex flex-col items-center p-6 bg-white">
       <h1 className="text-2xl font-bold mb-4 text-center text-sky-600">Gestión de Textos del Sistema</h1>
@@ -145,7 +168,9 @@ const TextosSistemaAdmin: React.FC = () => {
                 <ReactQuill
                   value={textos[id] ?? ""}
                   onChange={(value) => handleChange(id, value)}
-                  modules={quillModules}
+                  modules={modules}
+                  formats={formats}
+                  ref={quillRef}
                   className="bg-white"
                   readOnly={!editing[id]}
                 />

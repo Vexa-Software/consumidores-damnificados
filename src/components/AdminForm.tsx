@@ -41,6 +41,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
         [{ header: [1, 2, 3, false] }],
         ["bold", "italic", "underline", "strike"],
         [{ list: "ordered" }, { list: "bullet" }],
+        [{ align: [] }], 
         ["link"],
         ["clean"],
       ],
@@ -53,6 +54,18 @@ const AdminForm: React.FC<AdminFormProps> = ({
         matchVisual: false,
       },
     };
+
+    const formats = [
+      "header",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "list",
+      "bullet",
+      "link",
+      "align", // 🔹 Habilita la alineación en el contenido
+    ];
 
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -178,15 +191,8 @@ const AdminForm: React.FC<AdminFormProps> = ({
           <label htmlFor="titulo" className="block text-xs font-medium text-sky-500 mb-1">
             Título (*)
           </label>
-          <ReactQuill value={nuevoItem.titulo} onChange={handleChangeTitle} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
-          {/* <input
-            id="titulo"
-            type="text"
-            placeholder="Ingrese el título"
-            className="w-full p-2 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-            value={nuevoItem.titulo}
-            onChange={handleChangeTitle}
-          /> */}
+          <ReactQuill value={nuevoItem.titulo} onChange={handleChangeTitle} ref={quillRef} modules={modules}  formats={formats} className="bg-white  text-gray-700 shadow border rounded" />
+        
           {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
         </div>
 
@@ -236,14 +242,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
             Descripción (*)
           </label>
           <ReactQuill value={nuevoItem.descripcion} onChange={handleChangeDescription} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
-          {/* <textarea
-            id="descripcion"
-            placeholder="Ingrese descripción"
-            className="w-full p-2 h-full sm:h-50 border rounded text-sm outline-none focus:ring-2 focus:ring-sky-500 resize-none"
-            rows={4}
-            value={nuevoItem.descripcion}
-            onChange={handleChangeDescription}
-          /> */}
+         
           {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
         </div>
 

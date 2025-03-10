@@ -73,6 +73,7 @@ const AlertasAdmin: React.FC = () => {
       [{ header: [1, 2, 3, false] }],
       ["bold", "italic", "underline", "strike"],
       [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }], 
       ["link"],
       ["clean"],
     ],
@@ -85,6 +86,19 @@ const AlertasAdmin: React.FC = () => {
       matchVisual: false,
     },
   };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "link",
+    "align", // 🔹 Habilita la alineación en el contenido
+  ];
+
 
   useEffect(() => {
     cargarAlertas();
@@ -501,7 +515,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='  w-[100%] sm:w-[100%] xl:w-[49%]'>
               <div className="mb-4 flex flex-col justify-between ">
                 <label className="block text-xs font-medium text-sky-500 mb-1">Título (*)</label>
-                <ReactQuill value={titulo} onChange={setTitulo} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+                <ReactQuill value={titulo} onChange={setTitulo} ref={quillRef} modules={modules} formats={formats} className="bg-white  text-gray-700 shadow border rounded" />
 
               </div>
 
@@ -527,7 +541,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] '>
               <div className="mb-4">
                 <label className="block text-xs font-medium text-sky-500 mb-1 ">Contenido(*)</label>
-                <ReactQuill value={contenido} onChange={setContenido} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+                <ReactQuill value={contenido} onChange={setContenido} ref={quillRef} modules={modules} formats={formats} className="bg-white  text-gray-700 shadow border rounded" />
               </div>
               <div className='flex flex-row justify-between'>
                 <div className="mb-4 ">
