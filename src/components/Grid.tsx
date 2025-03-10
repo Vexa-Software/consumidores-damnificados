@@ -12,8 +12,9 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  Row,
 } from "@tanstack/react-table";
-
+import { toast } from 'react-toastify';
 import { Button } from "../components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,14 @@ export function DataTableDemo({ data, onEdit, onDelete, storageKey }: DataTableD
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const abrirImagen = (url: string) => {
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      toast.info("No hay imagen disponible para este item");
+    }
+  };
 
   const columns: ColumnDef<Item>[] = [
     {
@@ -100,16 +109,22 @@ export function DataTableDemo({ data, onEdit, onDelete, storageKey }: DataTableD
         {
           accessorKey: "imagen",
           header: "Imagen",
-          cell: ({ row }: { row: { original: Item } }) => {
-            const imagen = row.original.imagen;
-            return imagen ? (
-              <img
-                src={imagen}
-                alt="Miniatura"
-                className="max-w-16 sm:max-w-40 h-auto rounded-md shadow-md"
-              />
-            ) : (
-              <span className="text-gray-400 text-sm">Sin imagen</span>
+          cell: ({ row }: { row: Row<Item> }) => {
+            const imagen = row.getValue("imagen") as string;
+            return (
+              <div className="text-center">
+                {imagen ? (
+                  <Button
+                    variant="outline"
+                    className="bg-sky-500 text-white text-xs py-1 px-2"
+                    onClick={() => abrirImagen(imagen)}
+                  >
+                    Ver imagen
+                  </Button>
+                ) : (
+                  <span className="text-gray-400 text-sm">Sin imagen</span>
+                )}
+              </div>
             );
           },
         },
@@ -156,9 +171,10 @@ export function DataTableDemo({ data, onEdit, onDelete, storageKey }: DataTableD
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
+      <div className="flex flex-col items-start gap-2 py-4">
+        <label htmlFor="titulo" className="mr-2">Buscar por título:</label>
         <Input
-          placeholder="Buscar..."
+          placeholder="Buscar por título..."
           value={(table.getColumn("titulo")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("titulo")?.setFilterValue(event.target.value)

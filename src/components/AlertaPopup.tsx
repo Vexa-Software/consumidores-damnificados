@@ -10,7 +10,11 @@ const AlertaPopup: React.FC = () => {
     const cargarAlertaActiva = async () => {
       try {
         const alertasRef = collection(db, 'alertas');
-        const q = query(alertasRef, where('activo', '==', true));
+        const q = query(
+          alertasRef, 
+          where('activo', '==', true),
+          where('isDeleted', '!=', true)
+        );
         const querySnapshot = await getDocs(q);
 
         if (!querySnapshot.empty) {

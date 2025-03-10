@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { auth } from "../firebase/config";
 import { signInWithEmailAndPassword, sendPasswordResetEmail, fetchSignInMethodsForEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { FaSignInAlt } from "react-icons/fa"; 
+import { FaSignInAlt, FaEye, FaEyeSlash } from "react-icons/fa"; 
 
 
 const Login: React.FC = () => {
@@ -11,6 +11,7 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
    
@@ -123,14 +124,23 @@ const Login: React.FC = () => {
 
                     <div className="mb-6">
                         <label className="block mb-2 text-sky-500 font-medium">Contraseña</label>
-                        <input
-                            type="password"
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
-                            placeholder="Ingrese su contraseña"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                                placeholder="Ingrese su contraseña"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                            </button>
+                        </div>
                     </div>
 
 

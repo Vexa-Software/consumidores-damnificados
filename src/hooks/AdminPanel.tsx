@@ -3,7 +3,7 @@ import AdminForm from "../components/AdminForm";
 import { DataTableDemo } from "../components/Grid";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, updateDoc, query, orderBy, where } from "firebase/firestore";
 
 
 interface Item {
@@ -12,6 +12,7 @@ interface Item {
     descripcion: string;
     fecha: string;
     imagen?: string;
+    isDeleted?: boolean;
 }
 
 interface AdminPanelProps {
@@ -41,13 +42,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
 
     const fetchItems = async () => {
         try {
-            const q = query(collection(db, storageKey), orderBy("fecha", "desc"));
+            const q = query(
+                collection(db, storageKey), 
+                where("isDeleted", "==", false),
+                orderBy("fecha", "desc")
+            );
             const querySnapshot = await getDocs(q);
             const itemsData: Item[] = querySnapshot.docs.map((doc) => ({
                 id: doc.id, 
                 ...(doc.data() as Omit<Item, "id">), 
             }));
-
 
             setItems(itemsData);
         } catch (error) {
@@ -56,14 +60,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         }
     };
 
-
     useEffect(() => {
 
         fetchItems();
     }, [storageKey]); 
-
-
-
     
     const validarCampos = (): boolean => {
         let mensajesError = {
@@ -98,29 +98,23 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         if (!validarCampos()) return;
 
         try {
-           
             await addDoc(collection(db, storageKey), {
                 titulo: nuevoItem.titulo,
                 descripcion: nuevoItem.descripcion,
                 fecha: nuevoItem.fecha,
-                imagen: nuevoItem.imagen || "", 
+                imagen: nuevoItem.imagen || "",
+                isDeleted: false
             });
 
-          
             fetchItems();
             toast.success(`${title} agregado con éxito.`);
 
-       
             setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
         } catch (error) {
             console.error("Error al agregar item:", error);
             toast.error("Hubo un error al agregar el item.");
         }
     };
-
-
-
-
    
     const handleEditarItem = (item: Item) => {
         setEditando(true);
@@ -175,10 +169,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         if (!itemAEliminar) return;
 
         try {
-            const docRef = doc(db, storageKey, itemAEliminar)
-            await deleteDoc(docRef);
+            const docRef = doc(db, storageKey, itemAEliminar);
+            await updateDoc(docRef, {
+                isDeleted: true
+            });
 
-            
             fetchItems();
             toast.success(`${title} eliminado con éxito.`);
         } catch (error) {
