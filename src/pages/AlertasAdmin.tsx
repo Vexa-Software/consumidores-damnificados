@@ -501,13 +501,8 @@ const AlertasAdmin: React.FC = () => {
             <div className='  w-[100%] sm:w-[100%] xl:w-[49%]'>
               <div className="mb-4 flex flex-col justify-between ">
                 <label className="block text-xs font-medium text-sky-500 mb-1">Título (*)</label>
-                <input
-                  type="text"
-                  value={titulo}
-                  onChange={(e) => setTitulo(e.target.value)}
-                  className="shadow border rounded w-full py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline"
-                  
-                />
+                <ReactQuill value={titulo} onChange={setTitulo} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+
               </div>
 
 

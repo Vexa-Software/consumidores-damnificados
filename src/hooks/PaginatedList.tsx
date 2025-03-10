@@ -105,9 +105,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
            
             </p>
           )}
-          <div className="flex items-center space-x-4 mt-16">
-            <h1 className="text-lg sm:text-[90%] lg:text-lg 2xl:text-xl font-medium text-[#1C244B]">Notificaciones <span className="font-bold">Publicas</span></h1>
-          </div>
+         
 
           
         </div>
