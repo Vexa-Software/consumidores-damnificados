@@ -3,6 +3,7 @@ import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
 import { collection, onSnapshot, query, orderBy, doc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
+import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
 
 interface Item {
   id: string;
@@ -20,22 +21,30 @@ interface PaginatedListProps {
 const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [infoLoading, setInfoLoading] = useState<boolean>(true);
   const [itemsMostrados, setItemsMostrados] = useState<number>(3);
   const [infoImportante, setInfoImportante] = useState<string>("");
+  const [infoError, setInfoError] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchInfoImportante = async () => {
+      setInfoLoading(true);
       try {
         const docRef = doc(db, "textos_sistema", "noticias", "textos", "informacion_importante");
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setInfoImportante(docSnap.data().contenido);
+          setInfoError(false);
         } else {
           setInfoImportante("");
+          setInfoError(true);
         }
       } catch (error) {
         console.error("Error al obtener el texto de información importante:", error);
         toast.error("Error al cargar la información importante.");
+        setInfoError(true);
+      } finally {
+        setInfoLoading(false);
       }
     };
 
@@ -83,10 +92,19 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
             <h1 className="text-sm sm:text-[90%] lg:text-lg 2xl:text-xl font-bold text-[#1C244B]">INFORMACIÓN IMPORTANTE.-</h1>
           </div>
 
-
-          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg  mt-4 " dangerouslySetInnerHTML={{ __html: infoImportante }}>
-
-          </p>
+          {infoLoading ? (
+            <div className="flex justify-center items-center h-32">
+              <SimpleLoader />
+            </div>
+          ) : infoError ? (
+            <p className="text-red-500 text-[80%] sm:text-[90%] 2xl:text-lg text-center mt-4">
+              No se encontró la información importante
+            </p>
+          ) : (
+            <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 "  dangerouslySetInnerHTML={{ __html: infoImportante }}>
+           
+            </p>
+          )}
          
         </div>
       )}
@@ -94,7 +112,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
 
       {loading ? (
         <div className="flex justify-center items-center h-40">
-          <p className="text-gray-600 text-lg">Cargando...</p>
+          <SimpleLoader />
         </div>
       ) : (
         items.slice(0, itemsMostrados).map((item) => (

@@ -3,6 +3,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import imageCompression from 'browser-image-compression';
 import ReactQuill from 'react-quill';
+import { toast } from "react-toastify";
 
 interface AdminFormProps {
   storageKey: string;
@@ -83,7 +84,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
       const user = auth.currentUser;
 
       if (!user) {
-        alert("Debes iniciar sesión para subir imágenes.");
+        toast.error("Debes iniciar sesión para subir imágenes.");
         return;
       }
       const options = {
@@ -107,9 +108,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
       setNuevoItem({ ...nuevoItem, imagen: downloadURL });
 
 
-      console.log("Imagen subida correctamente:", downloadURL);
+      toast.success("Imagen subida correctamente");
     } catch (error) {
       console.error("Error al subir la imagen:", error);
+      toast.error("Error al subir la imagen");
       setErrores((prev: any) => ({ ...prev, imagen: "Error al subir la imagen." }));
     }
   };
@@ -128,8 +130,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
   const resetFormulario = (forceReset = false) => {
     if (!forceReset && editando && isDirty) {
-      const confirmCancel = window.confirm("Tienes cambios sin guardar. ¿Seguro que quieres cancelar?");
-      if (!confirmCancel) return;
+      if (!window.confirm("Tienes cambios sin guardar. ¿Seguro que quieres cancelar?")) return;
     }
 
     setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
@@ -152,11 +153,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
   };
 
   const handleChangeDescription = (value: string) => {
-    setNuevoItem((prevItem: any) => ({
-        ...prevItem, // 🔹 Mantiene `titulo` y `fecha`
-        descripcion: value // 🔹 Solo cambia `descripcion`
+    setNuevoItem((prevItem: { titulo: string; descripcion: string; fecha: string; imagen?: string }) => ({
+        ...prevItem,
+        descripcion: value
     }));
-    setErrores((prev: any) => ({ ...prev, descripcion: "" }));
+    setErrores((prev: { titulo: string; descripcion: string; fecha: string; imagen: string }) => ({ ...prev, descripcion: "" }));
     setIsDirty(true);
 };
 
