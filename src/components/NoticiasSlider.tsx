@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { Navigation, Pagination } from "swiper/modules";
+import { Pagination, Autoplay, EffectCoverflow } from "swiper/modules";
 import NewsCard from "./NewsCard";
 import { Link } from "react-router-dom";
 
@@ -23,9 +23,13 @@ export function NoticiasSlider({ items }: NoticiasSliderProps) {
     <div className="h-[700px] w-full mb-8 flex flex-col justify-center ">
       <div className="h-[500px]">
         <Swiper
-          modules={[Navigation, Pagination]}
+          modules={[Pagination, Autoplay, EffectCoverflow]}
           spaceBetween={30}
           slidesPerView={3}
+          autoplay={{
+            delay: 6000,
+            disableOnInteraction: false,
+          }}
           breakpoints={{
             320: {
               slidesPerView: 1,
@@ -40,17 +44,24 @@ export function NoticiasSlider({ items }: NoticiasSliderProps) {
               spaceBetween: 30,
             }
           }}
-          navigation
+          coverflowEffect={{
+            rotate: 0,
+            stretch: 0,
+            depth: 70,
+            modifier: 1,
+            slideShadows: false
+          }}
+          effect="coverflow"
           pagination={{ clickable: true }}
           centeredSlides={false}
           loop={true}
-          className="w-full"
+          className="w-full max-w-6xl 2xl:max-w-[120rem]"
         >
           {items.map((item) => (
             <SwiperSlide
               key={item.id}
               className="w-full"
-              
+
             >
               <NewsCard
                 imagen={item.imagen}
@@ -65,8 +76,9 @@ export function NoticiasSlider({ items }: NoticiasSliderProps) {
 
 
         </Swiper>
+        <Link to="/noticias" className="text-sky-600 flex flex-row justify-center">Ver todas las Noticias y Avisos Judiciales </Link>
       </div>
-      <Link to="/noticias" className="text-sky-600 flex flex-row justify-center">Ver todas las Noticias y Avisos Judiciales </Link>
+      
     </div>
   );
 }

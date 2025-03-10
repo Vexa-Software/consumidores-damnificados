@@ -23,7 +23,6 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [infoLoading, setInfoLoading] = useState<boolean>(true);
   const [itemsMostrados, setItemsMostrados] = useState<number>(3);
-  const pdfUrl = "/assets/pdf/EDICTO-MAPFRE.pdf";
   const [infoImportante, setInfoImportante] = useState<string>("");
   const [infoError, setInfoError] = useState<boolean>(false);
 
@@ -110,11 +109,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
             <h1 className="text-lg sm:text-[90%] lg:text-lg 2xl:text-xl font-medium text-[#1C244B]">Notificaciones <span className="font-bold">Publicas</span></h1>
           </div>
 
-          <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4">Ver documento Edicto MAPFRE {" "}
-            <a
-              href={pdfUrl}
-              download="Edicto-MAPFRE.pdf"
-              className="text-blue-600 underline" >aqui</a>.</p>
+          
         </div>
       )}
 
@@ -151,8 +146,8 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
             <div className="flex-1">
 
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center text-center ">
-                <h1 className={`font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start sm:w-[60%] md:w-auto}`}>
-                  {item.titulo}
+                <h1 className={`font-bold text-sm sm:text-[90%] lg:text-lg 2xl:text-xl text-[#1C244B] mb-2 sm:text-start sm:w-[60%] md:w-auto}`} dangerouslySetInnerHTML={{ __html: item.titulo}}>
+                
                 </h1>
                 <span className="text-[#1C244B] text-sm sm:text-[90%] lg:text-lg 2xl:text-xl font-medium mb-2 sm:ml-4">
                   {item.fecha}

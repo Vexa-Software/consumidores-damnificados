@@ -58,7 +58,9 @@ const AlertaPopup: React.FC = () => {
 
 
           <div className="flex justify-center items-start h-1/3 xl:h-1/3">
-            <h2 className="text-xl 2xl:text-2xl font-bold text-gray-900 text-center">{alerta.titulo}</h2>
+            <h2 className="text-xl 2xl:text-2xl font-bold text-gray-900 text-center"
+            dangerouslySetInnerHTML={{ __html: alerta.titulo }}
+            ></h2>
           </div>
 
 
