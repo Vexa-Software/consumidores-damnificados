@@ -2,8 +2,8 @@ import React, { useRef, useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import imageCompression from 'browser-image-compression';
-import ReactQuill from 'react-quill';
 import { toast } from "react-toastify";
+import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "./CustomQuillEditor";
 
 interface AdminFormProps {
   storageKey: string;
@@ -34,39 +34,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDirty, setIsDirty] = useState(false);
-  const quillRef = useRef<ReactQuill>(null);
+
   
-    const modules = {
-      toolbar: [
-        [{ header: [1, 2, 3, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        [{ align: [] }], 
-        ["link"],
-        ["clean"],
-      ],
-      history: {
-        delay: 2000,
-        maxStack: 500,
-        userOnly: true,
-      },
-      clipboard: {
-        matchVisual: false,
-      },
-    };
-
-    const formats = [
-      "header",
-      "bold",
-      "italic",
-      "underline",
-      "strike",
-      "list",
-      "bullet",
-      "link",
-      "align", // 🔹 Habilita la alineación en el contenido
-    ];
-
+  
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (storageKey !== "noticias") return;
@@ -161,9 +131,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
   };
 
   const handleChangeDescription = (value: string) => {
+    const formattedValue = convertQuillToTailwind(value);
     setNuevoItem((prevItem: { titulo: string; descripcion: string; fecha: string; imagen?: string }) => ({
         ...prevItem,
-        descripcion: value
+        descripcion: formattedValue
     }));
     setErrores((prev: { titulo: string; descripcion: string; fecha: string; imagen: string }) => ({ ...prev, descripcion: "" }));
     setIsDirty(true);
@@ -191,8 +162,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
           <label htmlFor="titulo" className="block text-xs font-medium text-sky-500 mb-1">
             Título (*)
           </label>
-          <ReactQuill value={nuevoItem.titulo} onChange={handleChangeTitle} ref={quillRef} modules={modules}  formats={formats} className="bg-white  text-gray-700 shadow border rounded" />
-        
+          <CustomQuillEditor value={nuevoItem.titulo} onChange={handleChangeTitle} />
           {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
         </div>
 
@@ -241,8 +211,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
           <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
             Descripción (*)
           </label>
-          <ReactQuill value={nuevoItem.descripcion} onChange={handleChangeDescription} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
-         
+          <CustomQuillEditor value={convertTailwindToQuill(nuevoItem.descripcion)} onChange={handleChangeDescription} />
           {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
         </div>
 

@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { db, storage } from '../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, query, getDocs, updateDoc, doc, deleteDoc, orderBy } from 'firebase/firestore';
-import ReactQuill from 'react-quill';
+
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import imageCompression from "browser-image-compression";
 import "react-quill/dist/quill.snow.css";
+import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "../components/CustomQuillEditor";
+
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
@@ -65,39 +67,6 @@ const AlertasAdmin: React.FC = () => {
   const [rowSelection, setRowSelection] = useState({});
   const [modalActivarFormularioOpen, setModalActivarFormularioOpen] = useState<boolean>(false);
 
-
-  const quillRef = useRef<ReactQuill>(null);
-
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }], 
-      ["link"],
-      ["clean"],
-    ],
-    history: {
-      delay: 2000,
-      maxStack: 500,
-      userOnly: true,
-    },
-    clipboard: {
-      matchVisual: false,
-    },
-  };
-
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "link",
-    "align", // 🔹 Habilita la alineación en el contenido
-  ];
 
 
   useEffect(() => {
@@ -408,7 +377,7 @@ const AlertasAdmin: React.FC = () => {
 
         await updateDoc(alertaRef, {
           titulo,
-          contenido,
+          contenido: convertQuillToTailwind(contenido),
           imagen: imageUrl || "",
           activo
         });
@@ -426,7 +395,7 @@ const AlertasAdmin: React.FC = () => {
 
         await addDoc(collection(db, "alertas"), {
           titulo,
-          contenido,
+          contenido: convertQuillToTailwind(contenido),
           imagen: imageUrl || "",
           activo,
           fechaCreacion: new Date(),
@@ -515,8 +484,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='  w-[100%] sm:w-[100%] xl:w-[49%]'>
               <div className="mb-4 flex flex-col justify-between ">
                 <label className="block text-xs font-medium text-sky-500 mb-1">Título (*)</label>
-                <ReactQuill value={titulo} onChange={setTitulo} ref={quillRef} modules={modules} formats={formats} className="bg-white  text-gray-700 shadow border rounded" />
-
+                <CustomQuillEditor value={convertTailwindToQuill(titulo)} onChange={(value) => setTitulo(convertQuillToTailwind(value))} />
               </div>
 
 
@@ -541,7 +509,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] '>
               <div className="mb-4">
                 <label className="block text-xs font-medium text-sky-500 mb-1 ">Contenido(*)</label>
-                <ReactQuill value={contenido} onChange={setContenido} ref={quillRef} modules={modules} formats={formats} className="bg-white  text-gray-700 shadow border rounded" />
+                <CustomQuillEditor value={convertTailwindToQuill(contenido)} onChange={(value) => setContenido(convertQuillToTailwind(value))} />
               </div>
               <div className='flex flex-row justify-between'>
                 <div className="mb-4 ">
