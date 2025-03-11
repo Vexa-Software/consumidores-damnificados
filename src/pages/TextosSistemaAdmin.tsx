@@ -125,9 +125,10 @@ const TextosSistemaAdmin: React.FC = () => {
     
   
   return (
-    <div className="flex flex-col items-center p-6 bg-white">
-      <h1 className="text-2xl font-bold mb-4 text-center text-sky-600">Gestión de Textos del Sistema</h1>
-      
+    <div className="flex flex-col p-6 bg-white">
+      <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">Gestión de Textos del Sistema</h1>
+      <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">Administra los textos del sistema</p>
+
       {initialLoading ? (
         <div className="w-full flex justify-center items-center min-h-[400px]">
           <SimpleLoader />

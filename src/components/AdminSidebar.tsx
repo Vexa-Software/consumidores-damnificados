@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaBars, FaTimes, FaRegNewspaper, FaExclamationCircle, FaTrophy, FaFileAlt, FaSignOutAlt } from "react-icons/fa";
+import { FaRegNewspaper, FaExclamationCircle, FaTrophy, FaFileAlt, FaSignOutAlt } from "react-icons/fa";
 import { auth } from "../firebase/config";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
 
-const AdminSidebar: React.FC = () => {
+interface AdminSidebarProps {
+  isOpen: boolean;
+}
+
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -22,67 +25,45 @@ const AdminSidebar: React.FC = () => {
   };
 
   return (
-    <>
-      <button
-        className="fixed top-4 left-4 text-white bg-gray-800 p-2 rounded-md sm:hidden z-50"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <FaBars size={20} />
-      </button>
+    <div
+      className={`h-full w-[300px] bg-white border-r border-sky-500 text-black p-4
+        ${isOpen ? "translate-x-0" : "-translate-x-[270px]"} 
+        transition-transform duration-300`}
+    >
+      <div className="flex-grow">
+        <ul>
+          <li className={`mb-2 flex items-center ${location.pathname === "/admin/noticias" ? "bg-sky-500 rounded-full text-white" : "border rounded-full "}`}>
+            <Link to="/admin/noticias" className="p-2 text-center flex items-center gap-2 w-full">
+              <FaRegNewspaper className={`text-xl 2xl:text-2xl ${location.pathname === "/admin/noticias" ? " text-white" : "text-sky-500 "}`} /> Noticias y Avisos Judiciales
+            </Link>
+          </li>
+          <li className={`mb-2 flex items-center ${location.pathname === "/admin/nuestros-logros" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
+            <Link to="/admin/nuestros-logros" className="p-2 text-center flex items-center gap-2 w-full">
+              <FaTrophy className={`text-xl 2xl:text-2xl ${location.pathname === "/admin/nuestros-logros" ? " text-white" : "text-sky-500 "}`} /> Nuestros Logros
+            </Link>
+          </li>
+          <li className={`mb-2 flex items-center ${location.pathname === "/admin/alertas" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
+            <Link to="/admin/alertas" className="p-2 text-center flex items-center gap-2 w-full">
+              <FaExclamationCircle className={`text-xl 2xl:text-2xl ${location.pathname === "/admin/alertas" ? " text-white" : "text-sky-500 "}`} /> Alertas
+            </Link>
+          </li>
+          <li className={`mb-2 flex items-center ${location.pathname === "/admin/textos-sistema" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
+            <Link to="/admin/textos-sistema" className="p-2 text-center flex items-center gap-2 w-full">
+              <FaFileAlt className={`text-xl 2xl:text-2xl ${location.pathname === "/admin/textos-sistema" ? " text-white" : "text-sky-500 "}`} /> Textos Sistema
+            </Link>
+          </li>
+        </ul>
 
-      <div
-        className={`h-full w-[300px] bg-white border-r border-sky-500 text-black p-4
-          ${isOpen ? "translate-x-0" : "-translate-x-full"} 
-          transition-transform duration-300 sm:translate-x-0`}
-      >
-        <div className="flex-grow">
-          <button
-            className="absolute top-1 right-1 text-black sm:hidden"
-            onClick={() => setIsOpen(false)}
-          >
-            <FaTimes className="text-xl" />
-          </button>
-
-          <ul>
-            <li className={`mb-2 flex items-center ${location.pathname === "/admin/noticias" ? "bg-sky-500 rounded-full text-white" : "border rounded-full "}`}>
-              <Link to="/admin/noticias" className="p-2 text-center flex items-center gap-2 w-full" onClick={() => setIsOpen(false)}>
-                <FaRegNewspaper className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/noticias" ? " text-white" : "text-sky-500 "}`} /> Noticias y Avisos Judiciales
-              </Link>
-            </li>
-            <li className={`mb-2 flex items-center ${location.pathname === "/admin/nuestros-logros" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
-              <Link to="/admin/nuestros-logros" className="p-2 text-center flex items-center gap-2 w-full" onClick={() => setIsOpen(false)}>
-                <FaTrophy className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/nuestros-logros" ? " text-white" : "text-sky-500 "}`} /> Nuestros Logros
-              </Link>
-            </li>
-            <li className={`mb-2 flex items-center ${location.pathname === "/admin/alertas" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
-              <Link to="/admin/alertas" className="p-2 text-center flex items-center gap-2 w-full" onClick={() => setIsOpen(false)}>
-                <FaExclamationCircle className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/alertas" ? " text-white" : "text-sky-500 "}`} /> Alertas
-              </Link>
-            </li>
-            <li className={`mb-2 flex items-center ${location.pathname === "/admin/textos-sistema" ? "bg-sky-500 rounded-full text-white" : "border rounded-full"}`}>
-              <Link to="/admin/textos-sistema" className="p-2 text-center flex items-center gap-2 w-full" onClick={() => setIsOpen(false)}>
-                <FaFileAlt className={` text-xl 2xl:text-2xl ${location.pathname === "/admin/textos-sistema" ? " text-white" : "text-sky-500 "}`} /> Textos Sistema
-              </Link>
-            </li>
-           
-          </ul>
-
-          <hr className="my-6 border-t border-gray-300" />
-          <button
-                onClick={handleLogout}
-                className="w-full mt-auto bg-white  text-black py-2 rounded-md  hover:text-red-600 transition flex flex-row justify-center items-center gap-2"
-              >
-                < FaSignOutAlt className=" text-xl 2xl:text-2xl text-sky-500" />
-                Cerrar Sesión
-              </button>
-
-        </div>
+        <hr className="my-6 border-t border-gray-300" />
+        <button
+          onClick={handleLogout}
+          className="w-full mt-auto bg-white text-black py-2 rounded-md hover:text-red-600 transition flex flex-row justify-center items-center gap-2"
+        >
+          <FaSignOutAlt className="text-xl 2xl:text-2xl text-sky-500" />
+          Cerrar Sesión
+        </button>
       </div>
-
-      {isOpen && (
-        <div className="fixed inset-0 bg-black opacity-50 sm:hidden" onClick={() => setIsOpen(false)}></div>
-      )}
-    </>
+    </div>
   );
 };
 

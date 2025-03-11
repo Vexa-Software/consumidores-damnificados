@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet } from "react-router-dom";
 import HeaderAdmin from '../components/HeaderAdmin';
 import AdminSidebar from '../components/AdminSidebar';
 import ScrollToTop from '../hooks/ScrollToTop';
 
 const LayoutAdmin: React.FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
     <div className="min-h-screen">
       <ScrollToTop />
-      <HeaderAdmin />
+      <HeaderAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
       <div className="flex pt-[100px]">
-        <div className="fixed w-[300px] h-full">
-          <AdminSidebar />
+        <div className="fixed w-[300px] h-full z-50">
+          <AdminSidebar isOpen={isSidebarOpen} />
         </div>
-        <div className="ml-[300px] w-full">
+        <div className="w-full lg:ml-[300px]">
           <main className="p-6">
             <Outlet />
           </main>

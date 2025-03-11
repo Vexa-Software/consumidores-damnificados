@@ -78,7 +78,7 @@ const Footer: React.FC = () => {
           />
         </div>
 
-        <div className="text-center text-sm text-gray-400 flex flex-wrap gap-4">
+        <div className="text-center text-sm text-gray-400 flex flex-wrap justify-center gap-4">
           <span className="text-white font-medium">Enlaces Relacionados:</span>
           {!error.enlaces_relacionados && footerData.enlaces_relacionados ? (
             <div dangerouslySetInnerHTML={{ __html: footerData.enlaces_relacionados }} />
@@ -87,7 +87,7 @@ const Footer: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mt-6 lg:mt-0">
           {!error.facebook && footerData.facebook && (
             <a href={footerData.facebook} target="_blank" rel="noopener noreferrer">
               <FaFacebookF className="text-white text-2xl hover:text-gray-400 transition" />
