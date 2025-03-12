@@ -3,14 +3,14 @@ import AdminForm from "../components/AdminForm";
 import { DataTableDemo } from "../components/Grid";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
-import { collection, getDocs, addDoc, doc, updateDoc, query, orderBy, where } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, updateDoc, query, orderBy, where, Timestamp } from "firebase/firestore";
 
 
 interface Item {
     id: string;
     titulo: string;
     descripcion: string;
-    fecha: string;
+    fecha: Timestamp | string;
     imagen?: string;
     isDeleted?: boolean;
 }
@@ -27,7 +27,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         id: "",
         titulo: "",
         descripcion: "",
-        fecha: "",
+        fecha: Timestamp.now(),
         imagen: "",
     });
 
@@ -44,7 +44,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         try {
             const q = query(
                 collection(db, storageKey), 
-                where("isDeleted", "==", false),
+                where("isDeleted", "!=", true),
                 orderBy("fecha", "desc")
             );
             const querySnapshot = await getDocs(q);
@@ -101,7 +101,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             await addDoc(collection(db, storageKey), {
                 titulo: nuevoItem.titulo,
                 descripcion: nuevoItem.descripcion,
-                fecha: nuevoItem.fecha,
+                fecha: typeof nuevoItem.fecha === 'string' 
+                    ? Timestamp.fromDate(new Date(nuevoItem.fecha))
+                    : nuevoItem.fecha,
                 imagen: nuevoItem.imagen || "",
                 isDeleted: false
             });
@@ -109,7 +111,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             fetchItems();
             toast.success(`${title} agregado con éxito.`);
 
-            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
+            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: Timestamp.now(), imagen: "" });
         } catch (error) {
             console.error("Error al agregar item:", error);
             toast.error("Hubo un error al agregar el item.");
@@ -135,7 +137,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             await updateDoc(itemRef, {
                 titulo: nuevoItem.titulo,
                 descripcion: nuevoItem.descripcion,
-                fecha: nuevoItem.fecha,
+                fecha: typeof nuevoItem.fecha === 'string' 
+                    ? Timestamp.fromDate(new Date(nuevoItem.fecha))
+                    : nuevoItem.fecha,
                 imagen: nuevoItem.imagen || "",
             });
 
@@ -148,7 +152,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             toast.success(`${title} editado con éxito.`);
 
            
-            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
+            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: Timestamp.now(), imagen: "" });
             setEditando(false);
             setItemEditadoId(null);
         } catch (error) {

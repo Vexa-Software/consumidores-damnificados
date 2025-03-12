@@ -43,7 +43,6 @@ interface Alerta {
   imagen?: string;
   activo: boolean;
   contenido: string;
-  fechaCreacion?: any;
   isDeleted?: boolean;
 }
 
@@ -114,15 +113,15 @@ const AlertasAdmin: React.FC = () => {
       const alertasRef = collection(db, 'alertas');
       const q = query(alertasRef, 
         where("isDeleted", "!=", true),
-        orderBy("fechaCreacion", "desc")
+        orderBy("fecha", "desc")
       );
       const querySnapshot = await getDocs(q);
       const alertasData = querySnapshot.docs.map(doc => {
         const data = doc.data();
         // Formatear la fecha para la tabla
         let fechaFormateada = 'N/A';
-        if (data.fechaCreacion) {
-          const fecha = data.fechaCreacion.toDate();
+        if (data.fecha  ) {
+          const fecha = data.fecha.toDate();
           fechaFormateada = fecha.toLocaleDateString();
         }
 
@@ -462,7 +461,7 @@ const AlertasAdmin: React.FC = () => {
           contenido: convertQuillToTailwind(contenido),
           imagen: imageUrl || "",
           activo,
-          fechaCreacion: new Date(),
+          fecha: new Date(),
           isDeleted: false
         });
 

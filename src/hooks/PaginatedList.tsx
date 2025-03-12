@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
-import { collection, onSnapshot, query, doc, getDoc, where } from "firebase/firestore";
+import { collection, onSnapshot, query, doc, getDoc, where, orderBy } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
@@ -57,7 +57,8 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
     try {
       const q = query(
         collection(db, storageKey),
-        where("isDeleted", "!=", true)
+        where("isDeleted", "!=", true),
+        orderBy("fecha", "desc")
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {

@@ -26,12 +26,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Timestamp } from "firebase/firestore";
 
 interface Item {
   id: string;
   titulo: string;
   descripcion: string;
-  fecha: string;
+  fecha: Timestamp | string;
   imagen?: string;
 }
 

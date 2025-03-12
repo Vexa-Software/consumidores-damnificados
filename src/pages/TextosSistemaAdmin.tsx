@@ -63,7 +63,7 @@ const TextosSistemaAdmin: React.FC = () => {
       }
     };
 
-    void fetchData();
+    fetchData();
   }, []);
 
 
@@ -142,7 +142,7 @@ const TextosSistemaAdmin: React.FC = () => {
               <div className="flex justify-end mt-3 gap-2">
                 {(<button
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
-                    onClick={void handleSave(categoria, id)}
+                    onClick={() => handleSave(categoria, id)}
                     disabled={savingStates[id] || deletingStates[id]}
                   >
                     {savingStates[id] ? "Guardando..." : "Guardar"}
@@ -150,7 +150,7 @@ const TextosSistemaAdmin: React.FC = () => {
                 )}
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-                  onClick={void handleDelete(categoria, id)}
+                  onClick={() => handleDelete(categoria, id)}
                   disabled={savingStates[id] || deletingStates[id]}
                 >
                   {deletingStates[id] ? "Eliminando..." : "Eliminar"}

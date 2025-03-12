@@ -39,7 +39,7 @@ const QuienesSomos: React.FC = () => {
         setLoading(false);
       }
     };
-    void fetchData();
+    fetchData();
   }, []);
 
   if (loading) {

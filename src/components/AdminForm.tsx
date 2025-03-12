@@ -6,10 +6,11 @@ import ConfirmAlert from "@/components/ConfirmAlert";
 import { toast } from "react-toastify";
 import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "./CustomQuillEditor";
 import { ExplicitAny } from "@/types/ExplicitAny";
+import { Timestamp } from "firebase/firestore";
 
 interface AdminFormProps {
   storageKey: string;
-  nuevoItem: { titulo: string; descripcion: string; fecha: string; imagen?: string };
+  nuevoItem: { titulo: string; descripcion: string; fecha: Timestamp | string; imagen?: string };
   setNuevoItem: (item: ExplicitAny) => void;
   editando: boolean;
   setEditando: (editando: ExplicitAny) => void;
@@ -178,7 +179,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
                   id="fecha"
                   type="date"
                   className="w-full  p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-                  value={nuevoItem.fecha}
+                  value={typeof nuevoItem.fecha === 'string' ? nuevoItem.fecha : nuevoItem.fecha.toDate().toISOString().split('T')[0]}
                   onChange={handleChangeDate}
                 />
                 {errores.fecha && <p className="text-red-500 text-sm">{errores.fecha}</p>}
