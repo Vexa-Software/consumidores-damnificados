@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
+import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "../components/CustomQuillEditor";
+
+
 
 const textosKeys = [
   { categoria: "quienes_somos", id: "origen", nombre: "Quienes Somos - Origen" },
@@ -12,16 +13,15 @@ const textosKeys = [
   { categoria: "quienes_somos", id: "temas", nombre: "Quienes Somos - Temas" },
   { categoria: "noticias", id: "informacion_importante", nombre: "Noticias - Información Importante" },
   { categoria: "denuncia", id: "texto", nombre: "Denuncia - Texto" },
-
   { categoria: "footer", id: "facebook", nombre: "Footer - Facebook" },
   { categoria: "footer", id: "instagram", nombre: "Footer - Instagram" },
   { categoria: "footer", id: "enlaces_relacionados", nombre: "Footer - Enlaces" },
-
   { categoria: "contacto", id: "contacto_correo", nombre: "Contacto - Correo" },
   { categoria: "contacto", id: "contacto_telefono", nombre: "Contacto - Teléfono" },
   { categoria: "contacto", id: "contacto_horario", nombre: "Contacto - Horario" },
 ];
 
+const simpleTextFields = ["facebook", "instagram", "contacto_correo", "contacto_telefono", "contacto_horario"];
 
 const TextosSistemaAdmin: React.FC = () => {
   const [textos, setTextos] = useState<{ [key: string]: string }>({});
@@ -30,25 +30,21 @@ const TextosSistemaAdmin: React.FC = () => {
   const [editing, setEditing] = useState<{ [key: string]: boolean }>({});
   const [initialLoading, setInitialLoading] = useState(true);
 
-  // Lista de campos que deberían usar input de texto simple
-  const simpleTextFields = [
-    "facebook",
-    "instagram",
-    "contacto_correo",
-    "contacto_telefono",
-    "contacto_horario"
-  ];
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const newTextos: { [key: string]: string } = {};
         for (const { id, categoria } of textosKeys) {
           const docRef = doc(db, `textos_sistema/${categoria}/textos`, id);
-
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            newTextos[id] = docSnap.data().contenido || "";
+            const contenidoOriginal = docSnap.data().contenido || "";
+            const contenidoConvertido = convertQuillToTailwind(contenidoOriginal);
+    
+            console.log(`🔥 Recibido desde Firebase (${id}):`, contenidoOriginal);
+            console.log(`✅ Convertido a Tailwind (${id}):`, contenidoConvertido);
+    
+            newTextos[id] = contenidoConvertido;
           } else {
             toast.warn(`No se encontró el documento: ${id}`);
           }
@@ -61,37 +57,43 @@ const TextosSistemaAdmin: React.FC = () => {
         setInitialLoading(false);
       }
     };
-
+  
     fetchData();
   }, []);
-
+  
+  
 
   const handleChange = (id: string, value: string) => {
-    setTextos((prev) => ({ ...prev, [id]: value }));
+    const formattedValue = convertQuillToTailwind(value); // 🔹 Convertimos antes de guardar en el estado
+    setTextos((prev) => ({ ...prev, [id]: formattedValue }));
   };
 
   const handleSave = async (categoria: string, id: string) => {
     setSavingStates((prev) => ({ ...prev, [id]: true }));
+  
     try {
-      let dataToSave = textos[id];
-
-      await setDoc(doc(db, `textos_sistema/${categoria}/textos`, id), { contenido: dataToSave }, { merge: true });
+      const formattedText = convertTailwindToQuill(textos[id]);
+      
+      console.log("🛠 Guardando en Firebase:", formattedText); // 🔍 Verifica el valor transformado
+  
+      await setDoc(doc(db, `textos_sistema/${categoria}/textos`, id), { contenido: formattedText }, { merge: true });
       toast.success(`"${id}" guardado correctamente`);
       setEditing((prev) => ({ ...prev, [id]: false }));
     } catch (error) {
       console.error("Error guardando el texto:", error);
       toast.error("Error al guardar el texto");
     }
+  
     setSavingStates((prev) => ({ ...prev, [id]: false }));
   };
-
+  
 
   const handleDelete = async (categoria: string, id: string) => {
     if (!window.confirm("¿Estás seguro de eliminar este texto?")) return;
     setDeletingStates((prev) => ({ ...prev, [id]: true }));
     try {
       await deleteDoc(doc(db, `textos_sistema/${categoria}/textos`, id));
-      setTextos((prev) => ({ ...prev, [id]: "" })); 
+      setTextos((prev) => ({ ...prev, [id]: "" }));
       toast.success(`"${id}" eliminado correctamente`);
     } catch (error) {
       console.error("Error eliminando el texto:", error);
@@ -101,46 +103,12 @@ const TextosSistemaAdmin: React.FC = () => {
   };
 
   const handleEdit = (id: string) => {
-    setEditing((prev) => ({ ...prev, [id]: !prev[id] })); 
+    setEditing((prev) => ({ ...prev, [id]: !prev[id] }));
   };
-
-  const quillRef = useRef<ReactQuill>(null);
-
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }], 
-      ["link"],
-      ["clean"],
-    ],
-    history: {
-      delay: 2000,
-      maxStack: 500,
-      userOnly: true,
-    },
-    clipboard: {
-      matchVisual: false,
-    },
-  };
-
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "link",
-    "align", // 🔹 Habilita la alineación en el contenido
-  ];
 
   return (
-    <div className="flex flex-col p-6 bg-white">
-      <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">Gestión de Textos del Sistema</h1>
-      <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">Administra los textos del sistema</p>
+    <div className="flex flex-col items-center p-6 bg-white">
+      <h1 className="text-2xl font-bold mb-4 text-center text-sky-600">Gestión de Textos del Sistema</h1>
 
       {initialLoading ? (
         <div className="w-full flex justify-center items-center min-h-[400px]">
@@ -166,15 +134,10 @@ const TextosSistemaAdmin: React.FC = () => {
                   placeholder={`Ingrese ${nombre.toLowerCase()}`}
                 />
               ) : (
-                <ReactQuill
-                  value={textos[id] ?? ""}
-                  onChange={(value) => handleChange(id, value)}
-                  modules={modules}
-                  formats={formats}
-                  ref={quillRef}
-                  className="bg-white"
-                  readOnly={!editing[id]}
-                />
+                <CustomQuillEditor
+  value={convertTailwindToQuill(textos[id] ?? "")} // 🔹 Convertimos antes de pasar al editor
+  onChange={(value) => handleChange(id, value)}
+/>
               )}
 
               <div className="flex justify-end mt-3 gap-2">

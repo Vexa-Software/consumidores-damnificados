@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import imageCompression from 'browser-image-compression';
-import ConfirmAlert from "@/components/ConfirmAlert";
 import { toast } from "react-toastify";
 import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "./CustomQuillEditor";
 
@@ -32,29 +31,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
   validarCampos,
 }) => {
 
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDirty, setIsDirty] = useState(false);
 
-  const [showConfirmReset, setShowConfirmReset] = useState(false);
-  
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }], // 🟢 Agrega la opción de alineación
-      ["link"],
-      ["clean"],
-    ],
-    history: {
-      delay: 2000,
-      maxStack: 500,
-      userOnly: true,
-    },
-    clipboard: {
-      matchVisual: false,
-    },
-  };
   
   
 
@@ -117,10 +97,20 @@ const AdminForm: React.FC<AdminFormProps> = ({
   };
 
 
-  const resetFormulario = (forceReset = false, fromSuccessfulSave = false) => {
-    if (!forceReset && isDirty && !fromSuccessfulSave) {
-      setShowConfirmReset(true);
-      return;
+  const handleSubmit = () => {
+    if (editando) {
+      handleGuardarEdicion();
+      resetFormulario(true);
+    } else {
+      if (!validarCampos()) return;
+      handleAgregarItem();
+      resetFormulario();
+    }
+  };
+
+  const resetFormulario = (forceReset = false) => {
+    if (!forceReset && editando && isDirty) {
+      if (!window.confirm("Tienes cambios sin guardar. ¿Seguro que quieres cancelar?")) return;
     }
 
     setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
@@ -131,23 +121,12 @@ const AdminForm: React.FC<AdminFormProps> = ({
     }
   };
 
-  const handleSubmit = () => {
-    if (editando) {
-      handleGuardarEdicion();
-      resetFormulario(false, true);
-    } else {
-      if (!validarCampos()) return;
-      handleAgregarItem();
-      resetFormulario(false, true);
-    }
-  };
-
   const handleChangeTitle = (value: string) => {
-    setNuevoItem((prevItem: any) => ({
-      ...prevItem,
-      titulo: value
+       setNuevoItem((prevItem: { titulo: string; descripcion: string; fecha: string; imagen?: string }) => ({
+        ...prevItem,
+        titulo: value
     }));
-    setErrores((prev: any) => ({ ...prev, titulo: "" }));
+    setErrores((prev: { titulo: string; descripcion: string; fecha: string; imagen: string }) => ({ ...prev, descripcion: "" }));
     setIsDirty(true);
   };
 
@@ -159,7 +138,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
     }));
     setErrores((prev: { titulo: string; descripcion: string; fecha: string; imagen: string }) => ({ ...prev, descripcion: "" }));
     setIsDirty(true);
-  };
+};
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNuevoItem({ ...nuevoItem, fecha: e.target.value });
@@ -175,10 +154,9 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
 
   return (
-    <>
-      <div className="mb-6 bg-white w-full  rounded-lg flex flex-col  xl:flex-row justify-between sm:h-auto">
+    <div className="mb-6 bg-white w-full  rounded-lg flex flex-col  xl:flex-row justify-between sm:h-auto">
 
-        <div className=" w-[100%] sm:w-[100%] xl:w-[49%]">
+      <div className=" w-[100%] sm:w-[100%] xl:w-[49%]">
 
         <div className="mb-4 flex flex-col justify-between ">
           <label htmlFor="titulo" className="block text-xs font-medium text-sky-500 mb-1">
@@ -194,58 +172,40 @@ const AdminForm: React.FC<AdminFormProps> = ({
             <label htmlFor="fecha" className="block text-xs font-medium text-sky-500 mb-1">
               Fecha de publicación (*)
             </label>
-            <ReactQuill value={nuevoItem.titulo} onChange={handleChangeTitle} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
-            {/* <input
-              id="titulo"
-              type="text"
-              placeholder="Ingrese el título"
-              className="w-full p-2 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-              value={nuevoItem.titulo}
-              onChange={handleChangeTitle}
-            /> */}
-            {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
+            <div className="relative">
+              <input
+                id="fecha"
+                type="date"
+                className="w-full  p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                value={nuevoItem.fecha}
+                onChange={handleChangeDate}
+              />
+              {errores.fecha && <p className="text-red-500 text-sm">{errores.fecha}</p>}
+            </div>
           </div>
 
-          <div className="flex flex-col sm:flex-col xl:flex-row mt-7 justify-between ">
-
-            <div className="mb-4 w-[100%] sm:w-[100%]  xl:w-[39%] flex flex-col justify-between">
-              <label htmlFor="fecha" className="block text-xs font-medium text-sky-500 mb-1">
-                Fecha de publicación (*)
+          {storageKey === "noticias" && (
+            <div className="mb-4 w-[100%] sm:w-[100%] xl:w-[59%]">
+              <label htmlFor="imagen" className="block text-xs font-medium text-sky-500 mb-1">
+                Imagen de portada
               </label>
-              <div className="relative">
-                <input
-                  id="fecha"
-                  type="date"
-                  className="w-full  p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-                  value={nuevoItem.fecha}
-                  onChange={handleChangeDate}
-                />
-                {errores.fecha && <p className="text-red-500 text-sm">{errores.fecha}</p>}
-              </div>
+              <input
+                id="imagen"
+                ref={fileInputRef}
+                type="file"
+                accept="image/png, image/jpeg, image/jpg"
+                onChange={handleChangeImage}
+                className="w-full p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
+              />
+              {errores.imagen && <p className="text-red-500 text-sm">{errores.imagen}</p>}
             </div>
 
-            {storageKey === "noticias" && (
-              <div className="mb-4 w-[100%] sm:w-[100%] xl:w-[59%]">
-                <label htmlFor="imagen" className="block text-xs font-medium text-sky-500 mb-1">
-                  Imagen de portada
-                </label>
-                <input
-                  id="imagen"
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/png, image/jpeg, image/jpg"
-                  onChange={handleChangeImage}
-                  className="w-full p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-                />
-                {errores.imagen && <p className="text-red-500 text-sm">{errores.imagen}</p>}
-              </div>
-
-            )}
-          </div>
+          )}
         </div>
+      </div>
 
 
-        <div className="flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] ">
+      <div className="flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] ">
 
         <div className="mb-0 xl:mb-4 2xl:mb-4 h-full">
           <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
@@ -258,37 +218,24 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
 
 
-          <div className="flex justify-end sm:mt-0 xl:mt-4 2xl:mt-">
-            <button
-              className="bg-white border border-gray-300 text-sky-500 px-6 py-2 rounded-lg hover:bg-sky-100 transition text-sm mr-4"
-              onClick={() => resetFormulario()}
-            >
-              Cancelar
-            </button>
-            <button
-              className="bg-sky-500 text-white px-9 py-2 rounded-lg hover:bg-sky-600 transition text-sm"
-              onClick={handleSubmit}
-            >
-              {editando ? "Guardar Edición" : "Crear"}
-            </button>
-          </div>
+        <div className="flex justify-end sm:mt-0 xl:mt-4 2xl:mt-">
+          <button
+            className="bg-white border border-gray-300 text-sky-500 px-6 py-2 rounded-lg hover:bg-sky-100 transition text-sm mr-4"
+            onClick={() => resetFormulario()}
+          >
+            Cancelar
+          </button>
+          <button
+            className="bg-sky-500 text-white px-9 py-2 rounded-lg hover:bg-sky-600 transition text-sm"
+            onClick={handleSubmit}
+          >
+            {editando ? "Guardar Edición" : "Crear"}
+          </button>
         </div>
-
       </div>
 
-      <ConfirmAlert
-        isOpen={showConfirmReset}
-        title="Confirmar cancelación"
-        message="Tienes cambios sin guardar. ¿Seguro que quieres cancelar?"
-        confirmText="Sí, cancelar"
-        cancelText="No, continuar editando"
-        onConfirm={() => {
-          setShowConfirmReset(false);
-          resetFormulario(true);
-        }}
-        onCancel={() => setShowConfirmReset(false)}
-      />
-    </>
+    </div>
+
   );
 };
 

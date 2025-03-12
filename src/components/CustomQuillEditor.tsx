@@ -9,21 +9,22 @@ interface CustomQuillEditorProps {
 
 // 🔹 Función para convertir clases de Quill a Tailwind antes de guardar
 export const convertQuillToTailwind = (html: string) => {
-  return html
-    .replace(/ql-align-center/g, "text-center")
-    .replace(/ql-align-right/g, "text-right")
-    .replace(/ql-align-justify/g, "text-justify")
-    .replace(/ql-align-left/g, "text-left");
-};
+    console.log("🔄 Transformando de Quill a Tailwind:", html);
+    return html
+      .replace(/ql-align-center/g, "text-center")
+      .replace(/ql-align-right/g, "text-right")
+      .replace(/ql-align-justify/g, "text-justify")
+      .replace(/ql-align-left/g, "text-left");
+  };
 
 // 🔹 Función para volver a convertir Tailwind a Quill cuando edites
 export const convertTailwindToQuill = (html: string) => {
-  return html
-    .replace(/text-center/g, "ql-align-center")
-    .replace(/text-right/g, "ql-align-right")
-    .replace(/text-justify/g, "ql-align-justify")
-    .replace(/text-left/g, "ql-align-left");
-};
+    return html
+      .replace(/class="text-center"/g, 'class="ql-align-center"')
+      .replace(/class="text-right"/g, 'class="ql-align-right"')
+      .replace(/class="text-justify"/g, 'class="ql-align-justify"')
+      .replace(/class="text-left"/g, 'class="ql-align-left"');
+  };
 
 const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }) => {
   const modules = {
@@ -41,12 +42,12 @@ const CustomQuillEditor: React.FC<CustomQuillEditorProps> = ({ value, onChange }
 
   return (
     <ReactQuill
-      value={value}
-      onChange={onChange}
-      modules={modules}
-      formats={formats}
-      className="bg-white"
-    />
+    value={convertTailwindToQuill(value)}
+    onChange={(content) => onChange(convertQuillToTailwind(content))} // 🔹 Convierto al formato correcto antes de enviarlo
+    modules={modules}
+    formats={formats}
+    className="bg-white"
+  />
   );
 };
 

@@ -4,6 +4,7 @@ import { collection, onSnapshot, query, orderBy, doc, getDoc } from "firebase/fi
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
+import { convertQuillToTailwind } from "../components/CustomQuillEditor";
 
 interface Item {
   id: string;
@@ -101,7 +102,7 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
               No se encontró la información importante
             </p>
           ) : (
-            <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 "  dangerouslySetInnerHTML={{ __html: infoImportante }}>
+            <p className="text-gray-500 text-[80%] sm:text-[90%] 2xl:text-lg text-justify mt-4 "  dangerouslySetInnerHTML={{ __html: convertQuillToTailwind(infoImportante) }}>
            
             </p>
           )}

@@ -4,6 +4,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { toast } from "react-toastify";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
+import { convertQuillToTailwind } from "../components/CustomQuillEditor";
 
 const Denuncia: React.FC = () => {
     const [textoDenuncia, setTextoDenuncia] = useState<string>("");
@@ -51,7 +52,7 @@ const Denuncia: React.FC = () => {
                         No se encontró la información sobre denuncias
                     </div>
                 ) : (
-                    <div className="w-[77%] text-[#324A6D] mt-6 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: textoDenuncia }} />
+                    <div className="w-[77%] text-[#324A6D] mt-6 text-lg leading-relaxed" dangerouslySetInnerHTML={{ __html: convertQuillToTailwind( textoDenuncia) }} />
                 )}
             </div>
         </>
