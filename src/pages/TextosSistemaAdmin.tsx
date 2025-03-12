@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "react-quill/dist/quill.snow.css";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
 import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "@/components/CustomQuillEditor";
+import ConfirmAlert from "@/components/ConfirmAlert";
 
 const textosKeys = [
   { categoria: "quienes_somos", id: "origen", nombre: "Quienes Somos - Origen" },
@@ -22,12 +23,13 @@ const textosKeys = [
   { categoria: "contacto", id: "contacto_horario", nombre: "Contacto - Horario" },
 ];
 
-
 const TextosSistemaAdmin: React.FC = () => {
   const [textos, setTextos] = useState<{ [key: string]: string }>({});
   const [savingStates, setSavingStates] = useState<{ [key: string]: boolean }>({});
   const [deletingStates, setDeletingStates] = useState<{ [key: string]: boolean }>({});
   const [initialLoading, setInitialLoading] = useState(true);
+  const [modalEliminarOpen, setModalEliminarOpen] = useState(false);
+  const [textoAEliminar, setTextoAEliminar] = useState<{categoria: string, id: string, nombre: string} | null>(null);
 
   // Lista de campos que deberían usar input de texto simple
   const simpleTextFields = [
@@ -66,7 +68,6 @@ const TextosSistemaAdmin: React.FC = () => {
     fetchData();
   }, []);
 
-
   const handleChange = (id: string, value: string) => {
     setTextos((prev) => ({ ...prev, [id]: value }));
   };
@@ -79,7 +80,6 @@ const TextosSistemaAdmin: React.FC = () => {
   const handleSave = async (categoria: string, id: string) => {
     setSavingStates((prev) => ({ ...prev, [id]: true }));
     try {
-
       const formattedText = convertTailwindToQuill(textos[id]);
       await setDoc(doc(db, `textos_sistema/${categoria}/textos`, id), { contenido: formattedText }, { merge: true });
       toast.success(`"${id}" guardado correctamente`);
@@ -90,19 +90,27 @@ const TextosSistemaAdmin: React.FC = () => {
     setSavingStates((prev) => ({ ...prev, [id]: false }));
   };
 
+  const handleDelete = async (categoria: string, id: string, nombre: string) => {
+    setTextoAEliminar({ categoria, id, nombre });
+    setModalEliminarOpen(true);
+  };
 
-  const handleDelete = async (categoria: string, id: string) => {
-    if (!window.confirm("¿Estás seguro de eliminar este texto?")) return;
+  const confirmarEliminar = async () => {
+    if (!textoAEliminar) return;
+    const { categoria, id } = textoAEliminar;
+
     setDeletingStates((prev) => ({ ...prev, [id]: true }));
     try {
       await deleteDoc(doc(db, `textos_sistema/${categoria}/textos`, id));
       setTextos((prev) => ({ ...prev, [id]: "" })); 
-      toast.success(`"${id}" eliminado correctamente`);
+      toast.success(`"${id}" borrado correctamente`);
     } catch (error) {
-      console.error("Error eliminando el texto:", error);
-      toast.error("Error al eliminar el texto");
+      console.error("Error borrando el texto:", error);
+      toast.error("Error al borrar el texto");
     }
     setDeletingStates((prev) => ({ ...prev, [id]: false }));
+    setModalEliminarOpen(false);
+    setTextoAEliminar(null);
   };
 
   return (
@@ -134,7 +142,7 @@ const TextosSistemaAdmin: React.FC = () => {
                 />
               ) : (
                 <CustomQuillEditor
-                  value={convertTailwindToQuill(textos[id] ?? "")} // 🔹 Convertimos antes de pasar al editor
+                  value={convertTailwindToQuill(textos[id] ?? "")}
                   onChange={(value) => handleRichTextChange(id, value)}
                 />
               )}
@@ -150,16 +158,30 @@ const TextosSistemaAdmin: React.FC = () => {
                 )}
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-                  onClick={() => handleDelete(categoria, id)}
+                  onClick={() => handleDelete(categoria, id, nombre)}
                   disabled={savingStates[id] || deletingStates[id]}
                 >
-                  {deletingStates[id] ? "Eliminando..." : "Eliminar"}
+                  {deletingStates[id] ? "Borrando..." : "Borrar Texto"}
                 </button>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      <ConfirmAlert
+        isOpen={modalEliminarOpen}
+        title={`¿Estás seguro de borrar ${textoAEliminar?.nombre}?`}
+        message="Esta acción eliminará todo el contenido del texto y no se puede deshacer."
+        confirmText="Sí, borrar"
+        cancelText="No, cancelar"
+        onConfirm={confirmarEliminar}
+        onCancel={() => {
+          setModalEliminarOpen(false);
+          setTextoAEliminar(null);
+        }}
+        confirmButtonColor="bg-red-500"
+      />
     </div>
   );
 };

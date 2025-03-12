@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "./CustomQuillEditor";
 import { ExplicitAny } from "@/types/ExplicitAny";
 import { Timestamp } from "firebase/firestore";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 interface AdminFormProps {
   storageKey: string;
@@ -142,8 +144,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
     setIsDirty(true);
   };
 
-  const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNuevoItem({ ...nuevoItem, fecha: e.target.value });
+  const handleChangeDate = (newValue: dayjs.Dayjs | null) => {
+    if (newValue) {
+      setNuevoItem({ ...nuevoItem, fecha: newValue.format('YYYY-MM-DD') });
+    }
     setErrores((prev: ExplicitAny) => ({ ...prev, fecha: "" }));
     setIsDirty(true);
   };
@@ -175,14 +179,19 @@ const AdminForm: React.FC<AdminFormProps> = ({
                 Fecha de publicación (*)
               </label>
               <div className="relative">
-                <input
-                  id="fecha"
-                  type="date"
-                  className="w-full  p-2 h-10 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-                  value={typeof nuevoItem.fecha === 'string' ? nuevoItem.fecha : nuevoItem.fecha.toDate().toISOString().split('T')[0]}
+                <DatePicker
+                  value={dayjs(typeof nuevoItem.fecha === 'string' ? nuevoItem.fecha : nuevoItem.fecha.toDate())}
                   onChange={handleChangeDate}
+                  format="DD/MM/YYYY"
+                  className="w-full"
+                  slotProps={{
+                    textField: {
+                      size: "small",
+                      error: !!errores.fecha,
+                      helperText: errores.fecha
+                    }
+                  }}
                 />
-                {errores.fecha && <p className="text-red-500 text-sm">{errores.fecha}</p>}
               </div>
             </div>
 

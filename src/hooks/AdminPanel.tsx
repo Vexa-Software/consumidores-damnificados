@@ -4,7 +4,7 @@ import { DataTableDemo } from "../components/Grid";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
 import { collection, getDocs, addDoc, doc, updateDoc, query, orderBy, where, Timestamp } from "firebase/firestore";
-
+import dayjs from "dayjs";
 
 interface Item {
     id: string;
@@ -18,7 +18,7 @@ interface Item {
 interface AdminPanelProps {
     storageKey: string;
     title: string;
-    subtitle:string;
+    subtitle: string;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) => {
@@ -27,7 +27,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         id: "",
         titulo: "",
         descripcion: "",
-        fecha: Timestamp.now(),
+        fecha: "",
         imagen: "",
     });
 
@@ -35,7 +35,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
     const [itemEditadoId, setItemEditadoId] = useState<string | null>(null);
 
     const [errores, setErrores] = useState({ titulo: "", descripcion: "", fecha: "", imagen: "" });
-
 
     const [modalEliminarOpen, setModalEliminarOpen] = useState<boolean>(false);
     const [itemAEliminar, setItemAEliminar] = useState<string | null>(null);
@@ -61,7 +60,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
     };
 
     useEffect(() => {
-
         fetchItems();
     }, [storageKey]); 
     
@@ -71,7 +69,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             descripcion: "",
             fecha: "",
             imagen: ""
-
         };
 
         if (nuevoItem.titulo.length < 3 || nuevoItem.titulo.length > 1000) {
@@ -102,7 +99,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
                 titulo: nuevoItem.titulo,
                 descripcion: nuevoItem.descripcion,
                 fecha: typeof nuevoItem.fecha === 'string' 
-                    ? Timestamp.fromDate(new Date(nuevoItem.fecha))
+                    ? Timestamp.fromDate(dayjs(nuevoItem.fecha).toDate())
                     : nuevoItem.fecha,
                 imagen: nuevoItem.imagen || "",
                 isDeleted: false
@@ -111,7 +108,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             fetchItems();
             toast.success(`${title} agregado con éxito.`);
 
-            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: Timestamp.now(), imagen: "" });
+            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
         } catch (error) {
             console.error("Error al agregar item:", error);
             toast.error("Hubo un error al agregar el item.");
@@ -124,26 +121,21 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         setNuevoItem(item);
     };
 
-   
     const handleGuardarEdicion = async () => {
         if (!validarCampos() || !itemEditadoId) return;
 
         try {
             const itemRef = doc(db, storageKey, itemEditadoId);
 
-            console.log("Editando el documento con ID:", itemEditadoId); 
-            console.log("Datos a actualizar:", nuevoItem);
-
             await updateDoc(itemRef, {
                 titulo: nuevoItem.titulo,
                 descripcion: nuevoItem.descripcion,
                 fecha: typeof nuevoItem.fecha === 'string' 
-                    ? Timestamp.fromDate(new Date(nuevoItem.fecha))
+                    ? Timestamp.fromDate(dayjs(nuevoItem.fecha).toDate())
                     : nuevoItem.fecha,
                 imagen: nuevoItem.imagen || "",
             });
 
-           
             const itemsActualizados = items.map((item) =>
                 item.id === itemEditadoId ? { ...item, ...nuevoItem } : item
             );
@@ -151,8 +143,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
             setItems(itemsActualizados);
             toast.success(`${title} editado con éxito.`);
 
-           
-            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: Timestamp.now(), imagen: "" });
+            setNuevoItem({ id: "", titulo: "", descripcion: "", fecha: "", imagen: "" });
             setEditando(false);
             setItemEditadoId(null);
         } catch (error) {
@@ -161,9 +152,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         }
     };
 
-
-
-    
     const handleEliminarItem = (id: string) => {
         setModalEliminarOpen(true);
         setItemAEliminar(id);
@@ -189,69 +177,63 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
         setItemAEliminar(null);
     };
 
-
     return (
         <div className="flex h-screen px-4">       
-        <div className="flex flex-col flex-grow h-screen  max-w-[100%]">
-            <div className=" flex-grow pb-8 px-4 ">
-                <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">{title}</h1>
-                <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">{subtitle}</p>
+            <div className="flex flex-col flex-grow h-screen max-w-[100%]">
+                <div className="flex-grow pb-8 px-4">
+                    <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">{title}</h1>
+                    <p className="text-lg sm:text-xl text-sky-500 font-light mb-4 xl:mb-10 text-start">{subtitle}</p>
 
-               
-                <AdminForm
-                    storageKey={storageKey}
-                    nuevoItem={nuevoItem}
-                    setNuevoItem={setNuevoItem}
-                    editando={editando}
-                    setEditando={setEditando}
-                    handleAgregarItem={handleAgregarItem}
-                    handleGuardarEdicion={handleGuardarEdicion}
-                    errores={errores}
-                    setErrores={setErrores}
-                    validarCampos={validarCampos}
-                />
-
-               
-                <div className=" max-h-[500px]">
-                    <DataTableDemo
-                        data={items}
-                        onEdit={handleEditarItem}
-                        onDelete={handleEliminarItem}
+                    <AdminForm
                         storageKey={storageKey}
+                        nuevoItem={nuevoItem}
+                        setNuevoItem={setNuevoItem}
+                        editando={editando}
+                        setEditando={setEditando}
+                        handleAgregarItem={handleAgregarItem}
+                        handleGuardarEdicion={handleGuardarEdicion}
+                        errores={errores}
+                        setErrores={setErrores}
+                        validarCampos={validarCampos}
                     />
-                </div>
-            </div>
 
-           
-        </div>
-
-      
-        {modalEliminarOpen && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div className="bg-white rounded-lg p-6 shadow-xl">
-                    <p className="text-lg font-bold mb-4">
-                        {storageKey === "noticias"
-                            ? "¿Estás seguro de eliminar esta noticia?"
-                            : "¿Estás seguro de eliminar este logro?"}
-                    </p>
-                    <div className="flex flex-row justify-evenly">
-                        <button
-                            className="bg-gray-500 text-white px-4 py-2 rounded"
-                            onClick={() => setModalEliminarOpen(false)}
-                        >
-                            Cancelar
-                        </button>
-                        <button
-                            className="bg-red-500 text-white px-4 py-2 rounded"
-                            onClick={confirmarEliminar}
-                        >
-                            Confirmar
-                        </button>
+                    <div className="max-h-[500px]">
+                        <DataTableDemo
+                            data={items}
+                            onEdit={handleEditarItem}
+                            onDelete={handleEliminarItem}
+                            storageKey={storageKey}
+                        />
                     </div>
                 </div>
             </div>
-        )}
-    </div>
+
+            {modalEliminarOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="bg-white rounded-lg p-6 shadow-xl">
+                        <p className="text-lg font-bold mb-4">
+                            {storageKey === "noticias"
+                                ? "¿Estás seguro de eliminar esta noticia?"
+                                : "¿Estás seguro de eliminar este logro?"}
+                        </p>
+                        <div className="flex flex-row justify-evenly">
+                            <button
+                                className="bg-gray-500 text-white px-4 py-2 rounded"
+                                onClick={() => setModalEliminarOpen(false)}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                className="bg-red-500 text-white px-4 py-2 rounded"
+                                onClick={confirmarEliminar}
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 

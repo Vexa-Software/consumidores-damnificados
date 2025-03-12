@@ -103,7 +103,17 @@ export function DataTableDemo({ data, onEdit, onDelete, storageKey }: DataTableD
     {
       accessorKey: "fecha",
       header: "Fecha",
-      cell: ({ row }) => <div className="text-center min-w-[150px] w-[100%]">{row.getValue("fecha")}</div>,
+      cell: ({ row }) => {
+        const fecha = row.getValue("fecha");
+        const fechaStr = fecha instanceof Timestamp 
+          ? fecha.toDate().toLocaleDateString('es-ES', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            })
+          : String(fecha);
+        return <div className="text-center min-w-[150px] w-[100%]">{fechaStr}</div>;
+      },
     },
     ...(storageKey === "noticias"
       ? [

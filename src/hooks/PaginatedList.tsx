@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaInfoCircle } from "react-icons/fa";
-import { collection, onSnapshot, query, doc, getDoc, where, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, doc, getDoc, where, orderBy, Timestamp } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { db } from "../firebase/config";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
@@ -62,10 +62,27 @@ const PaginatedList: React.FC<PaginatedListProps> = ({ storageKey, title }) => {
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        const itemsData: Item[] = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Item, "id">),
-        }));
+        const formatearFecha = (fecha: Timestamp | string) => {
+          if (fecha instanceof Timestamp) {
+            return fecha.toDate().toLocaleDateString('es-ES', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            });
+          }
+          return String(fecha);
+        };
+
+        const itemsData: Item[] = snapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            titulo: data.titulo,
+            descripcion: data.descripcion,
+            fecha: formatearFecha(data.fecha),
+            imagen: data.imagen
+          };
+        });
 
         setItems(itemsData);
         setLoading(false);

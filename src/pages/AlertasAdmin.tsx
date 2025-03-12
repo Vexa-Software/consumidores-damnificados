@@ -120,9 +120,14 @@ const AlertasAdmin: React.FC = () => {
         const data = doc.data();
         // Formatear la fecha para la tabla
         let fechaFormateada = 'N/A';
-        if (data.fecha  ) {
+        if (data.fecha) {
           const fecha = data.fecha.toDate();
-          fechaFormateada = fecha.toLocaleDateString();
+          const fechaAjustada = new Date(fecha.getTime() + fecha.getTimezoneOffset() * 60000);
+          fechaFormateada = fechaAjustada.toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          });
         }
 
         return {

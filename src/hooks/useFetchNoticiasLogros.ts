@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { collection, query, where, orderBy, getDocs, Timestamp } from "firebase/firestore";
 import { db } from "../firebase/config";
-import { collection, query, onSnapshot, where, orderBy } from "firebase/firestore";
 
 interface Item {
   id: string;
@@ -16,33 +16,67 @@ export function useFetchNoticiasLogros() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    
-    const fetchCollection = (storageKey: string, setState: (data: Item[]) => void) => {
-      const q = query(
-        collection(db, storageKey),
-        where("isDeleted", "!=", true),
-        orderBy("fecha", "desc")
-      );
+    const fetchData = async () => {
+      try {
+        const noticiasQuery = query(
+          collection(db, "noticias"),
+          where("isDeleted", "!=", true),
+          orderBy("fecha", "desc")
+        );
+        const logrosQuery = query(
+          collection(db, "nuestrosLogros"),
+          where("isDeleted", "!=", true),
+          orderBy("fecha", "desc")
+        );
 
-      return onSnapshot(q, (snapshot) => {
-        const itemsData: Item[] = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...(doc.data() as Omit<Item, "id">),
-        }));
+        const [noticiasSnapshot, logrosSnapshot] = await Promise.all([
+          getDocs(noticiasQuery),
+          getDocs(logrosQuery),
+        ]);
 
-        setState(itemsData.slice(0, 5)); 
+        const formatearFecha = (fecha: Timestamp | string) => {
+          if (fecha instanceof Timestamp) {
+            return fecha.toDate().toLocaleDateString('es-ES', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric'
+            });
+          }
+          return String(fecha);
+        };
+
+        const noticiasData = noticiasSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            titulo: data.titulo,
+            descripcion: data.descripcion,
+            fecha: formatearFecha(data.fecha),
+            imagen: data.imagen
+          };
+        });
+
+        const logrosData = logrosSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            titulo: data.titulo,
+            descripcion: data.descripcion,
+            fecha: formatearFecha(data.fecha),
+            imagen: data.imagen
+          };
+        });
+
+        setNoticias(noticiasData);
+        setNuestrosLogros(logrosData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
         setLoading(false);
-      });
+      }
     };
 
-    const unsubscribeNoticias = fetchCollection("noticias", setNoticias);
-    const unsubscribeNuestrosLogros = fetchCollection("nuestrosLogros", setNuestrosLogros);
-
-    return () => {
-      unsubscribeNoticias();
-      unsubscribeNuestrosLogros();
-    };
+    fetchData();
   }, []);
 
   return { noticias, nuestrosLogros, loading };
