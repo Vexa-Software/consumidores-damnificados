@@ -16,7 +16,7 @@ const limpiarContenidoHtml = (html: string): string => {
   // Elimina espacios en blanco
   const contenidoLimpio = html.trim();
   
-  // Verifica si solo contiene etiquetas vacÃ­as como <p><br></p> o <P><br></P>
+  // Verifica si solo contiene etiquetas vacías como <p><br></p> o <P><br></P>
   if (contenidoLimpio.replace(/<[pP]><br\s*\/?><\/[pP]>/g, '').trim() === '') {
     return '';
   }
@@ -118,6 +118,25 @@ const AlertaPopup: React.FC = () => {
             )}
           </div>
         )}
+
+
+        <div className="w-full xl:w-1/2 p-6  py-4 2xl:py-12 flex flex-col justify-between h-full xl:h-auto">
+
+
+          <div className="flex justify-center items-start h-1/3 xl:h-1/3">
+            <h2 className="text-xl 2xl:text-2xl font-bold text-gray-900 text-center"
+            dangerouslySetInnerHTML={{ __html: alerta.titulo }}
+            ></h2>
+          </div>
+
+
+          <div className="flex justify-center items-center h-2/3 xl:h-2/3">
+            <div
+              className="text-gray-700 text-center"
+              dangerouslySetInnerHTML={{ __html: alerta.contenido }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

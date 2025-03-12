@@ -224,11 +224,25 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
       
         {modalEliminarOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <div className="bg-white rounded-lg p-6">
-                    <p className="text-lg font-bold mb-4">¿Estás seguro de eliminar esta noticia?</p>
+                <div className="bg-white rounded-lg p-6 shadow-xl">
+                    <p className="text-lg font-bold mb-4">
+                        {storageKey === "noticias"
+                            ? "¿Estás seguro de eliminar esta noticia?"
+                            : "¿Estás seguro de eliminar este logro?"}
+                    </p>
                     <div className="flex flex-row justify-evenly">
-                        <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => setModalEliminarOpen(false)}>Cancelar</button>
-                        <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={confirmarEliminar}>Confirmar</button>
+                        <button
+                            className="bg-gray-500 text-white px-4 py-2 rounded"
+                            onClick={() => setModalEliminarOpen(false)}
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            className="bg-red-500 text-white px-4 py-2 rounded"
+                            onClick={confirmarEliminar}
+                        >
+                            Confirmar
+                        </button>
                     </div>
                 </div>
             </div>

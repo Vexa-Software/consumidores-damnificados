@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import imageCompression from 'browser-image-compression';
-import ReactQuill from 'react-quill';
 import ConfirmAlert from "@/components/ConfirmAlert";
 import { toast } from "react-toastify";
+import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "./CustomQuillEditor";
 
 interface AdminFormProps {
   storageKey: string;
@@ -34,7 +34,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDirty, setIsDirty] = useState(false);
-  const quillRef = useRef<ReactQuill>(null);
+
   const [showConfirmReset, setShowConfirmReset] = useState(false);
   
   const modules = {
@@ -57,7 +57,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
   };
   
   
-
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (storageKey !== "noticias") return;
@@ -153,9 +152,10 @@ const AdminForm: React.FC<AdminFormProps> = ({
   };
 
   const handleChangeDescription = (value: string) => {
+    const formattedValue = convertQuillToTailwind(value);
     setNuevoItem((prevItem: { titulo: string; descripcion: string; fecha: string; imagen?: string }) => ({
         ...prevItem,
-        descripcion: value
+        descripcion: formattedValue
     }));
     setErrores((prev: { titulo: string; descripcion: string; fecha: string; imagen: string }) => ({ ...prev, descripcion: "" }));
     setIsDirty(true);
@@ -180,9 +180,19 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
         <div className=" w-[100%] sm:w-[100%] xl:w-[49%]">
 
-          <div className="mb-4 flex flex-col justify-between ">
-            <label htmlFor="titulo" className="block text-xs font-medium text-sky-500 mb-1">
-              Título (*)
+        <div className="mb-4 flex flex-col justify-between ">
+          <label htmlFor="titulo" className="block text-xs font-medium text-sky-500 mb-1">
+            Título (*)
+          </label>
+          <CustomQuillEditor value={nuevoItem.titulo} onChange={handleChangeTitle} />
+          {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
+        </div>
+
+        <div className="flex flex-col sm:flex-col xl:flex-row mt-7 justify-between ">
+
+          <div className="mb-4 w-[100%] sm:w-[100%]  xl:w-[39%] flex flex-col justify-between">
+            <label htmlFor="fecha" className="block text-xs font-medium text-sky-500 mb-1">
+              Fecha de publicación (*)
             </label>
             <ReactQuill value={nuevoItem.titulo} onChange={handleChangeTitle} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
             {/* <input
@@ -237,21 +247,13 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
         <div className="flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] ">
 
-          <div className="mb-0 xl:mb-4 2xl:mb-4 h-full">
-            <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
-              Descripción (*)
-            </label>
-            <ReactQuill value={nuevoItem.descripcion} onChange={handleChangeDescription} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
-            {/* <textarea
-              id="descripcion"
-              placeholder="Ingrese descripción"
-              className="w-full p-2 h-full sm:h-50 border rounded text-sm outline-none focus:ring-2 focus:ring-sky-500 resize-none"
-              rows={4}
-              value={nuevoItem.descripcion}
-              onChange={handleChangeDescription}
-            /> */}
-            {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
-          </div>
+        <div className="mb-0 xl:mb-4 2xl:mb-4 h-full">
+          <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
+            Descripción (*)
+          </label>
+          <CustomQuillEditor value={convertTailwindToQuill(nuevoItem.descripcion)} onChange={handleChangeDescription} />
+          {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
+        </div>
 
 
 

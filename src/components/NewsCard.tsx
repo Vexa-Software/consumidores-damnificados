@@ -25,7 +25,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ title, description, date, imagen })
           
             <div className="p-4 flex flex-col flex-grow h-56">
                 <div className="flex flex-col flex-grow h-24">
-                    <h1 className="font-bold text-lg text-start text-gray-900">{title}</h1>
+                    <h1 className="font-bold text-lg text-start text-gray-900" dangerouslySetInnerHTML={{ __html: title}} ></h1>
                     <div
                         className="text-gray-600 text-sm mt-4 break-words line-clamp-4 overflow-hidden whitespace-normal text-ellipsis w-full leading-snug"
                         dangerouslySetInnerHTML={{ __html: description }}

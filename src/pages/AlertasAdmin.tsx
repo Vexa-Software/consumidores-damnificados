@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { db, storage } from '../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, query, getDocs, updateDoc, doc, deleteDoc, orderBy, where } from 'firebase/firestore';
-import ReactQuill from 'react-quill';
+
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import imageCompression from "browser-image-compression";
 import "react-quill/dist/quill.snow.css";
+import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "../components/CustomQuillEditor";
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import {
@@ -76,7 +78,6 @@ const AlertasAdmin: React.FC = () => {
     imagen: ''
   });
 
-  const quillRef = useRef<ReactQuill>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const modules = {
@@ -468,7 +469,7 @@ const AlertasAdmin: React.FC = () => {
 
         await updateDoc(alertaRef, {
           titulo,
-          contenido,
+          contenido: convertQuillToTailwind(contenido),
           imagen: imageUrl || "",
           activo,
           isDeleted: false
@@ -487,7 +488,7 @@ const AlertasAdmin: React.FC = () => {
 
         await addDoc(collection(db, "alertas"), {
           titulo,
-          contenido,
+          contenido: convertQuillToTailwind(contenido),
           imagen: imageUrl || "",
           activo,
           fechaCreacion: new Date(),
@@ -604,7 +605,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='  w-[100%] sm:w-[100%] xl:w-[49%]'>
               <div className="mb-4 flex flex-col justify-between ">
                 <label className="block text-xs font-medium text-sky-500 mb-1">Título</label>
-                <ReactQuill value={titulo} onChange={handleTituloChange} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+                <CustomQuillEditor value={convertTailwindToQuill(titulo)} onChange={(value) => setTitulo(convertQuillToTailwind(value))} />
               </div>
 
               <div className="flex flex-col justify-between mb-4 w-[50%]">
@@ -629,7 +630,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] '>
               <div className="mb-4">
                 <label className="block text-xs font-medium text-sky-500 mb-1">Contenido</label>
-                <ReactQuill value={contenido} onChange={handleContenidoChange} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
+                <CustomQuillEditor value={convertTailwindToQuill(contenido)} onChange={(value) => setContenido(convertQuillToTailwind(value))} />
               </div>
               <div className='flex flex-row justify-between'>
                 <div className="mb-4 ">

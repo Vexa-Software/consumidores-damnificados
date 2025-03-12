@@ -103,27 +103,40 @@ const TextosSistemaAdmin: React.FC = () => {
   const handleEdit = (id: string) => {
     setEditing((prev) => ({ ...prev, [id]: !prev[id] })); 
   };
-    const quillRef = useRef<ReactQuill>(null);
-    const modules = {
-      toolbar: [
-        [{ header: [1, 2, 3, false] }],
-        ["bold", "italic", "underline", "strike"],
-        [{ list: "ordered" }, { list: "bullet" }],
-        [{ align: [] }], // 🟢 Agrega la opción de alineación
-        ["link"],
-        ["clean"],
-      ],
-      history: {
-        delay: 2000,
-        maxStack: 500,
-        userOnly: true,
-      },
-      clipboard: {
-        matchVisual: false,
-      },
-    };
-    
-  
+
+  const quillRef = useRef<ReactQuill>(null);
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ align: [] }], 
+      ["link"],
+      ["clean"],
+    ],
+    history: {
+      delay: 2000,
+      maxStack: 500,
+      userOnly: true,
+    },
+    clipboard: {
+      matchVisual: false,
+    },
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "link",
+    "align", // 🔹 Habilita la alineación en el contenido
+  ];
+
   return (
     <div className="flex flex-col p-6 bg-white">
       <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">Gestión de Textos del Sistema</h1>
@@ -156,8 +169,9 @@ const TextosSistemaAdmin: React.FC = () => {
                 <ReactQuill
                   value={textos[id] ?? ""}
                   onChange={(value) => handleChange(id, value)}
+                  modules={modules}
+                  formats={formats}
                   ref={quillRef}
-				  modules={modules}
                   className="bg-white"
                   readOnly={!editing[id]}
                 />

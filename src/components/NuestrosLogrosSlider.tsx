@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { EffectCoverflow, Autoplay } from "swiper/modules";
+import { EffectCoverflow, Autoplay,  Pagination } from "swiper/modules";
 import { FaCheckCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -21,29 +21,42 @@ export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
     <div className="w-full flex flex-col justify-center ">
       <div className="flex justify-center items-center  w-full">
         <Swiper
-          modules={[Autoplay, EffectCoverflow]}
+          modules={[ Pagination, Autoplay, EffectCoverflow]}
+          spaceBetween={120}
+          slidesPerView={3}
           autoplay={{
             delay: 6000,
             disableOnInteraction: false,
           }}
-          navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+          breakpoints={{
+            320: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 120,
+            }
           }}
           effect="coverflow"
-          centeredSlides={true}
-          slidesPerView="auto"
-          spaceBetween={120}
+          pagination={{ clickable: true }}
+         
+         
           loop={true}
           coverflowEffect={{
             rotate: 0,
             stretch: 0,
-            depth: 150,
+            depth: 70,
             modifier: 1,
-            slideShadows: false,
+            slideShadows: false
           }}
-          className="relative w-full max-w-6xl 2xl:max-w-[90rem] "
+          className="relative w-full max-w-6xl 2xl:max-w-[110rem] "
         >
+          
           {items.map((item) => (
             <SwiperSlide
               key={item.id}
@@ -60,7 +73,7 @@ export function NuestrosLogrosSlider({ items }: NuestrosLogrosSliderProps) {
                 
                 <div className="flex flex-col gap-4 justify-center flex-grow w-[90%] min-h-48 2xl:h-72 p-4 ">
                   <div className="flex flex-col">
-                    <h1 className="text-lg 2xl:text-xl font-bold text-gray-800 ">{item.titulo}</h1>
+                    <h1 className="text-lg 2xl:text-xl font-bold text-gray-800 "dangerouslySetInnerHTML={{ __html: item.titulo }}></h1>
                     <p className="text-gray-600 text-sm mt-2 break-words line-clamp-2 2xl:line-clamp-4 overflow-hidden w-full whitespace-normal " dangerouslySetInnerHTML={{ __html: item.descripcion }}>
                      
                     </p>
