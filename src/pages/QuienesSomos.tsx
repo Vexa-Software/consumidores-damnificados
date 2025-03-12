@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
+import { convertQuillToTailwind } from "@/components/CustomQuillEditor";
 
 const QuienesSomos: React.FC = () => {
   const [textos, setTextos] = useState<{ [key: string]: string }>({});
@@ -38,7 +39,7 @@ const QuienesSomos: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchData();
+    void fetchData();
   }, []);
 
   if (loading) {
@@ -61,7 +62,7 @@ const QuienesSomos: React.FC = () => {
           {error.origen ? (
             <p className="text-red-500">No se encontró la información sobre nuestro origen</p>
           ) : (
-            <div className="" dangerouslySetInnerHTML={{ __html: textos["origen"] }} />
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: convertQuillToTailwind(textos["origen"]) }} />
           )}
         </div>
 
@@ -70,7 +71,7 @@ const QuienesSomos: React.FC = () => {
           {error.trabajamos ? (
             <p className="text-red-500">No se encontró la información sobre cómo trabajamos</p>
           ) : (
-            <div className="" dangerouslySetInnerHTML={{ __html: textos["trabajamos"] }} />
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: convertQuillToTailwind(textos["trabajamos"]) }} />
           )}
 
           <div className="flex justify-center mt-10">
@@ -87,7 +88,7 @@ const QuienesSomos: React.FC = () => {
           {error.temas ? (
             <p className="text-red-500">No se encontró la información sobre temas de interés</p>
           ) : (
-            <div className="" dangerouslySetInnerHTML={{ __html: textos["temas"] }} />
+            <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: convertQuillToTailwind(textos["temas"]) }} />
           )}
         </div>
       </div>

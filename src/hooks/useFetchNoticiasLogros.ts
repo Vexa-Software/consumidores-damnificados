@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase/config";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, where } from "firebase/firestore";
 
 interface Item {
   id: string;
@@ -19,7 +19,10 @@ export function useFetchNoticiasLogros() {
     setLoading(true);
     
     const fetchCollection = (storageKey: string, setState: (data: Item[]) => void) => {
-      const q = query(collection(db, storageKey), orderBy("fecha", "desc"));
+      const q = query(
+        collection(db, storageKey),
+        where("isDeleted", "!=", true)
+      );
 
       return onSnapshot(q, (snapshot) => {
         const itemsData: Item[] = snapshot.docs.map((doc) => ({

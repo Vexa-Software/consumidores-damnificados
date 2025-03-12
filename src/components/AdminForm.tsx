@@ -5,17 +5,18 @@ import imageCompression from 'browser-image-compression';
 import ConfirmAlert from "@/components/ConfirmAlert";
 import { toast } from "react-toastify";
 import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "./CustomQuillEditor";
+import { ExplicitAny } from "@/types/ExplicitAny";
 
 interface AdminFormProps {
   storageKey: string;
   nuevoItem: { titulo: string; descripcion: string; fecha: string; imagen?: string };
-  setNuevoItem: (item: any) => void;
+  setNuevoItem: (item: ExplicitAny) => void;
   editando: boolean;
-  setEditando: (editando: any) => void;
+  setEditando: (editando: ExplicitAny) => void;
   handleGuardarEdicion: () => void;
   handleAgregarItem: () => void;
   errores: { titulo: string; descripcion: string; fecha: string; imagen: string };
-  setErrores: (errores: any) => void;
+  setErrores: (errores: ExplicitAny) => void;
   validarCampos: () => boolean;
 }
 
@@ -36,27 +37,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
   const [isDirty, setIsDirty] = useState(false);
 
   const [showConfirmReset, setShowConfirmReset] = useState(false);
-  
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }], // 🟢 Agrega la opción de alineación
-      ["link"],
-      ["clean"],
-    ],
-    history: {
-      delay: 2000,
-      maxStack: 500,
-      userOnly: true,
-    },
-    clipboard: {
-      matchVisual: false,
-    },
-  };
-  
-  
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (storageKey !== "noticias") return;
@@ -69,15 +49,15 @@ const AdminForm: React.FC<AdminFormProps> = ({
     const maxSize = 5 * 1024 * 1024;
 
     if (!allowedTypes.includes(file.type)) {
-      setErrores((prev: any) => ({ ...prev, imagen: "Formato inválido. Solo JPG, JPEG o PNG." }));
+      setErrores((prev: ExplicitAny) => ({ ...prev, imagen: "Formato inválido. Solo JPG, JPEG o PNG." }));
       return;
     }
     if (file.size > maxSize) {
-      setErrores((prev: any) => ({ ...prev, imagen: "La imagen no puede superar los 5MB." }));
+      setErrores((prev: ExplicitAny) => ({ ...prev, imagen: "La imagen no puede superar los 5MB." }));
       return;
     }
 
-    setErrores((prev: any) => ({ ...prev, imagen: "" }));
+    setErrores((prev: ExplicitAny) => ({ ...prev, imagen: "" }));
 
     try {
       const auth = getAuth();
@@ -112,7 +92,7 @@ const AdminForm: React.FC<AdminFormProps> = ({
     } catch (error) {
       console.error("Error al subir la imagen:", error);
       toast.error("Error al subir la imagen");
-      setErrores((prev: any) => ({ ...prev, imagen: "Error al subir la imagen." }));
+      setErrores((prev: ExplicitAny) => ({ ...prev, imagen: "Error al subir la imagen." }));
     }
   };
 
@@ -143,11 +123,11 @@ const AdminForm: React.FC<AdminFormProps> = ({
   };
 
   const handleChangeTitle = (value: string) => {
-    setNuevoItem((prevItem: any) => ({
+    setNuevoItem((prevItem: ExplicitAny) => ({
       ...prevItem,
       titulo: value
     }));
-    setErrores((prev: any) => ({ ...prev, titulo: "" }));
+    setErrores((prev: ExplicitAny) => ({ ...prev, titulo: "" }));
     setIsDirty(true);
   };
 
@@ -163,13 +143,13 @@ const AdminForm: React.FC<AdminFormProps> = ({
 
   const handleChangeDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNuevoItem({ ...nuevoItem, fecha: e.target.value });
-    setErrores((prev: any) => ({ ...prev, fecha: "" }));
+    setErrores((prev: ExplicitAny) => ({ ...prev, fecha: "" }));
     setIsDirty(true);
   };
 
-  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e);
-    setErrores((prev: any) => ({ ...prev, imagen: "" }));
+  const handleChangeImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await handleImageUpload(e);
+    setErrores((prev: ExplicitAny) => ({ ...prev, imagen: "" }));
     setIsDirty(true);
   };
 
@@ -189,25 +169,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
         </div>
 
         <div className="flex flex-col sm:flex-col xl:flex-row mt-7 justify-between ">
-
-          <div className="mb-4 w-[100%] sm:w-[100%]  xl:w-[39%] flex flex-col justify-between">
-            <label htmlFor="fecha" className="block text-xs font-medium text-sky-500 mb-1">
-              Fecha de publicación (*)
-            </label>
-            <ReactQuill value={nuevoItem.titulo} onChange={handleChangeTitle} ref={quillRef} modules={modules} className="bg-white  text-gray-700 shadow border rounded" />
-            {/* <input
-              id="titulo"
-              type="text"
-              placeholder="Ingrese el título"
-              className="w-full p-2 border rounded text-xs outline-none focus:ring-2 focus:ring-sky-500"
-              value={nuevoItem.titulo}
-              onChange={handleChangeTitle}
-            /> */}
-            {errores.titulo && <p className="text-red-500 text-sm">{errores.titulo}</p>}
-          </div>
-
-          <div className="flex flex-col sm:flex-col xl:flex-row mt-7 justify-between ">
-
             <div className="mb-4 w-[100%] sm:w-[100%]  xl:w-[39%] flex flex-col justify-between">
               <label htmlFor="fecha" className="block text-xs font-medium text-sky-500 mb-1">
                 Fecha de publicación (*)
@@ -244,19 +205,15 @@ const AdminForm: React.FC<AdminFormProps> = ({
           </div>
         </div>
 
-
         <div className="flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] ">
 
-        <div className="mb-0 xl:mb-4 2xl:mb-4 h-full">
-          <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
-            Descripción (*)
-          </label>
-          <CustomQuillEditor value={convertTailwindToQuill(nuevoItem.descripcion)} onChange={handleChangeDescription} />
-          {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
-        </div>
-
-
-
+          <div className="mb-0 xl:mb-4 2xl:mb-4 h-full">
+            <label htmlFor="descripcion" className="block text-xs font-medium text-sky-500 mb-1">
+              Descripción (*)
+            </label>
+            <CustomQuillEditor value={convertTailwindToQuill(nuevoItem.descripcion)} onChange={handleChangeDescription} />
+            {errores.descripcion && <p className="text-red-500 text-sm">{errores.descripcion}</p>}
+          </div>
 
           <div className="flex justify-end sm:mt-0 xl:mt-4 2xl:mt-">
             <button
@@ -273,7 +230,6 @@ const AdminForm: React.FC<AdminFormProps> = ({
             </button>
           </div>
         </div>
-
       </div>
 
       <ConfirmAlert

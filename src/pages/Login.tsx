@@ -109,7 +109,7 @@ const Login: React.FC = () => {
             </p>
 
             <div className="bg-white rounded-lg w-[75%] max-w-2xl mt-8">
-                <form className="mt-6 xl:px-8 pb-6" onSubmit={handleLogin}>
+                <form className="mt-6 xl:px-8 pb-6" onSubmit={void handleLogin}>
                     <div className="mb-6">
                         <label className="block mb-2 text-sky-500 font-medium">Email</label>
                         <input
@@ -170,7 +170,7 @@ const Login: React.FC = () => {
                     <button
                         type="button"
                         className="w-full mt-4 text-sm text-sky-500 hover:underline"
-                        onClick={handleForgotPassword}
+                        onClick={void handleForgotPassword}
                     >
                         Olvidé mi contraseña
                     </button>

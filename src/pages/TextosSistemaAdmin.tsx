@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "../firebase/config";
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import SimpleLoader from "../components/SimpleLoader/SimpleLoader";
+import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "@/components/CustomQuillEditor";
 
 const textosKeys = [
   { categoria: "quienes_somos", id: "origen", nombre: "Quienes Somos - Origen" },
@@ -27,7 +27,6 @@ const TextosSistemaAdmin: React.FC = () => {
   const [textos, setTextos] = useState<{ [key: string]: string }>({});
   const [savingStates, setSavingStates] = useState<{ [key: string]: boolean }>({});
   const [deletingStates, setDeletingStates] = useState<{ [key: string]: boolean }>({});
-  const [editing, setEditing] = useState<{ [key: string]: boolean }>({});
   const [initialLoading, setInitialLoading] = useState(true);
 
   // Lista de campos que deberían usar input de texto simple
@@ -48,7 +47,9 @@ const TextosSistemaAdmin: React.FC = () => {
 
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
-            newTextos[id] = docSnap.data().contenido || "";
+            const contenidoOriginal = docSnap.data().contenido || "";
+            const contenidoConvertido = convertQuillToTailwind(contenidoOriginal);
+            newTextos[id] = contenidoConvertido;
           } else {
             toast.warn(`No se encontró el documento: ${id}`);
           }
@@ -62,7 +63,7 @@ const TextosSistemaAdmin: React.FC = () => {
       }
     };
 
-    fetchData();
+    void fetchData();
   }, []);
 
 
@@ -70,14 +71,18 @@ const TextosSistemaAdmin: React.FC = () => {
     setTextos((prev) => ({ ...prev, [id]: value }));
   };
 
+  const handleRichTextChange = (id: string, value: string) => {
+    const formattedValue = convertQuillToTailwind(value);
+    setTextos((prev) => ({ ...prev, [id]: formattedValue }));
+  };
+
   const handleSave = async (categoria: string, id: string) => {
     setSavingStates((prev) => ({ ...prev, [id]: true }));
     try {
-      let dataToSave = textos[id];
 
-      await setDoc(doc(db, `textos_sistema/${categoria}/textos`, id), { contenido: dataToSave }, { merge: true });
+      const formattedText = convertTailwindToQuill(textos[id]);
+      await setDoc(doc(db, `textos_sistema/${categoria}/textos`, id), { contenido: formattedText }, { merge: true });
       toast.success(`"${id}" guardado correctamente`);
-      setEditing((prev) => ({ ...prev, [id]: false }));
     } catch (error) {
       console.error("Error guardando el texto:", error);
       toast.error("Error al guardar el texto");
@@ -100,43 +105,6 @@ const TextosSistemaAdmin: React.FC = () => {
     setDeletingStates((prev) => ({ ...prev, [id]: false }));
   };
 
-  const handleEdit = (id: string) => {
-    setEditing((prev) => ({ ...prev, [id]: !prev[id] })); 
-  };
-
-  const quillRef = useRef<ReactQuill>(null);
-
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }], 
-      ["link"],
-      ["clean"],
-    ],
-    history: {
-      delay: 2000,
-      maxStack: 500,
-      userOnly: true,
-    },
-    clipboard: {
-      matchVisual: false,
-    },
-  };
-
-  const formats = [
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "link",
-    "align", // 🔹 Habilita la alineación en el contenido
-  ];
-
   return (
     <div className="flex flex-col p-6 bg-white">
       <h1 className="text-3xl sm:text-5xl text-sky-500 font-normal mb-2 xl:mb-4 text-start">Gestión de Textos del Sistema</h1>
@@ -147,7 +115,7 @@ const TextosSistemaAdmin: React.FC = () => {
           <SimpleLoader />
         </div>
       ) : (
-        <div className="w-full max-w-4xl grid grid-cols-1 gap-6">
+        <div className="w-full grid grid-cols-1 gap-6">
           {textosKeys.map(({ id, nombre, categoria }) => (
             <div key={id} className="bg-gray-100 p-4 rounded-lg shadow-md">
               <h2 className="text-lg font-semibold mb-2 text-gray-800">{nombre}</h2>
@@ -161,35 +129,20 @@ const TextosSistemaAdmin: React.FC = () => {
                   type="text"
                   value={textos[id] ?? ""}
                   onChange={(e) => handleChange(id, e.target.value)}
-                  disabled={!editing[id]}
                   className="w-full p-2 border rounded-md bg-white disabled:bg-gray-100"
                   placeholder={`Ingrese ${nombre.toLowerCase()}`}
                 />
               ) : (
-                <ReactQuill
-                  value={textos[id] ?? ""}
-                  onChange={(value) => handleChange(id, value)}
-                  modules={modules}
-                  formats={formats}
-                  ref={quillRef}
-                  className="bg-white"
-                  readOnly={!editing[id]}
+                <CustomQuillEditor
+                  value={convertTailwindToQuill(textos[id] ?? "")} // 🔹 Convertimos antes de pasar al editor
+                  onChange={(value) => handleRichTextChange(id, value)}
                 />
               )}
 
               <div className="flex justify-end mt-3 gap-2">
-                {!editing[id] ? (
-                  <button
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition"
-                    onClick={() => handleEdit(id)}
-                    disabled={deletingStates[id]}
-                  >
-                    Editar
-                  </button>
-                ) : (
-                  <button
+                {(<button
                     className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition"
-                    onClick={() => handleSave(categoria, id)}
+                    onClick={void handleSave(categoria, id)}
                     disabled={savingStates[id] || deletingStates[id]}
                   >
                     {savingStates[id] ? "Guardando..." : "Guardar"}
@@ -197,7 +150,7 @@ const TextosSistemaAdmin: React.FC = () => {
                 )}
                 <button
                   className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-                  onClick={() => handleDelete(categoria, id)}
+                  onClick={void handleDelete(categoria, id)}
                   disabled={savingStates[id] || deletingStates[id]}
                 >
                   {deletingStates[id] ? "Eliminando..." : "Eliminar"}

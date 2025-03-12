@@ -66,7 +66,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ storageKey, title, subtitle }) 
     }, [storageKey]); 
     
     const validarCampos = (): boolean => {
-        let mensajesError = {
+        const mensajesError = {
             titulo: "",
             descripcion: "",
             fecha: "",

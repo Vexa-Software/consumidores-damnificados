@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { db, storage } from '../firebase/config';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc, query, getDocs, updateDoc, doc, deleteDoc, orderBy, where } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, updateDoc, doc, orderBy, where } from 'firebase/firestore';
 
 import 'react-quill/dist/quill.snow.css';
 import { toast } from 'react-toastify';
@@ -10,7 +10,6 @@ import "react-quill/dist/quill.snow.css";
 import CustomQuillEditor, { convertQuillToTailwind, convertTailwindToQuill } from "../components/CustomQuillEditor";
 
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -50,7 +49,6 @@ interface Alerta {
 
 
 const AlertasAdmin: React.FC = () => {
-  const navigate = useNavigate();
   const [titulo, setTitulo] = useState('');
   const [contenido, setContenido] = useState('');
   const [activo, setActivo] = useState(false);
@@ -79,33 +77,14 @@ const AlertasAdmin: React.FC = () => {
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      [{ align: [] }],
-      ["link"],
-      ["clean"],
-    ],
-    history: {
-      delay: 2000,
-      maxStack: 500,
-      userOnly: true,
-    },
-    clipboard: {
-      matchVisual: false,
-    },
-  };
   
   const handleTituloChange = (value: string) => {
-    setTitulo(value);
+    setTitulo(convertQuillToTailwind(value))
     setIsDirty(true);
   };
 
   const handleContenidoChange = (value: string) => {
-    setContenido(value);
+    setContenido(convertQuillToTailwind(value));
     setIsDirty(true);
   };
 
@@ -129,17 +108,6 @@ const AlertasAdmin: React.FC = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [isDirty]);
-
-  const handleNavigation = (path: string) => {
-    if (isDirty) {
-      const confirmNavigation = window.confirm("Tienes cambios sin guardar. ¿Seguro que quieres salir?");
-      if (!confirmNavigation) {
-        return false;
-      }
-    }
-    navigate(path);
-    return true;
-  };
 
   const cargarAlertas = async () => {
     try {
@@ -228,6 +196,7 @@ const AlertasAdmin: React.FC = () => {
       toast.success("Estado de alerta actualizado exitosamente");
       cargarAlertas();
     } catch (error) {
+      console.error("Error al actualizar el estado de la alerta:", error);
       toast.error("Error al actualizar el estado de la alerta. Por favor, intente nuevamente.");
     } finally {
       setCargando(false);
@@ -243,6 +212,7 @@ const AlertasAdmin: React.FC = () => {
       toast.success(` Alerta ${nuevoEstado ? 'activada' : 'desactivada'} exitosamente`);
       cargarAlertas();
     } catch (error) {
+      console.error("Error al actualizar el estado de la alerta:", error);
       toast.error("Error al actualizar el estado de la alerta. Por favor, intente nuevamente.");
     } finally {
       setCargando(false);
@@ -381,6 +351,7 @@ const AlertasAdmin: React.FC = () => {
       toast.success("Imagen comprimida y subida con éxito");
       return imageUrl;
     } catch (error) {
+      console.error("Error al subir la imagen:", error);
       toast.error("Error al subir la imagen. Por favor, intente nuevamente.");
       return null;
     } finally {
@@ -452,7 +423,7 @@ const AlertasAdmin: React.FC = () => {
     try {
       setCargando(true);
 
-      let imageUrl = archivo ? await subirImagen() : imagenUrl;
+      const imageUrl = archivo ? await subirImagen() : imagenUrl;
 
       if (editando && alertaEditadaId) {
         // Actualizar alerta existente
@@ -577,7 +548,7 @@ const AlertasAdmin: React.FC = () => {
   });
 
   const validarCampos = () => {
-    let erroresTemp = {
+    const erroresTemp = {
       titulo: '',
       contenido: '',
       imagen: ''
@@ -605,7 +576,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='  w-[100%] sm:w-[100%] xl:w-[49%]'>
               <div className="mb-4 flex flex-col justify-between ">
                 <label className="block text-xs font-medium text-sky-500 mb-1">Título</label>
-                <CustomQuillEditor value={convertTailwindToQuill(titulo)} onChange={(value) => setTitulo(convertQuillToTailwind(value))} />
+                <CustomQuillEditor value={convertTailwindToQuill(titulo)} onChange={(value) => handleTituloChange(value)} />
               </div>
 
               <div className="flex flex-col justify-between mb-4 w-[50%]">
@@ -630,7 +601,7 @@ const AlertasAdmin: React.FC = () => {
             <div className='flex flex-col justify-between w-[100%] sm:w-[100%] xl:w-[49%] '>
               <div className="mb-4">
                 <label className="block text-xs font-medium text-sky-500 mb-1">Contenido</label>
-                <CustomQuillEditor value={convertTailwindToQuill(contenido)} onChange={(value) => setContenido(convertQuillToTailwind(value))} />
+                <CustomQuillEditor value={convertTailwindToQuill(contenido)} onChange={(value) => handleContenidoChange(value)} />
               </div>
               <div className='flex flex-row justify-between'>
                 <div className="mb-4 ">
