@@ -407,6 +407,13 @@ const AlertasAdmin: React.FC = () => {
     }
   };
 
+  const validateIsEmptyText = (text: string) => {
+    if(text.replace(/<(.|\n)*?>/g, '').trim().length === 0) {
+      return true;
+    }
+    return false;
+  };
+
   const confirmarActivacionFormulario = () => {
     setActivo(true);
     setModalActivarFormularioOpen(false);
@@ -442,9 +449,12 @@ const AlertasAdmin: React.FC = () => {
           }
         }
 
+
+
+
         await updateDoc(alertaRef, {
-          titulo,
-          contenido: convertQuillToTailwind(contenido),
+          titulo: validateIsEmptyText(titulo) ? '' : titulo,
+          contenido: validateIsEmptyText(contenido) ? '' : convertQuillToTailwind(contenido),
           imagen: imageUrl || "",
           activo,
           isDeleted: false
@@ -462,8 +472,8 @@ const AlertasAdmin: React.FC = () => {
         }
 
         await addDoc(collection(db, "alertas"), {
-          titulo,
-          contenido: convertQuillToTailwind(contenido),
+          titulo: validateIsEmptyText(titulo) ? '' : titulo,
+          contenido: validateIsEmptyText(contenido) ? '' : convertQuillToTailwind(contenido),
           imagen: imageUrl || "",
           activo,
           fecha: new Date(),
